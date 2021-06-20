@@ -26,7 +26,7 @@ interface MainLayoutProp {
     children:JSX.Element
 }
 
-export default function MainLayout({children}:MainLayoutProp){
+export default function ContentContainer({children}:MainLayoutProp){
     const classes = useStyles();
 
     return <div className={classes.root}>

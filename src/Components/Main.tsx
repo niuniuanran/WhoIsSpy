@@ -1,9 +1,6 @@
-import {Paper} from '@material-ui/core'
-import MainLayout from './MainLayout'
 import CreateRoom from './CreateRoom';
 import EnterGameOptions from './EnterGameOptions';
 import {
-    BrowserRouter as Router,
     Switch,
     Route,
     useRouteMatch
