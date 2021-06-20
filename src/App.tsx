@@ -7,6 +7,7 @@ import ChooseLanguage from "./Components/ChooseLanguage";
 import {LanguageProvider} from "./Contexts/LanguageContext";
 import Main from "./Components/Main";
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import MainLayout from "./Components/MainLayout";
 
 function App() {
   const theme = createMuiTheme({
@@ -16,23 +17,25 @@ function App() {
   })
   return (
     <ThemeProvider theme={theme}>
-    <Router>
-        <Switch>
-          <Route path="/en">
-            <LanguageProvider language={"en"}>
-              <Main/>
-            </LanguageProvider>
-          </Route>
-          <Route path="/cn">
-            <LanguageProvider language={"cn"}>
-              <Main/>
-            </LanguageProvider>
-          </Route>
-          <Route path="/">
-            <ChooseLanguage />
-          </Route>
-        </Switch>
-    </Router>
+      <MainLayout>
+        <Router>
+            <Switch>
+              <Route path="/en">
+                <LanguageProvider language={"en"}>
+                  <Main/>
+                </LanguageProvider>
+              </Route>
+              <Route path="/cn">
+                <LanguageProvider language={"cn"}>
+                  <Main/>
+                </LanguageProvider>
+              </Route>
+              <Route path="/">
+                <ChooseLanguage />
+              </Route>
+            </Switch>
+        </Router>
+      </MainLayout>
     </ThemeProvider>
   );
 }

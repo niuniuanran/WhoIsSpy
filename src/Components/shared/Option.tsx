@@ -1,4 +1,4 @@
-import {Grid, Button} from "@material-ui/core"
+import { Grid, Button } from "@material-ui/core"
 import { makeStyles } from '@material-ui/core/styles';
 import {
     useHistory,
@@ -20,16 +20,15 @@ const useStyles = makeStyles((theme) => ({
 interface OptionProps {
     text: string,
     path: string,
-    icon: JSX.Element
+    icon?: JSX.Element
 }
 
 export default function Option({text, path, icon}:OptionProps){
     const classes = useStyles();
-    const match = useRouteMatch();
     const history = useHistory();
 
     return <Grid item xs={12}>
-                <Button variant="contained" size="large" color="primary" className={classes.option} onClick={()=>{history.push(`${match.path}/${path}`)}}>
+                <Button variant="contained" size="large" color="primary" className={classes.option} onClick={()=>{history.push(path)}}>
                     <span className={classes.iconSpan}>
                         {icon}
                     </span>

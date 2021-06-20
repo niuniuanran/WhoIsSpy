@@ -24,11 +24,10 @@ export default function EnterGameOptions(){
     const classes = useStyles();
     const {getText} = useContext(LanguageContext) as LanguageContextType
     const match = useRouteMatch();
-    const history = useHistory();
 
     return <Grid container spacing={5}>
-                <Option text={getText("createRoom")} icon={<GroupAddIcon/>} path="create-room"/>
-                <Option text={getText("joinRoom")} icon={<PersonAddIcon/>} path="join-room"/>
-                <Option text={getText("addWords")} icon={<PostAddIcon/>} path="add-words"/>
+                <Option text={getText("createRoom")} icon={<GroupAddIcon/>} path={`${match.path}/create-room`}/>
+                <Option text={getText("joinRoom")} icon={<PersonAddIcon/>} path={`${match.path}/join-room`}/>
+                <Option text={getText("addWords")} icon={<PostAddIcon/>} path={`${match.path}/add-words`}/>
             </Grid>
 }

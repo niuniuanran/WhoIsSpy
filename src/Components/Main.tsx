@@ -12,14 +12,12 @@ import {
 export default function Main(){
     const match = useRouteMatch();
 
-   return <MainLayout>
-                <Switch>
-                    <Route path={`${match.path}/create-room`}>
-                        <CreateRoom/>
-                    </Route>
-                    <Route path={match.path}>
-                        <EnterGameOptions/>
-                    </Route>
-                </Switch>
-          </MainLayout>
+   return  <Switch>
+                <Route path={`${match.path}/create-room`}>
+                    <CreateRoom/>
+                </Route>
+                <Route path={match.path}>
+                    <EnterGameOptions/>
+                </Route>
+            </Switch>
 }
