@@ -3,39 +3,30 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
-    },
-    paper: {
-      padding: theme.spacing(2),
       textAlign: 'center',
+      margin: 0,
+      padding: 0,
+      width: '100vw',
+      height: '100vh',
       color: theme.palette.text.secondary,
+      backgroundColor: '#121212',
+    },
+    content: {
+        margin: theme.spacing(0, 'auto'),
     },
   }));
 
-export default function MainLayout(){
+interface MainLayoutProp {
+    children:JSX.Element
+}
+
+export default function MainLayout({children}:MainLayoutProp){
     const classes = useStyles();
 
     return <div className={classes.root}>
-    <Grid container spacing={3}>
-      <Grid item xs={12}>
-        <Paper className={classes.paper}>xs=12</Paper>
-      </Grid>
-      <Grid item xs={6}>
-        <Paper className={classes.paper}>xs=6</Paper>
-      </Grid>
-      <Grid item xs={6}>
-        <Paper className={classes.paper}>xs=6</Paper>
-      </Grid>
-      <Grid item xs={3}>
-        <Paper className={classes.paper}>xs=3</Paper>
-      </Grid>
-      <Grid item xs={3}>
-        <Paper className={classes.paper}>xs=3</Paper>
-      </Grid>
-      <Grid item xs={3}>
-        <Paper className={classes.paper}>xs=3</Paper>
-      </Grid>
-      <Grid item xs={3}>
-        <Paper className={classes.paper}>xs=3</Paper>
+    <Grid container>
+      <Grid item xs={9} md={6} className={classes.content}>
+          {children}
       </Grid>
     </Grid>
   </div>
