@@ -20,6 +20,10 @@ function LanguageProvider({language, children}:LanguageContextProp){
         joinRoom:{
             en: "Join room",
             cn: "加入房间"
+        },
+        addWords:{
+            en: "Add words",
+            cn: "贡献词条"
         }
     }
 
