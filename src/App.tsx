@@ -4,14 +4,14 @@ import {
   Route
 } from "react-router-dom";
 import ChooseLanguage from "./Components/ChooseLanguage";
-import LanguageProvider from "./Contexts/LanguageContext";
+import {LanguageProvider} from "./Contexts/LanguageContext";
 import Main from "./Components/Main";
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
 function App() {
   const theme = createMuiTheme({
     palette: {
-      type: 'dark'
+      type: 'dark',
     }
   })
   return (

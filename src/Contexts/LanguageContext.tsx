@@ -4,23 +4,26 @@ interface LanguageContextProp {
     language:string,
     children:JSX.Element
 }
+const LanguageContext = React.createContext<any>(undefined)
+export type LanguageContextType = {
+    language: string,
+    getText: (arg:string) => string
+}
 
-export default function LanguageProvider({language, children}:LanguageContextProp){
+function LanguageProvider({language, children}:LanguageContextProp){
     
     const textDisplay:{ [name: string]: {[language:string]:string}}={
         createRoom: {
-            en: "Create a room",
+            en: "New room",
             cn: "创建房间",
         },
         joinRoom:{
-            en: "Join a room",
+            en: "Join room",
             cn: "加入房间"
         }
     }
+
     const getText = (key:string) => textDisplay[key][language]
-
-    const LanguageContext = React.createContext<any>(undefined)
-
     return <LanguageContext.Provider value={
         {
             language,
@@ -30,3 +33,5 @@ export default function LanguageProvider({language, children}:LanguageContextPro
         {children}
     </LanguageContext.Provider>
 }
+
+export {LanguageProvider, LanguageContext}
