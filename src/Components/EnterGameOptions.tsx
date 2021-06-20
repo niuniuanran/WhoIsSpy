@@ -5,6 +5,7 @@ import { useContext } from "react";
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import PostAddIcon from '@material-ui/icons/PostAdd';
+import Option from "./shared/Option";
 import {
     useHistory,
     useRouteMatch
@@ -16,11 +17,6 @@ const useStyles = makeStyles((theme) => ({
     },
     content: {
         margin: theme.spacing(0, 'auto'),
-    },
-    option: {
-        height: '5rem',
-        width: '15rem',
-        fontSize: '1.5rem'
     }
   }));
 
@@ -31,20 +27,8 @@ export default function EnterGameOptions(){
     const history = useHistory();
 
     return <Grid container spacing={5}>
-                <Grid item xs={12}>
-                    <Button variant="contained" size="large" color="primary" className={classes.option} onClick={()=>{history.push(`${match.path}/create-room`)}}>
-                        <GroupAddIcon style={{ fontSize: '2rem', paddingRight: '1rem' }}/> {getText("createRoom")}
-                    </Button>
-                </Grid>
-                <Grid item xs={12}>
-                    <Button variant="contained" size="large" color="primary" className={classes.option} onClick={()=>{history.push(`${match.path}/join-room`)}}>
-                        <PersonAddIcon style={{ fontSize: '2rem', paddingRight: '1rem' }} /> {getText("joinRoom")}
-                    </Button>
-                </Grid>
-                <Grid item xs={12}>
-                    <Button variant="contained" size="large" color="primary" className={classes.option} onClick={()=>{history.push(`${match.path}/add-words`)}}>
-                        <PostAddIcon style={{ fontSize: '2rem', paddingRight: '1rem' }} /> {getText("addWords")}
-                    </Button>
-                </Grid>
+                <Option text={getText("createRoom")} icon={<GroupAddIcon/>} path="create-room"/>
+                <Option text={getText("joinRoom")} icon={<PersonAddIcon/>} path="join-room"/>
+                <Option text={getText("addWords")} icon={<PostAddIcon/>} path="add-words"/>
             </Grid>
 }

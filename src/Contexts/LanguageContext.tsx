@@ -22,7 +22,7 @@ function LanguageProvider({language, children}:LanguageContextProp){
             cn: "加入房间"
         },
         addWords:{
-            en: "Add words",
+            en: "Contribute",
             cn: "贡献词条"
         }
     }
