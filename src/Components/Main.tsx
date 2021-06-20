@@ -10,7 +10,7 @@ import {
   } from "react-router-dom";
 
 export default function Main(){
-    let match = useRouteMatch();
+    const match = useRouteMatch();
 
    return <MainLayout>
                 <Switch>

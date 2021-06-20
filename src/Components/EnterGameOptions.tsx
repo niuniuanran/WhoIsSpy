@@ -5,6 +5,10 @@ import { useContext } from "react";
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import PostAddIcon from '@material-ui/icons/PostAdd';
+import {
+    useHistory,
+    useRouteMatch
+  } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -23,20 +27,22 @@ const useStyles = makeStyles((theme) => ({
 export default function EnterGameOptions(){
     const classes = useStyles();
     const {getText} = useContext(LanguageContext) as LanguageContextType
+    const match = useRouteMatch();
+    const history = useHistory();
 
     return <Grid container spacing={5}>
                 <Grid item xs={12}>
-                    <Button variant="contained" size="large" color="primary" className={classes.option}>
+                    <Button variant="contained" size="large" color="primary" className={classes.option} onClick={()=>{history.push(`${match.path}/create-room`)}}>
                         <GroupAddIcon style={{ fontSize: '2rem', paddingRight: '1rem' }}/> {getText("createRoom")}
                     </Button>
                 </Grid>
                 <Grid item xs={12}>
-                    <Button variant="contained" size="large" color="primary" className={classes.option}>
+                    <Button variant="contained" size="large" color="primary" className={classes.option} onClick={()=>{history.push(`${match.path}/join-room`)}}>
                         <PersonAddIcon style={{ fontSize: '2rem', paddingRight: '1rem' }} /> {getText("joinRoom")}
                     </Button>
                 </Grid>
                 <Grid item xs={12}>
-                    <Button variant="contained" size="large" color="primary" className={classes.option}>
+                    <Button variant="contained" size="large" color="primary" className={classes.option} onClick={()=>{history.push(`${match.path}/add-words`)}}>
                         <PostAddIcon style={{ fontSize: '2rem', paddingRight: '1rem' }} /> {getText("addWords")}
                     </Button>
                 </Grid>
