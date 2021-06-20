@@ -6,9 +6,16 @@ import {
 import ChooseLanguage from "./Components/ChooseLanguage";
 import LanguageProvider from "./Contexts/LanguageContext";
 import Main from "./Components/Main";
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
 function App() {
+  const theme = createMuiTheme({
+    palette: {
+      type: 'dark'
+    }
+  })
   return (
+    <ThemeProvider theme={theme}>
     <Router>
         <Switch>
           <Route path="/en">
@@ -26,6 +33,7 @@ function App() {
           </Route>
         </Switch>
     </Router>
+    </ThemeProvider>
   );
 }
 
