@@ -32,12 +32,9 @@ const PlayerNumSlider = withStyles({
             }
     },
     // valueLabel: {
-    //     fontSize: '1rem',
-    //     top: -70,
-    //     left: 'calc(-50% - 18px)',
     //     '& *': {
-    //         width: '4rem',
-    //         height: '4rem',
+    //         width: '2rem',
+    //         height: '2rem',
     //       },
     // }
 })(Slider)
@@ -77,19 +74,14 @@ const SpyNumSlider = withStyles({
           opacity: 0.8
       },
     //   valueLabel: {
-    //     top: -70,
-    //     left: 'calc(-50% - 18px)',
-        // '& *': {
-        //     width: '4rem',
-        //     height: '4rem',
-        //   },
-        // '& span span': {
-        //     fontSize: '1.2rem',
-        //     position: 'absolute',
-        //     top: '1rem',
-        //     left: '-1rem'
-        // }
-        // }
+    //     '& *': {
+    //         width: '2rem',
+    //         height: '2rem',
+    //     },
+    //     '& span span': {
+    //         marginTop: '0.2rem',
+    //     }
+    //   }
 })(Slider)
 
 const useStyles = makeStyles((theme) => ({

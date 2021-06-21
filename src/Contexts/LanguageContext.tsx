@@ -32,6 +32,10 @@ function LanguageProvider({language, children}:LanguageContextProp){
         eighteenPlus: {
             en: "Allow 18+ words",
             cn: "允许成人词汇"
+        },
+        back: {
+            en: "Back",
+            cn: "返回"
         }
     }
 

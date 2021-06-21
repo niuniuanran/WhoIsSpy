@@ -2,6 +2,8 @@ import {Button, Grid} from "@material-ui/core"
 import { makeStyles } from '@material-ui/core/styles';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import { useHistory } from "react-router-dom";
+import { useContext } from 'react'
+import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -40,13 +42,15 @@ interface MainLayoutProp {
 export default function ContentContainer({children, allowBack}:MainLayoutProp){
     const history = useHistory();
     const classes = useStyles();
+    const languageContext = useContext(LanguageContext) as LanguageContextType
+
     return <div className={classes.root}>
         {
             allowBack?(  <Grid container >
                     <Grid item xs={9} md={4} className={classes.content}> 
                         <div className={classes.back}>
                             <Button aria-label="back" color="primary" variant="text" size="large" style={{fontWeight: "bolder"}} onClick={() => history.goBack()}>
-                                <ArrowBackIosIcon /> Back
+                                <ArrowBackIosIcon /> {languageContext && languageContext.getText("back")}
                             </Button>
                         </div>
                         {children}
