@@ -3,9 +3,9 @@ import {
   Switch,
   Route
 } from "react-router-dom";
-import ChooseLanguage from "./Components/ChooseLanguage";
+import ChooseLanguage from "./Components/EnterGame/ChooseLanguage";
 import {LanguageProvider} from "./Contexts/LanguageContext";
-import Main from "./Components/Main";
+import GameRoute from "./Components/GameRoute";
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
 function App() {
@@ -20,12 +20,12 @@ function App() {
             <Switch>
               <Route path="/en">
                 <LanguageProvider language={"en"}>
-                  <Main/>
+                  <GameRoute/>
                 </LanguageProvider>
               </Route>
               <Route path="/cn">
                 <LanguageProvider language={"cn"}>
-                  <Main/>
+                  <GameRoute/>
                 </LanguageProvider>
               </Route>
               <Route path="/">

@@ -1,4 +1,4 @@
-import Option from './shared/Option';
+import Option from '../Shared/Option';
 import {Grid} from '@material-ui/core'
 import ContentContainer from './ContentContainer';
 

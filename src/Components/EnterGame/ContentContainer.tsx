@@ -1,6 +1,7 @@
 import {Button} from "@material-ui/core"
 import { makeStyles } from '@material-ui/core/styles';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -35,26 +36,26 @@ interface MainLayoutProp {
 }
 
 export default function ContentContainer({children, allowBack}:MainLayoutProp){
+    const history = useHistory();
     const classes = useStyles();
-        return <div className={classes.root}>
-            {
-                allowBack?(
-                    <div >
-                        <div className={classes.content}> 
-                            {children}
+    return <div className={classes.root}>
+        {
+            allowBack?( <div>
+                    <div className={classes.content}> 
+                        <div className={classes.back}>
+                            <Button aria-label="back" color="primary" variant="text" size="large" style={{fontWeight: "bolder"}} onClick={() => history.goBack()}>
+                                <ArrowBackIosIcon /> Back
+                            </Button>
                         </div>
-                    </div>):(
-                    <div>
-                        <div className={classes.content}> 
-                            <div className={classes.back}>
-                                <Button aria-label="back" color="primary" variant="text" size="large" style={{fontWeight: "bolder"}}>
-                                    <ArrowBackIosIcon /> Back
-                                </Button>
-                            </div>
-                            {children}
-                        </div>
+                        {children}
                     </div>
-                )
-            }
+                </div>
+                ):( <div >
+                    <div className={classes.content}> 
+                        {children}
+                    </div>
+                </div>
+            )
+        }
         </div>
 }
