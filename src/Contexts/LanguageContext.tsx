@@ -24,6 +24,14 @@ function LanguageProvider({language, children}:LanguageContextProp){
         addWords:{
             en: "Contribute",
             cn: "贡献词条"
+        },
+        randomBlank: {
+            en: "Spy can be blank",
+            cn: "卧底可以是白板"
+        },
+        eighteenPlus: {
+            en: "18+ words ok",
+            cn: "允许成人词汇"
         }
     }
 
