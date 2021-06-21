@@ -16,6 +16,8 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: '#121212',
     },
     content: {
+        height: '60%',
+        width: '100%',
         margin: theme.spacing(0, 'auto'),
         position: 'absolute',
         top: '50%',

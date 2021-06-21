@@ -1,6 +1,6 @@
 import Option from '../Shared/Option';
 import {Grid} from '@material-ui/core'
-import ContentContainer from './ContentContainer';
+import ContentContainer from '../Shared/ContentContainer';
 
 export default function ChooseLanguage(){
     return <ContentContainer>
