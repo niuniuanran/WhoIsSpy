@@ -31,15 +31,15 @@ const PlayerNumSlider = withStyles({
             backgroundColor: 'currentColor',
             }
     },
-    valueLabel: {
-        fontSize: '1rem',
-        top: -70,
-        left: 'calc(-50% - 18px)',
-        '& *': {
-            width: '4rem',
-            height: '4rem',
-          },
-    }
+    // valueLabel: {
+    //     fontSize: '1rem',
+    //     top: -70,
+    //     left: 'calc(-50% - 18px)',
+    //     '& *': {
+    //         width: '4rem',
+    //         height: '4rem',
+    //       },
+    // }
 })(Slider)
 
 const SpyNumSlider = withStyles({
@@ -76,20 +76,20 @@ const SpyNumSlider = withStyles({
           color: '#424242',
           opacity: 0.8
       },
-      valueLabel: {
-        top: -70,
-        left: 'calc(-50% - 18px)',
-        '& *': {
-            width: '4rem',
-            height: '4rem',
-          },
-        '& span span': {
-            fontSize: '1.2rem',
-            position: 'absolute',
-            top: '1rem',
-            left: '-1rem'
-        }
-        }
+    //   valueLabel: {
+    //     top: -70,
+    //     left: 'calc(-50% - 18px)',
+        // '& *': {
+        //     width: '4rem',
+        //     height: '4rem',
+        //   },
+        // '& span span': {
+        //     fontSize: '1.2rem',
+        //     position: 'absolute',
+        //     top: '1rem',
+        //     left: '-1rem'
+        // }
+        // }
 })(Slider)
 
 const useStyles = makeStyles((theme) => ({
@@ -112,7 +112,7 @@ export default function NumSettingSliders(){
                 max={10}
                 marks
                 valueLabelDisplay="on"   
-                valueLabelFormat={v => `${v} players`}                 
+                valueLabelFormat={v => `${v} total`}                 
             />    
             <SpyNumSlider
                 defaultValue={1}
