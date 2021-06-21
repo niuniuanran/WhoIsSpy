@@ -1,4 +1,4 @@
-import {Grid, IconButton, Button} from "@material-ui/core"
+import {Button} from "@material-ui/core"
 import { makeStyles } from '@material-ui/core/styles';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
@@ -22,6 +22,11 @@ const useStyles = makeStyles((theme) => ({
         msTransform: 'translateY(-50%) translateX(-50%)',
         transform: 'translateY(-50%) translateX(-50%)',
     },
+    back: {
+        position: 'absolute',
+        left: '-2rem',
+        top: '-6rem'
+    }
   }));
 
 interface MainLayoutProp {
@@ -34,24 +39,22 @@ export default function ContentContainer({children, allowBack}:MainLayoutProp){
         return <div className={classes.root}>
             {
                 allowBack?(
-                    <Grid container >
-                        <Grid item xs={9} md={6} className={classes.content}> 
+                    <div >
+                        <div className={classes.content}> 
                             {children}
-                        </Grid>
-                    </Grid>):(
-                    <Grid container spacing={0} direction="column">
-                        <Grid item xs={1}>
-                        <Button aria-label="back" color="primary" variant="text" size="large" style={{fontWeight: "bolder"}}>
-                            <ArrowBackIosIcon /> Back
-                        </Button>
-                        </Grid>
-                        <Grid container item xs={9} md={6} className={classes.content}> 
+                        </div>
+                    </div>):(
+                    <div>
+                        <div className={classes.content}> 
+                            <div className={classes.back}>
+                                <Button aria-label="back" color="primary" variant="text" size="large" style={{fontWeight: "bolder"}}>
+                                    <ArrowBackIosIcon /> Back
+                                </Button>
+                            </div>
                             {children}
-                        </Grid>
-                    </Grid>
+                        </div>
+                    </div>
                 )
             }
         </div>
-
-    
 }

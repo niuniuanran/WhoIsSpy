@@ -7,7 +7,6 @@ import ChooseLanguage from "./Components/ChooseLanguage";
 import {LanguageProvider} from "./Contexts/LanguageContext";
 import Main from "./Components/Main";
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import ContentContainer from "./Components/ContentContainer";
 
 function App() {
   const theme = createMuiTheme({
