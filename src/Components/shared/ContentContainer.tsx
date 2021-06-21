@@ -43,7 +43,7 @@ export default function ContentContainer({children, allowBack}:MainLayoutProp){
     return <div className={classes.root}>
         {
             allowBack?(  <Grid container >
-                    <Grid item xs={9} md={6} className={classes.content}> 
+                    <Grid item xs={9} md={4} className={classes.content}> 
                         <div className={classes.back}>
                             <Button aria-label="back" color="primary" variant="text" size="large" style={{fontWeight: "bolder"}} onClick={() => history.goBack()}>
                                 <ArrowBackIosIcon /> Back

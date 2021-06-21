@@ -30,7 +30,7 @@ function LanguageProvider({language, children}:LanguageContextProp){
             cn: "卧底可以是白板"
         },
         eighteenPlus: {
-            en: "18+ words ok",
+            en: "Allow 18+ words",
             cn: "允许成人词汇"
         }
     }
