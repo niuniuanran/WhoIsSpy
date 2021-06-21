@@ -1,8 +1,6 @@
 import React from 'react';
 import { withStyles, makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Slider from '@material-ui/core/Slider';
-import Typography from '@material-ui/core/Typography';
-import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
