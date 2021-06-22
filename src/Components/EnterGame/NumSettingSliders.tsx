@@ -19,9 +19,9 @@ const PlayerNumSlider = withStyles({
         border: '1px solid currentColor',
       },
     rail: {
+        height: 6,
         opacity: 1,
         backgroundColor: 'rgba(63, 81, 181, 0.38)',
-        height: '1px',
         '&::after': {
             content: '""',
             height: '6px',

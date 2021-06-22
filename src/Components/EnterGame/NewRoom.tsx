@@ -1,6 +1,7 @@
 import {useState, useContext} from "react";
+import { makeStyles } from '@material-ui/core/styles';
 import ContentContainer from "../Shared/ContentContainer";
-import { FormGroup, FormControlLabel, Checkbox } from "@material-ui/core";
+import { FormGroup, FormControlLabel, Checkbox, Button } from "@material-ui/core";
 import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext";
 import NumSettingSliders from "./NumSettingSliders";
 
@@ -11,9 +12,19 @@ interface RoomSettings {
     eighteenPlus: boolean,
 }
 
-export default function NewRoom(){
-    const {getText} = useContext(LanguageContext) as LanguageContextType
+const useStyles = makeStyles((theme) => ({
+    formGroup: {
+        width: 'fit-content',
+        margin: '1rem auto'
+    },
+    submitButton: {
+        margin: '2rem 1rem 1rem 0'
+    }
+  }));
 
+export default function NewRoom(){
+    const classes = useStyles();
+    const {getText} = useContext(LanguageContext) as LanguageContextType
     const [roomSettings, setRoomSettings] = useState<RoomSettings>({
         numPlayer: 6,
         numSpy: 1,
@@ -23,8 +34,8 @@ export default function NewRoom(){
 
     return <ContentContainer allowBack>
             <form>
-                <NumSettingSliders/>                
-                <FormGroup row>
+                <NumSettingSliders/>    
+                <FormGroup className={classes.formGroup}>
                     <FormControlLabel
                         control={<Checkbox checked={roomSettings.randomBlank} 
                                         onChange={ e => setRoomSettings(roomSettings => ({...roomSettings, randomBlank: e.target.checked}))} 
@@ -40,7 +51,10 @@ export default function NewRoom(){
                         label={getText("eighteenPlus")}
                     />
                 </FormGroup>
+                <Button className={classes.submitButton} size="large" variant="contained" color="primary">
+                    Create room
+                </Button>
                 </form>
             </ContentContainer>
-    
+
 }
