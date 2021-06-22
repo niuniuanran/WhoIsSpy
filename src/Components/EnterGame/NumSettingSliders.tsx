@@ -1,5 +1,7 @@
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import { Slider } from "@material-ui/core";
+import { useContext } from 'react'
+import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext";
 
 const PlayerNumSlider = withStyles({
     root: {
@@ -93,6 +95,7 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 export default function NumSettingSliders(){
+    const {getText} = useContext(LanguageContext) as LanguageContextType
     const classes = useStyles()
     return <div className={classes.root}>
             <PlayerNumSlider
@@ -104,11 +107,11 @@ export default function NumSettingSliders(){
                 max={10}
                 marks
                 valueLabelDisplay="on"   
-                valueLabelFormat={v => `${v} total`}                 
+                valueLabelFormat={v => `${v} ${getText("total")}`}                 
             />    
             <SpyNumSlider
                 defaultValue={1}
-                getAriaValueText={v => `${v} spys`}
+                getAriaValueText={v => `${v} ${getText("spyPlural")}`}
                 aria-labelledby="number-of-spys"
                 step={1}
                 min={1}
@@ -116,7 +119,7 @@ export default function NumSettingSliders(){
                 valueLabelDisplay="on"   
                 color="secondary"
                 marks
-                valueLabelFormat={v => `${v} ${v > 1 ? 'spies' : 'spy'}`}
+                valueLabelFormat={v => `${v} ${v > 1 ? getText("spyPlural") : getText("spySingular")}`}
             />  
         </div>
 }

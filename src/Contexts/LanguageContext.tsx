@@ -36,6 +36,18 @@ function LanguageProvider({language, children}:LanguageContextProp){
         back: {
             en: "Back",
             cn: "返回"
+        },
+        spyPlural: {
+            en: "spies",
+            cn: "卧底"
+        },
+        spySingular: {
+            en: "spy",
+            cn: "个卧底"
+        },
+        total: {
+            en: "total",
+            cn: "个玩家"
         }
     }
 
