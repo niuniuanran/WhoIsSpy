@@ -54,7 +54,7 @@ export default function NewRoom(){
                 <Button className={classes.submitButton} size="large" variant="contained" color="primary">
                     Create room
                 </Button>
-                </form>
+            </form>
             </ContentContainer>
 
 }

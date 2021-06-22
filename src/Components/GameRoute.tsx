@@ -2,6 +2,7 @@ import NewRoom from './EnterGame/NewRoom';
 import JoinRoom from './EnterGame/JoinRoom';
 import Contribute from './Contribute/Contribute';
 import EnterGameOptions from './EnterGame/EnterGameOptions';
+import Room from './EnterGame/Room';
 import {
     Switch,
     Route,
@@ -21,7 +22,9 @@ export default function GameRoute(){
                 <Route path={`${match.path}/contribute`}>
                     <Contribute/>
                 </Route>
-
+                <Route path={`${match.path}/room/:roomId`}>
+                    <Room/>
+                </Route>
                 <Route path={match.path}>
                     <EnterGameOptions/>
                 </Route>
