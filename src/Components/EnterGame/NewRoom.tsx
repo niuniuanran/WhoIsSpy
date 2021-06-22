@@ -1,7 +1,8 @@
 import {useState, useContext} from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import ContentContainer from "../Shared/ContentContainer";
-import { FormGroup, FormControlLabel, Checkbox, Button } from "@material-ui/core";
+import { FormGroup, FormControlLabel, Checkbox, Button, Grid } from "@material-ui/core";
+import { Skeleton } from '@material-ui/lab';
 import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext";
 import NumSettingSliders from "./NumSettingSliders";
 
@@ -25,12 +26,35 @@ const useStyles = makeStyles((theme) => ({
 export default function NewRoom(){
     const classes = useStyles();
     const {getText} = useContext(LanguageContext) as LanguageContextType
+    const [creating, setCreating] = useState(false)
     const [roomSettings, setRoomSettings] = useState<RoomSettings>({
         numPlayer: 6,
         numSpy: 1,
         randomBlank: true,
         eighteenPlus: false
     })
+    const onClickCreate = () => {
+        setCreating(true)
+    }
+
+    if (creating) {
+        return <ContentContainer allowBack>
+            <Grid container>
+                <Grid item xs={3}>
+                    <Skeleton variant="circle" width={40} height={40} style={{margin: '0 auto'}}/>
+                </Grid>
+                <Grid item xs={3}>
+                    <Skeleton variant="circle" width={40} height={40} style={{margin: '0 auto'}}/>
+                </Grid>
+                <Grid item xs={3}>
+                    <Skeleton variant="circle" width={40} height={40} style={{margin: '0 auto'}}/>
+                </Grid>
+                <Grid item xs={3}>
+                    <Skeleton variant="circle" width={40} height={40} style={{margin: '0 auto'}}/>
+                </Grid>
+            </Grid>
+        </ContentContainer>
+    }
 
     return <ContentContainer allowBack>
             <form>
@@ -51,10 +75,10 @@ export default function NewRoom(){
                         label={getText("eighteenPlus")}
                     />
                 </FormGroup>
-                <Button className={classes.submitButton} size="large" variant="contained" color="primary">
+                <Button className={classes.submitButton} onClick={onClickCreate}
+                        size="large" variant="contained" color="primary">
                     Create room
                 </Button>
             </form>
-            </ContentContainer>
-
+        </ContentContainer>
 }
