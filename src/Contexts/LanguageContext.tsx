@@ -39,7 +39,7 @@ function LanguageProvider({language, children}:LanguageContextProp){
         },
         spyPlural: {
             en: "spies",
-            cn: "卧底"
+            cn: "个卧底"
         },
         spySingular: {
             en: "spy",

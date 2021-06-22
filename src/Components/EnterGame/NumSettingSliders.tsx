@@ -41,10 +41,10 @@ const PlayerNumSlider = withStyles({
             height: '2.8rem',
           },
         '& span span': {
-            width: '1.6rem',
+            width: '1.7rem',
             fontSize: '0.8rem',
-            marginTop: '0.5rem',
-            marginLeft: '-0.5rem'
+            marginTop: '0.6rem',
+            marginLeft: '-0.6rem'
         }
     }
 })(Slider)
@@ -103,7 +103,8 @@ const useStyles = makeStyles((theme) => ({
     root: {
       position: 'relative',
       width: '100%',
-      height: '5rem'
+      height: '5rem',
+      marginTop: '1rem',
     },
   }));
 
@@ -112,7 +113,7 @@ export default function NumSettingSliders(){
     const classes = useStyles()
     return <div className={classes.root}>
             <PlayerNumSlider
-                defaultValue={5}
+                defaultValue={6}
                 getAriaValueText={v => `${v} players`}
                 aria-labelledby="number-of-players"
                 step={1}
@@ -123,7 +124,7 @@ export default function NumSettingSliders(){
                 valueLabelFormat={v => `${v} ${getText("total")}`}                 
             />    
             <SpyNumSlider
-                defaultValue={1}
+                defaultValue={2}
                 getAriaValueText={v => `${v} ${getText("spyPlural")}`}
                 aria-labelledby="number-of-spys"
                 step={1}
