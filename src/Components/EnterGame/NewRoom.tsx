@@ -38,9 +38,7 @@ export default function NewRoom(){
     }
 
     if (roomLoading) {
-        return <ContentContainer allowBack>
-                <RoomCode loading={true}/>
-        </ContentContainer>
+        return <RoomCode loading={true}/>
     }
 
     return <ContentContainer allowBack>
