@@ -1,5 +1,6 @@
 import { Grid } from "@material-ui/core";
 import { Typography, Button } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { Skeleton } from '@material-ui/lab';
 import ContentContainer from '../Shared/ContentContainer'
 import PersonIcon from '@material-ui/icons/Person';
@@ -14,11 +15,21 @@ interface RoomInfoEnterProps {
     language?: string
 }
 
+const useStyles = makeStyles((theme) => ({
+    codeDisplay: {
+        [theme.breakpoints.up('md')]: {
+            width: "80%",
+            margin: '0 auto'
+        }
+    }
+  }));
+
 export default function RoomInfoEnter({loading, code, capacity, currentPlayerNum, language}:RoomInfoEnterProps){
         const {getText, getCurrentLanguage} = useContext(LanguageContext) as LanguageContextType
+        const classes = useStyles()
         return <ContentContainer allowBack>
             <div>
-                <Grid container style={{marginBottom: '3rem'}}>
+                <Grid container style={{marginBottom: '3rem'}} className={classes.codeDisplay}>
                     <Grid item xs={11}>
                         <Typography align="left" paragraph variant="h6" display="block" style={{margin: "1rem 0 1rem 1rem"}}>
                             {getText("roomCode")}: 
