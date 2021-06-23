@@ -1,7 +1,7 @@
 import {useState, useContext} from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import ContentContainer from "../Shared/ContentContainer";
-import { FormGroup, FormControlLabel, Checkbox, Button, Grid } from "@material-ui/core";
+import { FormGroup, FormControlLabel, Checkbox, Button, Typography } from "@material-ui/core";
 import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext";
 import NumSettingSliders from "./NumSettingSliders";
 import RoomCode from "./RoomCode";
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 export default function NewRoom(){
     const classes = useStyles();
     const {getText} = useContext(LanguageContext) as LanguageContextType
-    const [creating, setCreating] = useState(false)
+    const [roomLoading, setRoomLoading] = useState(false)
     const [roomSettings, setRoomSettings] = useState<RoomSettings>({
         numPlayer: 6,
         numSpy: 1,
@@ -34,12 +34,12 @@ export default function NewRoom(){
         eighteenPlus: false
     })
     const onClickCreate = () => {
-        setCreating(true)
+        setRoomLoading(true)
     }
 
-    if (creating) {
+    if (roomLoading) {
         return <ContentContainer allowBack>
-            <RoomCode loading={true}/>
+                <RoomCode loading={true}/>
         </ContentContainer>
     }
 
