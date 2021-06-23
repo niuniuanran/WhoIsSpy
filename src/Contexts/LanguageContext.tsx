@@ -61,6 +61,14 @@ function LanguageProvider({language, children}:LanguageContextProp){
         cnRoom: {
             en: "Room in Chinese",
             cn: "中文房间"
+        },
+        enterRoom: {
+            en: "Enter room",
+            cn: "进入房间"
+        },
+        roomFull: {
+            en: "Room is full",
+            cn: "房间已满"
         }
     }
 

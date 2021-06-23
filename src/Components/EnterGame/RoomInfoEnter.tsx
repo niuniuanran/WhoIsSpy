@@ -62,12 +62,18 @@ export default function RoomInfoEnter({loading, code, capacity, currentPlayerNum
                 }
                 
                 {(loading || !code)? (<Skeleton style={{margin: '0 auto'}} animation="wave">
-                    <Button size="large" variant="contained" color="primary" style={{marginTop: "2rem"}}>
-                        Enter room
-                    </Button>
+                    {
+                        (currentPlayerNum < capacity) ? (<Button size="large" variant="contained" color="primary" style={{marginTop: "2rem"}}>
+                            {getText("enterRoom")}
+                        </Button>) : (
+                        <Button disabled size="large" variant="contained" color="primary" style={{marginTop: "2rem"}}>
+                            {getText("roomFull")}
+                        </Button>
+                        )
+                    }
                     </Skeleton>):(
                 <Button size="large" variant="contained" color="primary" style={{marginTop: "6rem"}}>
-                    Enter room
+                    {getText("enterRoom")}
                 </Button>)} 
             </div>
         </ContentContainer>
