@@ -40,10 +40,9 @@ export default function NewRoom(){
     }
 
     if (roomLoading) {
-        return <RoomInfoEnter loading={false} currentPlayerNum={0} 
+        return <RoomInfoEnter loading currentPlayerNum={0} 
                                 capacity={roomSettings.numPlayer} 
                                 language={roomSettings.language}
-                                code="2333"
                                 />
     }
 
@@ -68,7 +67,7 @@ export default function NewRoom(){
                 </FormGroup>
                 <Button className={classes.submitButton} onClick={onClickCreate}
                         size="large" variant="contained" color="primary">
-                    Create room
+                    {getText("createRoom")}
                 </Button>
             </form>
         </ContentContainer>

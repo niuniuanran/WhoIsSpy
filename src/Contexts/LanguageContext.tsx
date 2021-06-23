@@ -14,9 +14,9 @@ export type LanguageContextType = {
 function LanguageProvider({language, children}:LanguageContextProp){
     
     const textDisplay:{ [name: string]: {[language:string]:string}}={
-        createRoom: {
+        newRoom: {
             en: "New room",
-            cn: "创建房间",
+            cn: "新建房间",
         },
         joinRoom:{
             en: "Join room",
@@ -69,6 +69,10 @@ function LanguageProvider({language, children}:LanguageContextProp){
         roomFull: {
             en: "Room is full",
             cn: "房间已满"
+        },
+        createRoom: {
+            en: "Create room",
+            cn: "创建房间"
         }
     }
 

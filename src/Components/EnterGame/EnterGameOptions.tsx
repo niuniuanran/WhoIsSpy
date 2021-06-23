@@ -14,7 +14,7 @@ export default function EnterGameOptions(){
 
     return <ContentContainer allowBack>
                 <Grid container spacing={5}>
-                    <OptionButtonBig text={getText("createRoom")} icon={<GroupAddIcon/>} path={`${match.path}/new-room`}/>
+                    <OptionButtonBig text={getText("newRoom")} icon={<GroupAddIcon/>} path={`${match.path}/new-room`}/>
                     <OptionButtonBig text={getText("joinRoom")} icon={<PersonAddIcon/>} path={`${match.path}/join-room`}/>
                     <OptionButtonBig text={getText("addWords")} icon={<PostAddIcon/>} path={`${match.path}/contribute`}/>
                 </Grid>
