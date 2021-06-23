@@ -3,21 +3,25 @@ import { Typography, Button } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import ContentContainer from '../Shared/ContentContainer'
 import PersonIcon from '@material-ui/icons/Person';
+import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext";
+import { useContext } from "react";
 
 interface RoomInfoEnterProps {
     loading: boolean,
     code?: string,
     capacity: number,
-    currentPlayerNum: number
+    currentPlayerNum: number,
+    language?: string
 }
 
-export default function RoomInfoEnter({loading, code, capacity, currentPlayerNum}:RoomInfoEnterProps){
+export default function RoomInfoEnter({loading, code, capacity, currentPlayerNum, language}:RoomInfoEnterProps){
+        const {getText, getCurrentLanguage} = useContext(LanguageContext) as LanguageContextType
         return <ContentContainer allowBack>
             <div>
                 <Grid container style={{marginBottom: '4rem'}}>
                     <Grid item xs={11}>
                         <Typography align="left" paragraph variant="h6" display="block" style={{margin: "1rem 0 1rem 1rem"}}>
-                            Room code: 
+                            {getText("roomCode")}: 
                         </Typography>
                     </Grid>
                     {
@@ -43,6 +47,16 @@ export default function RoomInfoEnter({loading, code, capacity, currentPlayerNum
                     ) : (
                         <Skeleton style={{margin: '0 auto'}}>
                             {[...Array(7)].map(() => <PersonIcon color="primary"/>)}
+                        </Skeleton>
+                    )
+                }
+
+                {
+                    (language !== undefined ) ? (
+                        <Typography variant="caption">{getText(`${getCurrentLanguage()}Room`)}</Typography>
+                    ) : (
+                        <Skeleton style={{margin: '0 auto'}}>
+                            <Typography>Room in English</Typography>
                         </Skeleton>
                     )
                 }

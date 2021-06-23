@@ -7,7 +7,8 @@ interface LanguageContextProp {
 const LanguageContext = React.createContext<any>(undefined)
 export type LanguageContextType = {
     language: string,
-    getText: (arg:string) => string
+    getText: (arg:string) => string,
+    getCurrentLanguage: () => string
 }
 
 function LanguageProvider({language, children}:LanguageContextProp){
@@ -48,14 +49,29 @@ function LanguageProvider({language, children}:LanguageContextProp){
         total: {
             en: "total",
             cn: "个玩家"
+        },
+        roomCode: {
+            en: "Room code",
+            cn: "房间号"
+        },
+        enRoom: {
+            en: "Room in English",
+            cn: "英文房间"
+        },
+        cnRoom: {
+            en: "Room in Chinese",
+            cn: "中文房间"
         }
     }
 
     const getText = (key:string) => textDisplay[key][language]
+    const getCurrentLanguage = () => language
+
     return <LanguageContext.Provider value={
         {
             language,
-            getText
+            getText,
+            getCurrentLanguage
         }
     }>
         {children}

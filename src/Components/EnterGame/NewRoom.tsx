@@ -11,6 +11,7 @@ export interface RoomSettings {
     numSpy: number,
     randomBlank: boolean,
     eighteenPlus: boolean,
+    language: string
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -25,20 +26,21 @@ const useStyles = makeStyles((theme) => ({
 
 export default function NewRoom(){
     const classes = useStyles();
-    const {getText} = useContext(LanguageContext) as LanguageContextType
+    const {getText, getCurrentLanguage} = useContext(LanguageContext) as LanguageContextType
     const [roomLoading, setRoomLoading] = useState(false)
     const [roomSettings, setRoomSettings] = useState<RoomSettings>({
         numPlayer: 6,
         numSpy: 1,
         randomBlank: true,
-        eighteenPlus: false
+        eighteenPlus: false,
+        language: getCurrentLanguage()
     })
     const onClickCreate = () => {
         setRoomLoading(true)
     }
 
     if (roomLoading) {
-        return <RoomInfoEnter loading={true} currentPlayerNum={0} capacity={roomSettings.numPlayer}/>
+        return <RoomInfoEnter loading={true} currentPlayerNum={0} capacity={roomSettings.numPlayer} language={roomSettings.language}/>
     }
 
     return <ContentContainer allowBack>
