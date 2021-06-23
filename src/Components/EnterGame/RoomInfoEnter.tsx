@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-export default function RoomInfoEnter({loading, code, capacity, currentPlayerNum, language}:RoomInfoEnterProps){
+export default function RoomInfoEnter({loading, code, capacity, currentPlayerNum, language: roomLanguage}:RoomInfoEnterProps){
         const {getText, getCurrentLanguage} = useContext(LanguageContext) as LanguageContextType
         const classes = useStyles()
         return <ContentContainer allowBack>
@@ -71,9 +71,9 @@ export default function RoomInfoEnter({loading, code, capacity, currentPlayerNum
                 }
 
                 {
-                    (language !== undefined ) ? (
+                    (roomLanguage !== undefined ) ? (
                         <Typography display="block" variant="caption">
-                            {getText(`${getCurrentLanguage()}Room`)}
+                            {getText(`${roomLanguage}Room`)}
                         </Typography>
                     ) : (
                         <Skeleton className={classes.skeleton}>
