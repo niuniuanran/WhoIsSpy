@@ -22,7 +22,7 @@ interface OptionProps {
     icon?: JSX.Element
 }
 
-export default function Option({text, path, icon}:OptionProps){
+export default function OptionButtonBig({text, path, icon}:OptionProps){
     const classes = useStyles();
     const history = useHistory();
 
