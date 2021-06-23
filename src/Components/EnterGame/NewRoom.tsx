@@ -40,7 +40,11 @@ export default function NewRoom(){
     }
 
     if (roomLoading) {
-        return <RoomInfoEnter loading={true} currentPlayerNum={0} capacity={roomSettings.numPlayer} language={roomSettings.language}/>
+        return <RoomInfoEnter loading={false} currentPlayerNum={0} 
+                                capacity={roomSettings.numPlayer} 
+                                language={roomSettings.language}
+                                code="2333"
+                                />
     }
 
     return <ContentContainer allowBack>

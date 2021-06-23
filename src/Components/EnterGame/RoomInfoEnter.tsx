@@ -18,7 +18,7 @@ export default function RoomInfoEnter({loading, code, capacity, currentPlayerNum
         const {getText, getCurrentLanguage} = useContext(LanguageContext) as LanguageContextType
         return <ContentContainer allowBack>
             <div>
-                <Grid container style={{marginBottom: '4rem'}}>
+                <Grid container style={{marginBottom: '3rem'}}>
                     <Grid item xs={11}>
                         <Typography align="left" paragraph variant="h6" display="block" style={{margin: "1rem 0 1rem 1rem"}}>
                             {getText("roomCode")}: 
@@ -26,11 +26,16 @@ export default function RoomInfoEnter({loading, code, capacity, currentPlayerNum
                     </Grid>
                     {
                         (loading || !code)? [...Array(4)].map(() => (
-                        <Grid item xs={3}>
-                            <Skeleton style={{margin: '0 auto'}} animation="wave">
-                                <Typography variant="h2">1</Typography>
-                            </Skeleton>
-                        </Grid>)) : <div></div>
+                            <Grid item xs={3}>
+                                <Skeleton style={{margin: '0 auto'}} animation="wave">
+                                    <Typography variant="h2">1</Typography>
+                                </Skeleton>
+                            </Grid>)) : (
+                            code.split("").map((c, i) => (
+                                <Grid item xs={3}>
+                                    <Typography variant="h2">{c}</Typography>
+                                </Grid>)
+                        ))
                     }
                 </Grid>
 
@@ -53,7 +58,9 @@ export default function RoomInfoEnter({loading, code, capacity, currentPlayerNum
 
                 {
                     (language !== undefined ) ? (
-                        <Typography variant="caption">{getText(`${getCurrentLanguage()}Room`)}</Typography>
+                        <Typography display="block" variant="caption">
+                            {getText(`${getCurrentLanguage()}Room`)}
+                        </Typography>
                     ) : (
                         <Skeleton style={{margin: '0 auto'}}>
                             <Typography>Room in English</Typography>
@@ -72,7 +79,7 @@ export default function RoomInfoEnter({loading, code, capacity, currentPlayerNum
                         )
                     }
                     </Skeleton>):(
-                <Button size="large" variant="contained" color="primary" style={{marginTop: "6rem"}}>
+                <Button size="large" variant="contained" color="primary" style={{marginTop: "2rem"}}>
                     {getText("enterRoom")}
                 </Button>)} 
             </div>
