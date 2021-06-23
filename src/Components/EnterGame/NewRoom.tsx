@@ -2,9 +2,9 @@ import {useState, useContext} from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import ContentContainer from "../Shared/ContentContainer";
 import { FormGroup, FormControlLabel, Checkbox, Button, Grid } from "@material-ui/core";
-import { Skeleton } from '@material-ui/lab';
 import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext";
 import NumSettingSliders from "./NumSettingSliders";
+import RoomCode from "./RoomCode";
 
 interface RoomSettings {
     numPlayer: number,
@@ -39,20 +39,7 @@ export default function NewRoom(){
 
     if (creating) {
         return <ContentContainer allowBack>
-            <Grid container>
-                <Grid item xs={3}>
-                    <Skeleton variant="circle" width={40} height={40} style={{margin: '0 auto'}}/>
-                </Grid>
-                <Grid item xs={3}>
-                    <Skeleton variant="circle" width={40} height={40} style={{margin: '0 auto'}}/>
-                </Grid>
-                <Grid item xs={3}>
-                    <Skeleton variant="circle" width={40} height={40} style={{margin: '0 auto'}}/>
-                </Grid>
-                <Grid item xs={3}>
-                    <Skeleton variant="circle" width={40} height={40} style={{margin: '0 auto'}}/>
-                </Grid>
-            </Grid>
+            <RoomCode loading={true}/>
         </ContentContainer>
     }
 
