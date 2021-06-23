@@ -4,9 +4,9 @@ import ContentContainer from "../Shared/ContentContainer";
 import { FormGroup, FormControlLabel, Checkbox, Button, Typography } from "@material-ui/core";
 import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext";
 import NumSettingSliders from "./NumSettingSliders";
-import RoomCode from "./RoomCode";
+import RoomInfoEnter from "./RoomInfoEnter";
 
-interface RoomSettings {
+export interface RoomSettings {
     numPlayer: number,
     numSpy: number,
     randomBlank: boolean,
@@ -38,7 +38,7 @@ export default function NewRoom(){
     }
 
     if (roomLoading) {
-        return <RoomCode loading={true}/>
+        return <RoomInfoEnter loading={true} currentPlayerNum={0} capacity={roomSettings.numPlayer}/>
     }
 
     return <ContentContainer allowBack>
