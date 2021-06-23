@@ -21,6 +21,9 @@ const useStyles = makeStyles((theme) => ({
             width: "80%",
             margin: '0 auto'
         }
+    },
+    skeleton: {
+        margin: '0 auto'
     }
   }));
 
@@ -38,7 +41,7 @@ export default function RoomInfoEnter({loading, code, capacity, currentPlayerNum
                     {
                         (loading || !code)? [...Array(4)].map(() => (
                             <Grid item xs={3}>
-                                <Skeleton style={{margin: '0 auto'}} animation="wave">
+                                <Skeleton className={classes.skeleton} animation="wave">
                                     <Typography variant="h2">1</Typography>
                                 </Skeleton>
                             </Grid>)) : (
@@ -61,7 +64,7 @@ export default function RoomInfoEnter({loading, code, capacity, currentPlayerNum
                         }
                         </div>
                     ) : (
-                        <Skeleton style={{margin: '0 auto'}}>
+                        <Skeleton className={classes.skeleton}>
                             {[...Array(7)].map(() => <PersonIcon color="primary"/>)}
                         </Skeleton>
                     )
@@ -73,13 +76,13 @@ export default function RoomInfoEnter({loading, code, capacity, currentPlayerNum
                             {getText(`${getCurrentLanguage()}Room`)}
                         </Typography>
                     ) : (
-                        <Skeleton style={{margin: '0 auto'}}>
+                        <Skeleton className={classes.skeleton}>
                             <Typography>Room in English</Typography>
                         </Skeleton>
                     )
                 }
                 
-                {(loading || !code)? (<Skeleton style={{margin: '0 auto'}} animation="wave">
+                {(loading || !code)? (<Skeleton className={classes.skeleton} animation="wave">
                     {
                         (currentPlayerNum < capacity) ? (<Button size="large" variant="contained" color="primary" style={{marginTop: "2rem"}}>
                             {getText("enterRoom")}
