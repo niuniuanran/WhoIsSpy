@@ -3,7 +3,6 @@ import { Typography, Button } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import ContentContainer from '../Shared/ContentContainer'
 import PersonIcon from '@material-ui/icons/Person';
-import { RoomSettings } from './NewRoom'
 
 interface RoomInfoEnterProps {
     loading: boolean,

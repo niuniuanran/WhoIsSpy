@@ -1,7 +1,7 @@
 import {useState, useContext} from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import ContentContainer from "../Shared/ContentContainer";
-import { FormGroup, FormControlLabel, Checkbox, Button, Typography } from "@material-ui/core";
+import { FormGroup, FormControlLabel, Checkbox, Button } from "@material-ui/core";
 import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext";
 import NumSettingSliders from "./NumSettingSliders";
 import RoomInfoEnter from "./RoomInfoEnter";
