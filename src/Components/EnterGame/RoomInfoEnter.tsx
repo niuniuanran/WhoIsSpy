@@ -6,14 +6,7 @@ import ContentContainer from '../Shared/ContentContainer'
 import PersonIcon from '@material-ui/icons/Person';
 import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext";
 import { useContext } from "react";
-
-interface RoomInfoEnterProps {
-    loading: boolean,
-    code?: string,
-    capacity: number,
-    currentPlayerNum: number,
-    language?: string
-}
+import RoomEnterInfo from "../../Interfaces/RoomEnterInfo"
 
 const useStyles = makeStyles((theme) => ({
     codeDisplay: {
@@ -27,8 +20,8 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-export default function RoomInfoEnter({loading, code, capacity, currentPlayerNum, language: roomLanguage}:RoomInfoEnterProps){
-        const {getText, getCurrentLanguage} = useContext(LanguageContext) as LanguageContextType
+export default function RoomInfoEnter({loading, code, capacity, currentPlayerNum, language: roomLanguage}: RoomEnterInfo){
+        const { getText } = useContext(LanguageContext) as LanguageContextType
         const classes = useStyles()
         return <ContentContainer allowBack>
             <div>
