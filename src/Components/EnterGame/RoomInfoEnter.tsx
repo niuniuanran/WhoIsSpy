@@ -7,6 +7,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext";
 import { useContext } from "react";
 import RoomEnterInfo from "../../Interfaces/RoomEnterInfo"
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     codeDisplay: {
@@ -23,6 +24,8 @@ const useStyles = makeStyles((theme) => ({
 export default function RoomInfoEnter({loading, code, capacity, currentPlayerNum, language: roomLanguage}: RoomEnterInfo){
         const { getText } = useContext(LanguageContext) as LanguageContextType
         const classes = useStyles()
+        const history = useHistory()
+
         return <ContentContainer allowBack>
             <div>
                 <Grid container style={{marginBottom: '3rem'}} className={classes.codeDisplay}>
@@ -86,7 +89,7 @@ export default function RoomInfoEnter({loading, code, capacity, currentPlayerNum
                         )
                     }
                     </Skeleton>):(
-                <Button size="large" variant="contained" color="primary" style={{marginTop: "2rem"}}>
+                <Button size="large" variant="contained" color="primary" style={{marginTop: "2rem"}} onClick={() => {history.push(`/${roomLanguage}/room/${code}`)}}>
                     {getText("enterRoom")}
                 </Button>)} 
             </div>

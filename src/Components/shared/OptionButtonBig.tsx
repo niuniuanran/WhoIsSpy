@@ -1,8 +1,6 @@
 import { Grid, Button } from "@material-ui/core"
 import { makeStyles } from '@material-ui/core/styles';
-import {
-    useHistory,
-  } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     option: {
@@ -23,8 +21,8 @@ interface OptionProps {
 }
 
 export default function OptionButtonBig({text, path, icon}:OptionProps){
-    const classes = useStyles();
-    const history = useHistory();
+    const classes = useStyles()
+    const history = useHistory()
 
     return <Grid item xs={12}>
                 <Button variant="contained" size="large" color="primary" className={classes.option} onClick={()=>{history.push(path)}}>
