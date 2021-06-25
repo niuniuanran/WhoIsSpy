@@ -1,6 +1,8 @@
-import { Avatar } from "@material-ui/core";
+import { Avatar, Paper } from "@material-ui/core";
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-
+import { useState } from "react";
+import { Skeleton } from "@material-ui/lab";
+import { useEffect } from "react";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     xlarge:{
@@ -24,11 +26,17 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface PlayerAvatarProps {
     size:"xlarge"|"large"|"small"|"xsmall"
-    nickname?:string
+    nickname?:string,
 }
 
 export default function PlayerAvatar({nickname, size}: PlayerAvatarProps){
     const classes = useStyles()
-    return <Avatar alt={nickname} src={`https://avatars.dicebear.com/api/bottts/${nickname}.svg`} 
-                    className={classes[size]}/>
+    const [loading, setLoading] = useState(true)
+    useEffect(()=>setLoading(true),[nickname])
+
+    return <div>
+            <Avatar alt={nickname} src={`https://avatars.dicebear.com/api/bottts/${nickname}.svg`} 
+                    className={classes[size]} onLoad={()=>setLoading(false)} style={loading? {display: 'none'}: {display: 'block'}}/>
+            <Skeleton variant="circle" className={classes[size]} style={loading? {display: 'block'}: {display: 'none'}}/>
+        </div>
 }

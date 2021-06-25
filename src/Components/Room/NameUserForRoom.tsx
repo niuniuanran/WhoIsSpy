@@ -5,10 +5,6 @@ import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageCon
 import { PlayerContext, PlayerContextType } from "../../Contexts/PlayerContext";
 import PlayerAvatar from "../Shared/PlayerAvatar";
 
-interface NameUserProps{
-    onOk: () => void 
-}
-
 const useStyles = makeStyles((theme) => ({
     formGroup: {
         width: 'fit-content',
@@ -19,27 +15,28 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-export default function NameUserForRoom({onOk}: NameUserProps) {
+export default function NameUserForRoom() {
     const classes = useStyles()
-    const {getText} = useContext(LanguageContext) as LanguageContextType
-    const {nickname, setNickname} = useContext(PlayerContext) as PlayerContextType
-    
+    const { getText } = useContext(LanguageContext) as LanguageContextType
+    const { setNickname } = useContext(PlayerContext) as PlayerContextType
+    const [ tryNickname, setTryNickname ] = useState("")
+
     return <form>
-        <PlayerAvatar nickname={nickname} size="xlarge"/>
+        <PlayerAvatar nickname={tryNickname} size="xlarge"/>
         <FormGroup className={classes.formGroup}>
             <TextField
                 id="nickname"
                 label="Nickname"
                 variant="outlined"
                 color="primary"
-                value={nickname}
+                value={tryNickname}
                 onInput={(e) => {
                     const targetInput = e.target as HTMLInputElement
-                    setNickname(targetInput.value)
+                    setTryNickname(targetInput.value)
                 }}
             />
         </FormGroup>
-        <Button className={classes.submitButton} onClick={onOk}
+        <Button className={classes.submitButton} onClick={() => setNickname(tryNickname)}
                 size="large" variant="contained" color="primary">
             { getText("createRoom") }
         </Button>
