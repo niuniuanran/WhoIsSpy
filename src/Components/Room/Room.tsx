@@ -17,6 +17,7 @@ export default function Room(){
     }
     return <ContentContainer allowExit> 
         <div>   
+            {code}
             <PlayerAvatar size="large" nickname="anran"/>
             <Paper>Anran's turn to talk</Paper>
         </div>

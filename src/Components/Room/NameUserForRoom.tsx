@@ -4,7 +4,6 @@ import { FormGroup, TextField, Button, } from "@material-ui/core";
 import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext";
 import { PlayerContext, PlayerContextType } from "../../Contexts/PlayerContext";
 import PlayerAvatar from "../Shared/PlayerAvatar";
-import ContentContainer from "../Shared/ContentContainer"
 
 const useStyles = makeStyles((theme) => ({
     formGroup: {
