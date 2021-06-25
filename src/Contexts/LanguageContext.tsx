@@ -73,6 +73,14 @@ function LanguageProvider({language, children}:LanguageContextProp){
         createRoom: {
             en: "Create room",
             cn: "创建房间"
+        },
+        ok: {
+            en: "OK",
+            cn: "确认"
+        },
+        youNickname: {
+            en: "Your nickname",
+            cn: "你的昵称"
         }
     }
 

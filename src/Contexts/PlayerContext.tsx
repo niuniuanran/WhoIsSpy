@@ -16,14 +16,14 @@ export type PlayerContextType = {
 
 function PlayerProvider({ children }: PlayerContextProp){
     const [id, setId] = useState(undefined)
-    const [nickname, setNickName] = useState(undefined)
+    const [nickname, setNickname] = useState(undefined)
 
     return <PlayerContext.Provider value={
         {
             id,
             setId,
             nickname,
-            setNickName,
+            setNickname,
         }
     }>
         {children}
