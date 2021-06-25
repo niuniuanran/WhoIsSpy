@@ -22,8 +22,7 @@ export default function NameUserForRoom() {
     const { setNickname } = useContext(PlayerContext) as PlayerContextType
     const [ tryNickname, setTryNickname ] = useState("")
 
-    return <ContentContainer> 
-        <form>
+    return  <form>
             <PlayerAvatar nickname={tryNickname} size="xlarge"/>
             <FormGroup className={classes.formGroup}>
                 <TextField
@@ -44,5 +43,4 @@ export default function NameUserForRoom() {
                 { getText("ok") }
         </Button>      
         </form>
-    </ContentContainer>
 }

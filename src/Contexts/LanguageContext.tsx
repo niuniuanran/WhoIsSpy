@@ -81,6 +81,10 @@ function LanguageProvider({language, children}:LanguageContextProp){
         youNickname: {
             en: "Your nickname",
             cn: "你的昵称"
+        },
+        exit: {
+            en: "Exit",
+            cn: "退出"
         }
     }
 

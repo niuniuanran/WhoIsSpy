@@ -35,33 +35,51 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 interface MainLayoutProp {
-    allowBack?: boolean
+    allowBack?: boolean,
+    allowExit?: boolean,
     children:JSX.Element
 }
 
-export default function ContentContainer({children, allowBack}:MainLayoutProp){
+export default function ContentContainer({children, allowBack, allowExit}:MainLayoutProp){
     const history = useHistory();
     const classes = useStyles();
     const languageContext = useContext(LanguageContext) as LanguageContextType
 
-    return <div className={classes.root}>
-        {
-            allowBack?(  <Grid container >
-                    <Grid item xs={9} md={4} className={classes.content}> 
-                        <div className={classes.back}>
-                            <Button size="large" aria-label="back" color="primary" variant="text" style={{fontWeight: "bolder"}} onClick={() => history.goBack()}>
-                                <ArrowBackIosIcon /> {languageContext && languageContext.getText("back")}
-                            </Button>
-                        </div>
-                        {children}
-                    </Grid>
+    if (allowBack) {
+        return <div className={classes.root}>
+            <Grid container >
+                <Grid item xs={9} md={4} className={classes.content}> 
+                    <div className={classes.back}>
+                        <Button size="large" aria-label="back" color="primary" variant="text" style={{fontWeight: "bolder"}} onClick={() => history.goBack()}>
+                            <ArrowBackIosIcon /> {languageContext && languageContext.getText("back")}
+                        </Button>
+                    </div>
+                    {children}
                 </Grid>
-                ):( <Grid container>
-                    <Grid item xs={9} md={6} className={classes.content}> 
-                        {children}
-                    </Grid>
-                </Grid>
-            )
-        }
+            </Grid>
         </div>
+    }
+
+    if (allowExit) {
+        return <div className={classes.root}>
+            <Grid container >
+                <Grid item xs={9} md={4} className={classes.content}> 
+                    <div className={classes.back}>
+                        <Button size="large" aria-label="back" color="primary" variant="text" style={{fontWeight: "bolder"}} onClick={() => history.push(`/${languageContext && languageContext.getCurrentLanguage()}`)}>
+                            <ArrowBackIosIcon /> {languageContext && languageContext.getText("exit")}
+                        </Button>
+                    </div>
+                    {children}
+                </Grid>
+            </Grid>
+        </div>
+    }
+
+    return <div className={classes.root}>
+       <Grid container>
+            <Grid item xs={9} md={6} className={classes.content}> 
+                {children}
+            </Grid>
+        </Grid>
+    </div>
 }
