@@ -1,9 +1,9 @@
 package main
 
 type WsServer struct {
-	clients    map[*Client]bool
-	register   chan *Client
-	unregister chan *Client
-	broadcast  chan []byte
+	clients    map[*Player]bool
 	rooms      map[*Room]bool
+	register   chan *Player
+	unregister chan *Player
+	broadcast  chan []byte
 }

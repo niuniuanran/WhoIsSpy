@@ -21,7 +21,7 @@ type BroadcastMessage struct {
 	Action  string  `json:"action"`
 	Message string  `json:"message"`
 	Target  *Room   `json:"target"`
-	Sender  *Client `json:"sender"`
+	Sender  *Player `json:"sender"`
 }
 
 func (Broadcast *BroadcastMessage) encode() []byte {

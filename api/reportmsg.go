@@ -17,7 +17,7 @@ const (
 // Message is sent through websocket connections between the room and client.
 type ReportMessage struct {
 	Action  string  `json:"action"`
-	Sender  *Client `json:"sender"`
+	Sender  *Player `json:"sender"`
 	Message string  `json:"message"`
 	Target  *Room   `json:"target"`
 }

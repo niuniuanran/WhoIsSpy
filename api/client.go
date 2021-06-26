@@ -4,7 +4,7 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-type Client struct {
+type Player struct {
 	// The actual websocket connection.
 	conn         *websocket.Conn
 	wsServer     *WsServer
