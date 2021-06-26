@@ -19,7 +19,7 @@ const (
 
 type BroadcastMessage struct {
 	Action  string  `json:"action"`
-	Message string  `json:"message"`
+	Payload string  `json:"payload"`
 	Target  *Room   `json:"target"`
 	Sender  *Player `json:"sender"`
 }
