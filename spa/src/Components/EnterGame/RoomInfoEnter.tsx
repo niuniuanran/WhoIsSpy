@@ -35,14 +35,14 @@ export default function RoomInfoEnter({loading, code, capacity, currentPlayerNum
                         </Typography>
                     </Grid>
                     {
-                        (loading || !code)? [...Array(4)].map(() => (
-                            <Grid item xs={3}>
+                        (loading || !code)? [...Array(4)].map((_, i) => (
+                            <Grid item xs={3} key={i}>
                                 <Skeleton className={classes.skeleton} animation="wave">
                                     <Typography variant="h2">1</Typography>
                                 </Skeleton>
                             </Grid>)) : (
                             code.split("").map((c, i) => (
-                                <Grid item xs={3}>
+                                <Grid item xs={3} key={i}>
                                     <Typography variant="h2">{c}</Typography>
                                 </Grid>)
                         ))
@@ -53,15 +53,15 @@ export default function RoomInfoEnter({loading, code, capacity, currentPlayerNum
                     (currentPlayerNum !== undefined && capacity !== undefined) ? (
                         <div>
                         {
-                            [...Array(currentPlayerNum)].map(() => <PersonIcon color="primary"/>)
+                            [...Array(currentPlayerNum)].map((_, i) => <PersonIcon color="primary" key={i}/>)
                         }
                         {
-                            [...Array(capacity - currentPlayerNum)].map(() => <PersonIcon color="disabled"/>)
+                            [...Array(capacity - currentPlayerNum)].map((_, i) => <PersonIcon color="disabled" key={i}/>)
                         }
                         </div>
                     ) : (
                         <Skeleton className={classes.skeleton}>
-                            {[...Array(7)].map(() => <PersonIcon color="primary"/>)}
+                            {[...Array(7)].map((_, i) => <PersonIcon color="primary" key={i}/>)}
                         </Skeleton>
                     )
                 }
