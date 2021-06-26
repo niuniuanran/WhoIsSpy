@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/WhoIsSpy/static/css/main.52728fd5.chunk.css",
+    "main.js": "/WhoIsSpy/static/js/main.a8802c91.chunk.js",
+    "main.js.map": "/WhoIsSpy/static/js/main.a8802c91.chunk.js.map",
+    "runtime-main.js": "/WhoIsSpy/static/js/runtime-main.2159a847.js",
+    "runtime-main.js.map": "/WhoIsSpy/static/js/runtime-main.2159a847.js.map",
+    "static/js/2.4d710de9.chunk.js": "/WhoIsSpy/static/js/2.4d710de9.chunk.js",
+    "static/js/2.4d710de9.chunk.js.map": "/WhoIsSpy/static/js/2.4d710de9.chunk.js.map",
+    "static/js/3.92361bc2.chunk.js": "/WhoIsSpy/static/js/3.92361bc2.chunk.js",
+    "static/js/3.92361bc2.chunk.js.map": "/WhoIsSpy/static/js/3.92361bc2.chunk.js.map",
+    "index.html": "/WhoIsSpy/index.html",
+    "static/css/main.52728fd5.chunk.css.map": "/WhoIsSpy/static/css/main.52728fd5.chunk.css.map",
+    "static/js/2.4d710de9.chunk.js.LICENSE.txt": "/WhoIsSpy/static/js/2.4d710de9.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.2159a847.js",
+    "static/js/2.4d710de9.chunk.js",
+    "static/css/main.52728fd5.chunk.css",
+    "static/js/main.a8802c91.chunk.js"
+  ]
+}
