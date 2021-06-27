@@ -5,8 +5,8 @@ import { FormGroup, FormControlLabel, Checkbox, Button } from "@material-ui/core
 import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext";
 import NumSettingSliders from "./NumSettingSliders";
 import RoomInfoEnter from "./RoomInfoEnter";
-import stubCreateRoomApi from "../../stub/StubCreateRoomApi"
 import RoomEnterInfo from "../../Interfaces/RoomEnterInfo";
+import {CallApi} from "../../Utils/Api";
 
 export interface RoomSettings {
     numPlayer: number,
@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
 export default function NewRoom(){
     const classes = useStyles();
     const {getText, getCurrentLanguage} = useContext(LanguageContext) as LanguageContextType
+    const [error, setError] = useState<string>("")
     const [roomSettings, setRoomSettings] = useState<RoomSettings>({
         numPlayer: 6,
         numSpy: 1,
@@ -43,11 +44,22 @@ export default function NewRoom(){
         currentPlayerNum: 0,
         language: getCurrentLanguage()
     })
+
     const onClickCreate = () => {
         setCreatedRoomInfo((createdRoomInfo) => ({...createdRoomInfo, loading: true}))
-        setTimeout(()=> {
-            setCreatedRoomInfo(() => stubCreateRoomApi(roomSettings))
-        }, 2000)
+        CallApi({path: "create-room", payload: roomSettings})
+            .then((code:string) => {
+                setCreatedRoomInfo(() => ({...createdRoomInfo, loading: false, code, capacity: roomSettings.numPlayer}))
+            })
+            .catch((e) => {
+                setError(e)
+            })
+    }
+
+    if (error) {
+        return <div>
+            Error: 
+            </div>
     }
 
     if (createdRoomInfo.loading || createdRoomInfo.code !== undefined) {
@@ -73,7 +85,7 @@ export default function NewRoom(){
                         label={getText("eighteenPlus")}
                     />
                 </FormGroup>
-                <Button className={classes.submitButton} onClick={onClickCreate}
+                <Button className={classes.submitButton} onClick={ onClickCreate }
                         size="large" variant="contained" color="primary">
                     { getText("createRoom") }
                 </Button>

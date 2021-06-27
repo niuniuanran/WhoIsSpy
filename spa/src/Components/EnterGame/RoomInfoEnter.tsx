@@ -41,7 +41,7 @@ export default function RoomInfoEnter({loading, code, capacity, currentPlayerNum
                                     <Typography variant="h2">1</Typography>
                                 </Skeleton>
                             </Grid>)) : (
-                            code.split("").map((c, i) => (
+                            (code + "").split("").map((c, i) => (
                                 <Grid item xs={3} key={i}>
                                     <Typography variant="h2">{c}</Typography>
                                 </Grid>)
