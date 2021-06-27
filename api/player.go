@@ -178,20 +178,13 @@ func (player *Player) handleNewMessage(jsonMessage []byte) {
 	fmt.Println("received message", message, "from", player.Nickname)
 
 	switch message.Action {
-	// case SendMessageAction:
-	// 	roomID := message.Target.GetID()
-	// 	if room := client.wsServer.findRoomByID(roomID); room != nil {
-	// 		room.broadcast <- &message
-	// 	}
-
-	// case JoinRoomAction:
-	// 	player.handleJoinRoomMessage(message)
-
-	// case LeaveRoomAction:
-	// 	client.handleLeaveRoomMessage(message)
-
-	// case JoinRoomPrivateAction:
-	// 	client.handleJoinRoomPrivateMessage(message)
-	// }
+	case ReadyStartAction:
+		{
+			broadcast := BroadcastMessage{
+				Payload: player.Nickname,
+				Action:  UserReadyBroadcast,
+			}
+			player.room.broadcast <- &broadcast
+		}
 	}
 }

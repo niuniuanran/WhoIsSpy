@@ -19,9 +19,8 @@ const (
 )
 
 type BroadcastMessage struct {
-	Action     string `json:"action"`
-	Payload    string `json:"payload"`
-	TargetRoom *Room  `json:"target"`
+	Action  string `json:"action"`
+	Payload string `json:"payload"`
 }
 
 func (message *BroadcastMessage) encode() []byte {
@@ -35,5 +34,5 @@ func (message *BroadcastMessage) encode() []byte {
 
 func (message *BroadcastMessage) toString() string {
 	return fmt.Sprintf("Action: %s, Payload: %s, Target room: %s",
-		message.Action, message.Payload, message.TargetRoom.Code)
+		message.Action, message.Payload)
 }

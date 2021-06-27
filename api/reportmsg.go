@@ -6,9 +6,6 @@ import (
 )
 
 const (
-	CreateRoomAction = "create-room"
-	JoinRoomAction   = "join-room"
-	NicknameAction   = "nickname"
 	TalkFinishAction = "talk-finish"
 	VoteAction       = "vote"
 	ReadyStartAction = "ready-start"
