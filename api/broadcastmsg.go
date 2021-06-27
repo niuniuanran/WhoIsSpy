@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 )
 
@@ -18,17 +19,21 @@ const (
 )
 
 type BroadcastMessage struct {
-	Action  string  `json:"action"`
-	Payload string  `json:"payload"`
-	Target  *Room   `json:"target"`
-	Sender  *Player `json:"sender"`
+	Action     string `json:"action"`
+	Payload    string `json:"payload"`
+	TargetRoom *Room  `json:"target"`
 }
 
-func (Broadcast *BroadcastMessage) encode() []byte {
-	json, err := json.Marshal(Broadcast)
+func (message *BroadcastMessage) encode() []byte {
+	json, err := json.Marshal(message)
 	if err != nil {
 		log.Println(err)
 	}
 
 	return json
+}
+
+func (message *BroadcastMessage) toString() string {
+	return fmt.Sprintf("Action: %s, Payload: %s, Target room: %s",
+		message.Action, message.Payload, message.TargetRoom.Code)
 }

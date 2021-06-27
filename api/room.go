@@ -1,6 +1,9 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
+	"net/http"
 	"strconv"
 )
 
@@ -42,11 +45,26 @@ func NewRoom(roomSettings RoomSettings) *Room {
 	}
 }
 
+func HandleCreateRoom(wsServer *WsServer, w http.ResponseWriter, r *http.Request) {
+	// Declare a new Person struct.
+	var rs RoomSettings
+
+	// Try to decode the request body into the struct. If there is an error,
+	// respond to the client with the error message and a 400 status code.
+	err := json.NewDecoder(r.Body).Decode(&rs)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	room := NewRoom(rs)
+	room.RunRoom()
+	fmt.Fprintf(w, room.Code)
+}
+
 // RunRoom runs our room, accepting various requests
 func (room *Room) RunRoom() {
 	for {
 		select {
-
 		case client := <-room.register:
 			room.registerClientInRoom(client)
 
@@ -76,9 +94,9 @@ func (room *Room) broadcastToClientsInRoom(message []byte) {
 
 func (room *Room) notifyPlayerJoined(player *Player) {
 	message := &BroadcastMessage{
-		Action:  UserJoinedBroadcast,
-		Target:  room,
-		Payload: player.Nickname,
+		Action:     UserJoinedBroadcast,
+		TargetRoom: room,
+		Payload:    player.Nickname,
 	}
 
 	room.broadcastToClientsInRoom(message.encode())

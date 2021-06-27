@@ -24,16 +24,17 @@ type Player struct {
 	Nickname string `json:"nickname"`
 }
 
-func newPlayer(conn *websocket.Conn, roomCode string, nickname string) *Player {
+func newPlayer(conn *websocket.Conn, wsServer *WsServer, roomCode string, nickname string) *Player {
 	return &Player{
 		conn:     conn,
 		RoomCode: roomCode,
 		Nickname: nickname,
+		wsServer: wsServer,
 	}
 }
 
 // ServeWs handles websocket requests from clients requests.
-func ServeWs(w http.ResponseWriter, r *http.Request) {
+func ServeWs(wsServer *WsServer, w http.ResponseWriter, r *http.Request) {
 	nickname, ok := r.URL.Query()["nickname"]
 	if !ok || len(nickname[0]) < 1 {
 		log.Println("Url Param 'nickname' is missing")
@@ -52,6 +53,6 @@ func ServeWs(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Printf("New player %s joined room %s!", nickname, roomCode)
-	player := newPlayer(conn, roomCode[0], nickname[0])
+	player := newPlayer(conn, wsServer, roomCode[0], nickname[0])
 	fmt.Println(player)
 }
