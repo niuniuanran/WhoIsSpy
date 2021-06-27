@@ -1,11 +1,32 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/websocket"
+)
+
+const (
+	// Max wait time when writing message to peer
+	writeWait = 10 * time.Second
+
+	// Max time till next pong from peer
+	pongWait = 60 * time.Second
+
+	// Send ping interval, must be less then pong wait time
+	pingPeriod = (pongWait * 9) / 10
+
+	// Maximum message size allowed from peer.
+	maxMessageSize = 10000
+)
+
+var (
+	newline = []byte{'\n'}
+	space   = []byte{' '}
 )
 
 var upgrader = websocket.Upgrader{
@@ -33,7 +54,7 @@ func newPlayer(conn *websocket.Conn, wsServer *WsServer, roomCode string, nickna
 	}
 }
 
-// ServeWs handles websocket requests from clients requests.
+// ServeWs handles websocket requests from players requests.
 func ServeWs(wsServer *WsServer, w http.ResponseWriter, r *http.Request) {
 	nickname, ok := r.URL.Query()["nickname"]
 	if !ok || len(nickname[0]) < 1 {
@@ -52,11 +73,115 @@ func ServeWs(wsServer *WsServer, w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
+
 	fmt.Printf("New player %s joined room %s!", nickname, roomCode)
 	player := newPlayer(conn, wsServer, roomCode[0], nickname[0])
+	go player.writePump()
+	go player.readPump()
 	fmt.Println(player.ToString())
 }
 
 func (player *Player) ToString() string {
 	return fmt.Sprintf("Player nickname: %s, room code: %s", player.Nickname, player.RoomCode)
+}
+
+// readPump reads new messages from a player's connection
+func (player *Player) readPump() {
+	defer func() {
+		player.disconnect()
+	}()
+
+	player.conn.SetReadLimit(maxMessageSize)
+	player.conn.SetReadDeadline(time.Now().Add(pongWait))
+	player.conn.SetPongHandler(func(string) error { player.conn.SetReadDeadline(time.Now().Add(pongWait)); return nil })
+
+	// Start endless read loop, waiting for messages from player
+	for {
+		_, jsonMessage, err := player.conn.ReadMessage()
+		if err != nil {
+			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
+				log.Printf("unexpected close error: %v", err)
+			}
+			break
+		}
+		player.handleNewMessage(jsonMessage)
+	}
+}
+
+// writePump writes message to the player's connection
+func (player *Player) writePump() {
+	ticker := time.NewTicker(pingPeriod)
+	defer func() {
+		ticker.Stop()
+		player.conn.Close()
+	}()
+	for {
+		select {
+		case message, ok := <-player.send:
+			player.conn.SetWriteDeadline(time.Now().Add(writeWait))
+			if !ok {
+				// The WsServer closed the channel.
+				player.conn.WriteMessage(websocket.CloseMessage, []byte{})
+				return
+			}
+
+			w, err := player.conn.NextWriter(websocket.TextMessage)
+			if err != nil {
+				return
+			}
+			w.Write(message)
+
+			// Attach queued chat messages to the current websocket message.
+			n := len(player.send)
+			for i := 0; i < n; i++ {
+				w.Write(newline)
+				w.Write(<-player.send)
+			}
+
+			if err := w.Close(); err != nil {
+				return
+			}
+		case <-ticker.C:
+			player.conn.SetWriteDeadline(time.Now().Add(writeWait))
+			if err := player.conn.WriteMessage(websocket.PingMessage, nil); err != nil {
+				return
+			}
+		}
+	}
+}
+
+func (player *Player) disconnect() {
+	player.wsServer.unregister <- player
+	player.wsServer.findRoomByCode(player.RoomCode).unregister <- player
+	close(player.send)
+	player.conn.Close()
+}
+
+func (player *Player) handleNewMessage(jsonMessage []byte) {
+
+	var message ReportMessage
+	if err := json.Unmarshal(jsonMessage, &message); err != nil {
+		log.Printf("Error on unmarshal JSON message %s", err)
+		return
+	}
+
+	fmt.Println("received message", message, "from", player.Nickname)
+
+	switch message.Action {
+	// case SendMessageAction:
+	// 	roomID := message.Target.GetID()
+	// 	if room := client.wsServer.findRoomByID(roomID); room != nil {
+	// 		room.broadcast <- &message
+	// 	}
+
+	// case JoinRoomAction:
+	// 	player.handleJoinRoomMessage(message)
+
+	// case LeaveRoomAction:
+	// 	client.handleLeaveRoomMessage(message)
+
+	// case JoinRoomPrivateAction:
+	// 	client.handleJoinRoomPrivateMessage(message)
+	// }
+	}
 }
