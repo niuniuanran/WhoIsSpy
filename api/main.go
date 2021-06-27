@@ -14,8 +14,6 @@ var availableRoomCodes = make(map[string]bool)
 func main() {
 	flag.Parse()
 	rooms = make(map[*Room]bool)
-	// wsServer := NewWebsocketServer()
-	// go wsServer.Run()
 
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		ServePlayerWs(w, r)

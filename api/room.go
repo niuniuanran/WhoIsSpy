@@ -103,7 +103,7 @@ func (room *Room) broadcastToClientsInRoom(message []byte) {
 
 func (room *Room) notifyPlayerJoined(player *Player) {
 	message := &BroadcastMessage{
-		Action:  UserJoinedBroadcast,
+		Action:  PlayerJoinedBroadcast,
 		Payload: player.Nickname,
 	}
 
@@ -112,7 +112,7 @@ func (room *Room) notifyPlayerJoined(player *Player) {
 
 func (room *Room) notifyPlayerLeft(player *Player) {
 	message := &BroadcastMessage{
-		Action:  UserLeftBroadcast,
+		Action:  PlayerLeftBroadcast,
 		Payload: player.Nickname,
 	}
 

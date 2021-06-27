@@ -182,7 +182,7 @@ func (player *Player) handleNewMessage(jsonMessage []byte) {
 		{
 			broadcast := BroadcastMessage{
 				Payload: player.Nickname,
-				Action:  UserReadyBroadcast,
+				Action:  PlayerReadyBroadcast,
 			}
 			player.room.broadcast <- &broadcast
 		}
