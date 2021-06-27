@@ -24,7 +24,6 @@ func NewWebsocketServer() *WsServer {
 func (server *WsServer) Run() {
 	for {
 		select {
-
 		case player := <-server.register:
 			server.registerPlayer(player)
 
@@ -54,7 +53,7 @@ func (server *WsServer) notifyPlayerJoined(player *Player) {
 	message := &BroadcastMessage{
 		Action:     UserJoinedBroadcast,
 		Payload:    player.Nickname,
-		TargetRoom: server.findRoomByCode(player.RoomCode),
+		TargetRoom: findRoomByCode(player.RoomCode),
 	}
 
 	server.broadcastToPlayersInRoom(message)
@@ -64,7 +63,7 @@ func (server *WsServer) notifyPlayerLeft(player *Player) {
 	message := &BroadcastMessage{
 		Action:     UserLeftBroadcast,
 		Payload:    player.Nickname,
-		TargetRoom: server.findRoomByCode(player.RoomCode),
+		TargetRoom: findRoomByCode(player.RoomCode),
 	}
 
 	server.broadcastToPlayersInRoom(message)
@@ -83,30 +82,6 @@ func (server *WsServer) broadcastToPlayersInRoom(message *BroadcastMessage) {
 			player.send <- message.encode()
 		}
 	}
-}
-
-func (server *WsServer) findRoomByCode(code string) *Room {
-	var foundRoom *Room
-	for room := range server.rooms {
-		if room.Code == code {
-			foundRoom = room
-			break
-		}
-	}
-
-	return foundRoom
-}
-
-func (server *WsServer) findPlayerByNickname(nickname string) *Player {
-	var foundPlayer *Player
-	for player := range server.players {
-		if player.Nickname == nickname {
-			foundPlayer = player
-			break
-		}
-	}
-
-	return foundPlayer
 }
 
 // func (server *WsServer) listOnlinePlayers(player *Player) {

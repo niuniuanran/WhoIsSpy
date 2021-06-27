@@ -38,46 +38,57 @@ var upgrader = websocket.Upgrader{
 type Player struct {
 	// The actual websocket connection.
 	conn     *websocket.Conn
-	wsServer *WsServer
 	send     chan []byte
 	RoomCode string `json:"roomCode"`
-	Id       int    `json:"Id"`
+	room     *Room
 	Nickname string `json:"nickname"`
 }
 
-func newPlayer(conn *websocket.Conn, wsServer *WsServer, roomCode string, nickname string) *Player {
-	return &Player{
-		conn:     conn,
-		RoomCode: roomCode,
+func newPlayer(conn *websocket.Conn, room *Room, nickname string) *Player {
+	player := Player{
+		RoomCode: room.Code,
 		Nickname: nickname,
-		wsServer: wsServer,
+		conn:     conn,
+		room:     room,
+		send:     make(chan []byte),
 	}
+	room.register <- &player
+	return &player
 }
 
-// ServeWs handles websocket requests from players requests.
-func ServeWs(wsServer *WsServer, w http.ResponseWriter, r *http.Request) {
+// ServePlayerWs handles websocket requests from players requests.
+func ServePlayerWs(w http.ResponseWriter, r *http.Request) {
 	nickname, ok := r.URL.Query()["nickname"]
 	if !ok || len(nickname[0]) < 1 {
 		log.Println("Url Param 'nickname' is missing")
+		http.Error(w, "Url Param 'nickname' is missing", http.StatusBadRequest)
 		return
 	}
 
 	roomCode, ok := r.URL.Query()["roomcode"]
 	if !ok || len(roomCode[0]) < 1 {
 		log.Println("Url Param 'roomcode' is missing")
+		http.Error(w, "Url Param 'roomcode' is missing", http.StatusBadRequest)
+		return
+	}
+
+	room := findRoomByCode(roomCode[0])
+	if room == nil {
+		http.Error(w, "Failed to find room with code "+roomCode[0], http.StatusBadRequest)
 		return
 	}
 
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println(err)
-		return
+		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
 
-	fmt.Printf("New player %s joined room %s!", nickname, roomCode)
-	player := newPlayer(conn, wsServer, roomCode[0], nickname[0])
+	player := newPlayer(conn, room, nickname[0])
+
 	go player.writePump()
 	go player.readPump()
+	fmt.Printf("New player %s joined room %s!", nickname, roomCode)
 	fmt.Println(player.ToString())
 }
 
@@ -151,8 +162,7 @@ func (player *Player) writePump() {
 }
 
 func (player *Player) disconnect() {
-	player.wsServer.unregister <- player
-	player.wsServer.findRoomByCode(player.RoomCode).unregister <- player
+	player.room.unregister <- player
 	close(player.send)
 	player.conn.Close()
 }

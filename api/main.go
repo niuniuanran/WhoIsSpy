@@ -8,14 +8,17 @@ import (
 )
 
 var addr = flag.String("addr", ":8080", "http server address")
+var rooms map[*Room]bool
+var availableRoomCodes = make(map[string]bool)
 
 func main() {
 	flag.Parse()
-	wsServer := NewWebsocketServer()
-	go wsServer.Run()
+	rooms = make(map[*Room]bool)
+	// wsServer := NewWebsocketServer()
+	// go wsServer.Run()
 
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
-		ServeWs(wsServer, w, r)
+		ServePlayerWs(w, r)
 	})
 
 	http.HandleFunc("/create-room", func(w http.ResponseWriter, r *http.Request) {
@@ -23,7 +26,7 @@ func main() {
 		if (r).Method == "OPTIONS" {
 			return
 		}
-		HandleCreateRoom(wsServer, w, r)
+		HandleCreateRoom(w, r)
 	})
 
 	fmt.Println("Running on :8080")

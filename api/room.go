@@ -45,7 +45,7 @@ func NewRoom(roomSettings RoomSettings) *Room {
 	}
 }
 
-func HandleCreateRoom(wsServer *WsServer, w http.ResponseWriter, r *http.Request) {
+func HandleCreateRoom(w http.ResponseWriter, r *http.Request) {
 	// Declare a new Person struct.
 	var rs RoomSettings
 
@@ -57,7 +57,9 @@ func HandleCreateRoom(wsServer *WsServer, w http.ResponseWriter, r *http.Request
 		fmt.Println("Error: ", err.Error())
 		return
 	}
+
 	room := NewRoom(rs)
+	rooms[room] = true
 	go room.RunRoom()
 	fmt.Fprintf(w, room.Code)
 }
@@ -85,6 +87,12 @@ func (room *Room) registerClientInRoom(player *Player) {
 
 func (room *Room) unregisterClientInRoom(player *Player) {
 	delete(room.players, player)
+	room.notifyPlayerLeft(player)
+	if len(room.players) == 0 {
+		delete(rooms, room)
+		delete(availableRoomCodes, room.Code)
+		room = nil
+	}
 }
 
 func (room *Room) broadcastToClientsInRoom(message []byte) {
@@ -103,12 +111,48 @@ func (room *Room) notifyPlayerJoined(player *Player) {
 	room.broadcastToClientsInRoom(message.encode())
 }
 
+func (room *Room) notifyPlayerLeft(player *Player) {
+	message := &BroadcastMessage{
+		Action:     UserLeftBroadcast,
+		TargetRoom: room,
+		Payload:    player.Nickname,
+	}
+
+	room.broadcastToClientsInRoom(message.encode())
+}
+
 // GetCode returns the code string of room
 func (room *Room) GetCode() string {
 	return room.Code
 }
 
+func findRoomByCode(code string) *Room {
+	for room := range rooms {
+		if room.Code == code && rooms[room] {
+			return room
+		}
+	}
+
+	return nil
+}
+
+func (room *Room) findPlayerByNickname(nickname string) *Player {
+	for player := range room.players {
+		if player.Nickname == nickname {
+			return player
+		}
+	}
+
+	return nil
+}
+
 func generateCode() string {
-	roomCodeIncr++
+	for _, taken := availableRoomCodes[strconv.Itoa(roomCodeIncr)]; taken; {
+		roomCodeIncr++
+		if roomCodeIncr > 9999 {
+			roomCodeIncr = 1000
+		}
+	}
+
 	return strconv.Itoa(roomCodeIncr)
 }
