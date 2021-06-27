@@ -18,7 +18,7 @@ func main() {
 		ServeWs(wsServer, w, r)
 	})
 
-	http.HandleCreateRoom("/create-room", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/create-room", func(w http.ResponseWriter, r *http.Request) {
 		HandleCreateRoom(wsServer, w, r)
 	})
 
