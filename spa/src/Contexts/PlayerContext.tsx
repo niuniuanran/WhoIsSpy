@@ -27,7 +27,7 @@ function PlayerProvider({ children }: PlayerContextProp){
     };
 
     useEffect(() => {
-        if (nickname && !connected){
+        if (nickname && code && !connected){
             ws.current = new WebSocket(`ws://localhost:8080/ws?nickname=${nickname}&roomcode=${code}`)
             ws.current.onopen = () => {
                 // on connecting, do nothing but log it to the console
