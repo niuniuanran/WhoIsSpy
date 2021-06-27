@@ -24,22 +24,34 @@ type Player struct {
 	Nickname string `json:"nickname"`
 }
 
-func newPlayer(conn *websocket.Conn) *Player {
+func newPlayer(conn *websocket.Conn, roomCode string, nickname string) *Player {
 	return &Player{
-		conn: conn,
+		conn:     conn,
+		RoomCode: roomCode,
+		Nickname: nickname,
 	}
 }
 
 // ServeWs handles websocket requests from clients requests.
 func ServeWs(w http.ResponseWriter, r *http.Request) {
+	nickname, ok := r.URL.Query()["nickname"]
+	if !ok || len(nickname[0]) < 1 {
+		log.Println("Url Param 'nickname' is missing")
+		return
+	}
+
+	roomCode, ok := r.URL.Query()["roomcode"]
+	if !ok || len(roomCode[0]) < 1 {
+		log.Println("Url Param 'roomcode' is missing")
+		return
+	}
+
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println(err)
 		return
 	}
-
-	player := newPlayer(conn)
-
-	fmt.Println("New player joined the hub!")
+	fmt.Printf("New player %s joined room %s!", nickname, roomCode)
+	player := newPlayer(conn, roomCode[0], nickname[0])
 	fmt.Println(player)
 }
