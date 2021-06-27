@@ -54,10 +54,11 @@ func HandleCreateRoom(wsServer *WsServer, w http.ResponseWriter, r *http.Request
 	err := json.NewDecoder(r.Body).Decode(&rs)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		fmt.Println("Error: ", err.Error())
 		return
 	}
 	room := NewRoom(rs)
-	room.RunRoom()
+	go room.RunRoom()
 	fmt.Fprintf(w, room.Code)
 }
 

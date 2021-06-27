@@ -54,5 +54,9 @@ func ServeWs(wsServer *WsServer, w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Printf("New player %s joined room %s!", nickname, roomCode)
 	player := newPlayer(conn, wsServer, roomCode[0], nickname[0])
-	fmt.Println(player)
+	fmt.Println(player.ToString())
+}
+
+func (player *Player) ToString() string {
+	return fmt.Sprintf("Player nickname: %s, room code: %s", player.Nickname, player.RoomCode)
 }
