@@ -41,13 +41,13 @@ function PlayerProvider({ children }: PlayerContextProp){
                 handleMessage(JSON.parse(evt.data));
             };
             ws.current.onclose = () => {
+                reportExitRoom()
                 console.log("disconnected");
-            // automatically try to reconnect on connection loss
             };
         }
     }, [connected, nickname, ws, code])
 
-    const onExitRoom = () => {
+    const reportExitRoom = () => {
         ws?.current?.send(
             JSON.stringify({
               action: "player-left",
@@ -64,7 +64,7 @@ function PlayerProvider({ children }: PlayerContextProp){
             setId,
             nickname,
             setNickname,
-            closeConnection: onExitRoom
+            onExitRoom: reportExitRoom
         }
     }>
         {children}
