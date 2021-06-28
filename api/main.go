@@ -27,6 +27,7 @@ func main() {
 	})
 
 	http.HandleFunc("/find-room", func(w http.ResponseWriter, r *http.Request) {
+		setupResponse(&w, r)
 		handleFindRoom(w, r)
 	})
 

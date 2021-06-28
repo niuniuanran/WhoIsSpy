@@ -40,7 +40,7 @@ export default function NewRoom(){
     const [createdRoomInfo, setCreatedRoomInfo] = useState<RoomEnterInfo>({
         loading: false,
         code: undefined,
-        capacity: 5,
+        capacity: 6,
         currentPlayerNum: 0,
         language: getCurrentLanguage(),
         eighteenPlus: false
@@ -48,6 +48,7 @@ export default function NewRoom(){
 
     const onClickCreate = () => {
         setCreatedRoomInfo((createdRoomInfo) => ({...createdRoomInfo, loading: true}))
+        console.log("Room settings submitted: ", roomSettings)
         CallApi({path: "create-room", payload: roomSettings})
             .then((code:string) => {
                 setCreatedRoomInfo(() => ({...createdRoomInfo, loading: false, code, capacity: roomSettings.numPlayer}))
@@ -69,7 +70,7 @@ export default function NewRoom(){
 
     return <ContentContainer allowBack>
             <form>
-                <NumSettingSliders/>    
+                <NumSettingSliders roomSettings={roomSettings} setRoomSettings={setRoomSettings}/>    
                 <FormGroup className={classes.formGroup}>
                     <FormControlLabel
                         control={<Checkbox checked={roomSettings.randomBlank} 

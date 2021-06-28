@@ -43,7 +43,7 @@ export default function JoinRoom(){
             <FormGroup className={classes.formGroup}>
                         <TextField
                             id="room-code"
-                            label={getText("enterRoomCode")}
+                            label={getText("roomCode")}
                             variant="outlined"
                             color="primary"
                             value={roomCode}
@@ -56,7 +56,7 @@ export default function JoinRoom(){
 
             <Button className={classes.submitButton} onClick={findRoom}
                     size="large" variant="contained" color="primary">
-                { getText("Find room") }
+                { getText("findRoom") }
             </Button>   
         </form>
 

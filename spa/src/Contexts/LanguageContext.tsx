@@ -86,9 +86,9 @@ function LanguageProvider({language, children}:LanguageContextProp){
             en: "Exit",
             cn: "退出"
         },
-        enterRoomCode: {
-            en: "Please enter the room code",
-            cn: "请输入房间号"
+        findRoom: {
+            en: "Find room",
+            cn: "查找房间"
         }
     }
 

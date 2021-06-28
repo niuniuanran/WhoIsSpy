@@ -2,6 +2,7 @@ import { withStyles, makeStyles } from '@material-ui/core/styles';
 import { Slider } from "@material-ui/core";
 import { useContext } from 'react'
 import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext";
+import { RoomSettings } from './NewRoom';
 
 const PlayerNumSlider = withStyles({
     root: {
@@ -99,6 +100,11 @@ const SpyNumSlider = withStyles({
     }
 })(Slider)
 
+interface NumSettingSlidersProps {
+  roomSettings: RoomSettings
+  setRoomSettings: (r: RoomSettings) => void
+}
+
 const useStyles = makeStyles((theme) => ({
     root: {
       position: 'relative',
@@ -108,11 +114,16 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-export default function NumSettingSliders(){
+export default function NumSettingSliders({roomSettings, setRoomSettings}:NumSettingSlidersProps){
     const {getText} = useContext(LanguageContext) as LanguageContextType
     const classes = useStyles()
     return <div className={classes.root}>
             <PlayerNumSlider
+                value={roomSettings.numPlayer}
+                onChange={e => {
+                  const targetInput = e.target as HTMLInputElement
+                  setRoomSettings({...roomSettings, numPlayer: parseInt(targetInput.value, 10)})
+                }}
                 defaultValue={6}
                 getAriaValueText={v => `${v} players`}
                 aria-labelledby="number-of-players"
@@ -124,6 +135,11 @@ export default function NumSettingSliders(){
                 valueLabelFormat={v => `${v} ${getText("total")}`}                 
             />    
             <SpyNumSlider
+                value={roomSettings.numSpy}
+                onChange={e => {
+                  const targetInput = e.target as HTMLInputElement
+                  setRoomSettings({...roomSettings, numSpy: parseInt(targetInput.value, 10)})
+                }}
                 defaultValue={2}
                 getAriaValueText={v => `${v} ${getText("spyPlural")}`}
                 aria-labelledby="number-of-spys"

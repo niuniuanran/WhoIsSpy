@@ -11,12 +11,12 @@ import (
 var roomCodeIncr = 1001
 
 type Room struct {
-	Code         string `json:"code"`
-	PlayerNum    int    `json:"playerNum"`
-	SpyNum       int    `json:"spyNum"`
-	Language     string `json:"language"`
-	EighteenPlus bool   `json:"eighteenPlus"`
-	RandomBlank  bool   `json:"randomBlank"`
+	Code         string
+	numPlayer    int
+	numSpy       int
+	Language     string
+	EighteenPlus bool
+	RandomBlank  bool
 	players      map[*Player]bool
 	register     chan *Player
 	unregister   chan *Player
@@ -25,8 +25,8 @@ type Room struct {
 
 type RoomSettings struct {
 	Language     string `json:"language"`
-	PlayerNum    int    `json:"playerNum"`
-	SpyNum       int    `json:"spyNum"`
+	NumPlayer    int    `json:"numPlayer"`
+	NumSpy       int    `json:"numSpy"`
 	EighteenPlus bool   `json:"eighteenPlus"`
 	RandomBlank  bool   `json:"randomBlank"`
 }
@@ -35,7 +35,7 @@ type RoomInfo struct {
 	Code             string `json:"code"`
 	Capacity         int    `json:"capacity"`
 	CurrentPlayerNum int    `json:"currentPlayerNum"`
-	Language         bool   `json:"language"`
+	Language         string `json:"language"`
 	EighteenPlus     bool   `json:"eighteenPlus"`
 }
 
@@ -43,11 +43,11 @@ func NewRoom(roomSettings RoomSettings) *Room {
 	return &Room{
 		Code:         generateCode(),
 		Language:     roomSettings.Language,
-		PlayerNum:    roomSettings.PlayerNum,
-		SpyNum:       roomSettings.SpyNum,
+		numPlayer:    roomSettings.NumPlayer,
+		numSpy:       roomSettings.NumSpy,
 		EighteenPlus: roomSettings.EighteenPlus,
 		RandomBlank:  roomSettings.RandomBlank,
-		players:      make(map[*Player]bool, roomSettings.PlayerNum),
+		players:      make(map[*Player]bool, roomSettings.NumPlayer),
 		register:     make(chan *Player),
 		unregister:   make(chan *Player),
 		broadcast:    make(chan *BroadcastMessage),
@@ -66,7 +66,7 @@ func handleCreateRoom(w http.ResponseWriter, r *http.Request) {
 		log.Println("Error: ", err.Error())
 		return
 	}
-
+	log.Println("Room settings received: ", rs)
 	room := NewRoom(rs)
 	rooms[room] = true
 	go room.RunRoom()
@@ -78,12 +78,25 @@ func handleFindRoom(w http.ResponseWriter, r *http.Request) {
 	roomCode, ok := r.URL.Query()["code"]
 	if !ok {
 		http.Error(w, "Url Param 'roomcode' is missing", http.StatusBadRequest)
+		return
 	}
 	room := findRoomByCode(roomCode[0])
 	if room == nil {
-		http.Error(w, "Cannot find room with code "+roomCode[0], http.StatusBadRequest)
+		http.Error(w, "Cannot find room with code "+roomCode[0], http.StatusNotFound)
+		return
 	}
-
+	roomInfo := RoomInfo{
+		Code:             room.Code,
+		Capacity:         room.numPlayer,
+		CurrentPlayerNum: len(room.players),
+		Language:         room.Language,
+		EighteenPlus:     room.EighteenPlus,
+	}
+	bs, err := json.Marshal(roomInfo)
+	if err != nil {
+		http.Error(w, "Failed to create room info response", http.StatusInternalServerError)
+	}
+	fmt.Fprintln(w, string(bs))
 }
 
 // RunRoom runs our room, accepting various requests
