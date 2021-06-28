@@ -88,6 +88,7 @@ func (room *Room) registerClientInRoom(player *Player) {
 }
 
 func (room *Room) unregisterPlayerInRoom(player *Player) {
+	log.Printf("Player %s is leaving room %s", player.Nickname, room.Code)
 	delete(room.players, player)
 	room.notifyPlayerLeft(player)
 	if len(room.players) == 0 {

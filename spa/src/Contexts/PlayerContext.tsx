@@ -13,7 +13,7 @@ export type PlayerContextType = {
     setId: (id: number) => void
     setNickname: (name: string) => void
     getAvatarPath: () => string
-    closeConnection?: () => void
+    reportExitRoom?: () => void
 }
 
 function PlayerProvider({ children }: PlayerContextProp){
@@ -26,6 +26,18 @@ function PlayerProvider({ children }: PlayerContextProp){
     const handleMessage = (message:string) => {
         console.log(message);
     };
+
+    const reportExitRoom = () => {
+        console.log("Leaving room ", code)
+        ws?.current?.send(
+            JSON.stringify({
+              action: "player-left",
+              sender: nickname,
+              roomcode: code,
+              payload: ""
+            })
+          )
+    }
 
     useEffect(() => {
         if (nickname && code && !connected){
@@ -47,24 +59,13 @@ function PlayerProvider({ children }: PlayerContextProp){
         }
     }, [connected, nickname, ws, code])
 
-    const reportExitRoom = () => {
-        ws?.current?.send(
-            JSON.stringify({
-              action: "player-left",
-              sender: nickname,
-              roomcode: code,
-              payload: ""
-            })
-          )
-    }
-
     return <PlayerContext.Provider value={
         {
             id,
             setId,
             nickname,
             setNickname,
-            onExitRoom: reportExitRoom
+            reportExitRoom
         }
     }>
         {children}
