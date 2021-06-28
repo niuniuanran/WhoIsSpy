@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 )
@@ -54,7 +55,7 @@ func HandleCreateRoom(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&rs)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
-		fmt.Println("Error: ", err.Error())
+		log.Println("Error: ", err.Error())
 		return
 	}
 
@@ -103,17 +104,20 @@ func (room *Room) broadcastToClientsInRoom(message []byte) {
 
 func (room *Room) notifyPlayerJoined(player *Player) {
 	message := &BroadcastMessage{
-		Action:  PlayerJoinedBroadcast,
-		Payload: player.Nickname,
+		Action:   PlayerJoinedBroadcast,
+		Payload:  player.Nickname,
+		RoomCode: room.Code,
 	}
 
 	room.broadcastToClientsInRoom(message.encode())
+	log.Println("Broadcasting", message.toString())
 }
 
 func (room *Room) notifyPlayerLeft(player *Player) {
 	message := &BroadcastMessage{
-		Action:  PlayerLeftBroadcast,
-		Payload: player.Nickname,
+		Action:   PlayerLeftBroadcast,
+		Payload:  player.Nickname,
+		RoomCode: player.RoomCode,
 	}
 
 	room.broadcastToClientsInRoom(message.encode())

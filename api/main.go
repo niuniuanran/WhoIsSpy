@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 	"net/http"
 )
@@ -27,7 +26,7 @@ func main() {
 		HandleCreateRoom(w, r)
 	})
 
-	fmt.Println("Running on :8080")
+	log.Println("Running on :8080")
 
 	log.Fatal(http.ListenAndServe(*addr, nil))
 }

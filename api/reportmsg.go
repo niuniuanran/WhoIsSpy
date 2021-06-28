@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 )
 
@@ -13,10 +14,10 @@ const (
 
 // Message is sent through websocket connections between the room and client.
 type ReportMessage struct {
-	Action  string  `json:"action"`
-	Sender  *Player `json:"sender"`
-	Message string  `json:"message"`
-	Target  *Room   `json:"target"`
+	Action         string `json:"action"`
+	SenderNickname string `json:"nickname"`
+	RoomCode       string `json:"roomcode"`
+	Payload        string `json:"payload"`
 }
 
 func (report *ReportMessage) encode() []byte {
@@ -26,4 +27,9 @@ func (report *ReportMessage) encode() []byte {
 	}
 
 	return json
+}
+
+func (message *ReportMessage) toString() string {
+	return fmt.Sprintf("Action: %s, Payload: %s",
+		message.Action, message.Payload)
 }

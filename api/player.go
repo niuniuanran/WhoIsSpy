@@ -26,7 +26,7 @@ const (
 
 var (
 	newline = []byte{'\n'}
-	space   = []byte{' '}
+	// space   = []byte{' '}
 )
 
 var upgrader = websocket.Upgrader{
@@ -89,7 +89,7 @@ func ServePlayerWs(w http.ResponseWriter, r *http.Request) {
 	go player.writePump()
 	go player.readPump()
 	fmt.Printf("New player %s joined room %s!", nickname, roomCode)
-	fmt.Println(player.ToString())
+	log.Println(player.ToString())
 }
 
 func (player *Player) ToString() string {
@@ -175,14 +175,15 @@ func (player *Player) handleNewMessage(jsonMessage []byte) {
 		return
 	}
 
-	fmt.Println("received message", message, "from", player.Nickname)
+	log.Println("received message", message.toString(), "from", player.Nickname)
 
 	switch message.Action {
 	case ReadyStartAction:
 		{
 			broadcast := BroadcastMessage{
-				Payload: player.Nickname,
-				Action:  PlayerReadyBroadcast,
+				Payload:  player.Nickname,
+				Action:   PlayerReadyBroadcast,
+				RoomCode: player.RoomCode,
 			}
 			player.room.broadcast <- &broadcast
 		}
