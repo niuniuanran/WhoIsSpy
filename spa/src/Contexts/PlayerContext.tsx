@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from "react";
+import React, {useState, useRef, useEffect, useCallback} from "react";
 import { useParams } from "react-router-dom";
 import { BroadcastMessage } from "../Interfaces/Messages";
 
@@ -28,7 +28,7 @@ function PlayerProvider({ children }: PlayerContextProp){
         console.log(message);
     };
 
-    const reportExitRoom = () => {
+    const reportExitRoom = useCallback(async () => {
         console.log("Leaving room ", code)
         ws?.current?.send(
             JSON.stringify({
@@ -38,13 +38,12 @@ function PlayerProvider({ children }: PlayerContextProp){
               payload: ""
             })
           )
-    }
+    }, [ws, nickname, code])
 
     useEffect(() => {
         if (nickname && code && !connected){
             ws.current = new WebSocket(`ws://${process.env.REACT_APP_API_BASE_URL}/ws?nickname=${nickname}&roomcode=${code}`)
             ws.current.onopen = () => {
-                // on connecting, do nothing but log it to the console
                 console.log("connected");
                 setConnected(true);
             };
@@ -56,7 +55,7 @@ function PlayerProvider({ children }: PlayerContextProp){
                 console.log("disconnected");
             };
         }
-    }, [connected, nickname, ws, code])
+    }, [reportExitRoom, code, nickname, ws, connected])
 
     return <PlayerContext.Provider value={
         {
