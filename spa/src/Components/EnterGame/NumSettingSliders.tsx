@@ -120,9 +120,8 @@ export default function NumSettingSliders({roomSettings, setRoomSettings}:NumSet
     return <div className={classes.root}>
             <PlayerNumSlider
                 value={roomSettings.numPlayer}
-                onChange={e => {
-                  const targetInput = e.target as HTMLInputElement
-                  setRoomSettings({...roomSettings, numPlayer: parseInt(targetInput.value, 10)})
+                onChange={(e: any, newValue: number | number[]) => {
+                  setRoomSettings({...roomSettings, numPlayer: newValue as number})
                 }}
                 defaultValue={6}
                 getAriaValueText={v => `${v} players`}
@@ -136,9 +135,8 @@ export default function NumSettingSliders({roomSettings, setRoomSettings}:NumSet
             />    
             <SpyNumSlider
                 value={roomSettings.numSpy}
-                onChange={e => {
-                  const targetInput = e.target as HTMLInputElement
-                  setRoomSettings({...roomSettings, numSpy: parseInt(targetInput.value, 10)})
+                onChange={(e: any, newValue: number | number[]) => {
+                  setRoomSettings({...roomSettings, numSpy: newValue as number})
                 }}
                 defaultValue={2}
                 getAriaValueText={v => `${v} ${getText("spyPlural")}`}
