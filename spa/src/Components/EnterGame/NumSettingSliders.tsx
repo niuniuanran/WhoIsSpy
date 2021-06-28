@@ -2,7 +2,7 @@ import { withStyles, makeStyles } from '@material-ui/core/styles';
 import { Slider } from "@material-ui/core";
 import { useContext } from 'react'
 import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext";
-import { RoomSettings } from './NewRoom';
+import RoomSettings from '../../Interfaces/RoomSettings';
 
 const PlayerNumSlider = withStyles({
     root: {

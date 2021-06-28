@@ -7,14 +7,7 @@ import NumSettingSliders from "./NumSettingSliders";
 import RoomInfoEnter from "./RoomInfoEnter";
 import RoomEnterInfo from "../../Interfaces/RoomEnterInfo";
 import {CallApi} from "../../Utils/Api";
-
-export interface RoomSettings {
-    numPlayer: number,
-    numSpy: number,
-    randomBlank: boolean,
-    eighteenPlus: boolean,
-    language: string
-}
+import RoomSettings from "../../Interfaces/RoomSettings";
 
 const useStyles = makeStyles((theme) => ({
     formGroup: {
