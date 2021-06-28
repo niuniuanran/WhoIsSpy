@@ -4,6 +4,7 @@ export default interface RoomEnterInfo {
     code?: string,
     capacity: number,
     currentPlayerNum: number,
-    language?: string
+    language?: string,
+    eighteenPlus?: boolean
 }
 

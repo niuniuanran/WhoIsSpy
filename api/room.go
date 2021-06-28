@@ -31,6 +31,14 @@ type RoomSettings struct {
 	RandomBlank  bool   `json:"randomBlank"`
 }
 
+type RoomInfo struct {
+	Code             string `json:"code"`
+	Capacity         int    `json:"capacity"`
+	CurrentPlayerNum int    `json:"currentPlayerNum"`
+	Language         bool   `json:"language"`
+	EighteenPlus     bool   `json:"eighteenPlus"`
+}
+
 func NewRoom(roomSettings RoomSettings) *Room {
 	return &Room{
 		Code:         generateCode(),
@@ -46,7 +54,7 @@ func NewRoom(roomSettings RoomSettings) *Room {
 	}
 }
 
-func HandleCreateRoom(w http.ResponseWriter, r *http.Request) {
+func handleCreateRoom(w http.ResponseWriter, r *http.Request) {
 	// Declare a new Person struct.
 	var rs RoomSettings
 
@@ -64,6 +72,18 @@ func HandleCreateRoom(w http.ResponseWriter, r *http.Request) {
 	go room.RunRoom()
 	fmt.Fprintf(w, room.Code)
 	log.Println("Room created: ", room.Code)
+}
+
+func handleFindRoom(w http.ResponseWriter, r *http.Request) {
+	roomCode, ok := r.URL.Query()["code"]
+	if !ok {
+		http.Error(w, "Url Param 'roomcode' is missing", http.StatusBadRequest)
+	}
+	room := findRoomByCode(roomCode[0])
+	if room == nil {
+		http.Error(w, "Cannot find room with code "+roomCode[0], http.StatusBadRequest)
+	}
+
 }
 
 // RunRoom runs our room, accepting various requests

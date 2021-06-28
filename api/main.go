@@ -23,7 +23,11 @@ func main() {
 		if (r).Method == "OPTIONS" {
 			return
 		}
-		HandleCreateRoom(w, r)
+		handleCreateRoom(w, r)
+	})
+
+	http.HandleFunc("/find-room", func(w http.ResponseWriter, r *http.Request) {
+		handleFindRoom(w, r)
 	})
 
 	log.Println("Running on :8080")

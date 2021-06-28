@@ -42,7 +42,8 @@ export default function NewRoom(){
         code: undefined,
         capacity: 5,
         currentPlayerNum: 0,
-        language: getCurrentLanguage()
+        language: getCurrentLanguage(),
+        eighteenPlus: false
     })
 
     const onClickCreate = () => {
