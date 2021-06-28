@@ -63,6 +63,7 @@ func HandleCreateRoom(w http.ResponseWriter, r *http.Request) {
 	rooms[room] = true
 	go room.RunRoom()
 	fmt.Fprintf(w, room.Code)
+	log.Println("Room created: ", room.Code)
 }
 
 // RunRoom runs our room, accepting various requests
@@ -149,12 +150,16 @@ func (room *Room) findPlayerByNickname(nickname string) *Player {
 }
 
 func generateCode() string {
-	for _, taken := availableRoomCodes[strconv.Itoa(roomCodeIncr)]; taken; {
+	for {
+		_, taken := availableRoomCodes[strconv.Itoa(roomCodeIncr)]
+		if !taken {
+			break
+		}
 		roomCodeIncr++
 		if roomCodeIncr > 9999 {
 			roomCodeIncr = 1000
 		}
 	}
-
+	availableRoomCodes[strconv.Itoa(roomCodeIncr)] = true
 	return strconv.Itoa(roomCodeIncr)
 }
