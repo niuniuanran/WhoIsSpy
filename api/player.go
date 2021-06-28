@@ -187,5 +187,9 @@ func (player *Player) handleNewMessage(jsonMessage []byte) {
 			}
 			player.room.broadcast <- &broadcast
 		}
+	case PlayerLeftAction:
+		{
+			player.room.unregisterPlayerInRoom(player)
+		}
 	}
 }

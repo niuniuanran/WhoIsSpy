@@ -34,13 +34,14 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-interface MainLayoutProp {
+interface ContentContainerProps {
     allowBack?: boolean,
     allowExit?: boolean,
-    children:JSX.Element
+    children:JSX.Element,
+    onExit?: () => void
 }
 
-export default function ContentContainer({children, allowBack, allowExit}:MainLayoutProp){
+export default function ContentContainer({children, allowBack, allowExit, onExit}:ContentContainerProps){
     const history = useHistory();
     const classes = useStyles();
     const languageContext = useContext(LanguageContext) as LanguageContextType
@@ -65,7 +66,11 @@ export default function ContentContainer({children, allowBack, allowExit}:MainLa
             <Grid container >
                 <Grid item xs={9} md={4} className={classes.content}> 
                     <div className={classes.back}>
-                        <Button size="large" aria-label="back" color="primary" variant="text" style={{fontWeight: "bolder"}} onClick={() => history.push(`/${languageContext && languageContext.getCurrentLanguage()}`)}>
+                        <Button size="large" aria-label="back" color="primary" variant="text" style={{fontWeight: "bolder"}} 
+                            onClick={() => {
+                                onExit && onExit()
+                                history.push(`/${languageContext && languageContext.getCurrentLanguage()}`
+                            )}}>
                             <ArrowBackIosIcon /> {languageContext && languageContext.getText("exit")}
                         </Button>
                     </div>

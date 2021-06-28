@@ -10,12 +10,13 @@ const (
 	TalkFinishAction = "talk-finish"
 	VoteAction       = "vote"
 	ReadyStartAction = "ready-start"
+	PlayerLeftAction = "player-left"
 )
 
 // Message is sent through websocket connections between the room and client.
 type ReportMessage struct {
 	Action         string `json:"action"`
-	SenderNickname string `json:"nickname"`
+	SenderNickname string `json:"sender"`
 	RoomCode       string `json:"roomcode"`
 	Payload        string `json:"payload"`
 }

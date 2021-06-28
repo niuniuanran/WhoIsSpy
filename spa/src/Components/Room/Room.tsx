@@ -7,7 +7,7 @@ import ContentContainer from "../Shared/ContentContainer"
 import PlayerAvatar from "../Shared/PlayerAvatar";
 
 export default function Room(){
-    const { nickname } = useContext(PlayerContext) as PlayerContextType
+    const { nickname, closeConnection } = useContext(PlayerContext) as PlayerContextType
     const { code } = useParams<{code?: string}>()
 
     if (!nickname) {
@@ -15,7 +15,7 @@ export default function Room(){
             <NameUserForRoom />
         </ContentContainer>
     }
-    return <ContentContainer allowExit> 
+    return <ContentContainer allowExit onExit={closeConnection}> 
         <div>   
             {code}
             <PlayerAvatar size="large" nickname="anran"/>

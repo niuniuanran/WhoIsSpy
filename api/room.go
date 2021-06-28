@@ -74,10 +74,10 @@ func (room *Room) RunRoom() {
 			room.registerClientInRoom(client)
 
 		case client := <-room.unregister:
-			room.unregisterClientInRoom(client)
+			room.unregisterPlayerInRoom(client)
 
 		case message := <-room.broadcast:
-			room.broadcastToClientsInRoom(message.encode())
+			room.broadcastToPlayersInRoom(message.encode())
 		}
 	}
 }
@@ -87,17 +87,18 @@ func (room *Room) registerClientInRoom(player *Player) {
 	room.players[player] = true
 }
 
-func (room *Room) unregisterClientInRoom(player *Player) {
+func (room *Room) unregisterPlayerInRoom(player *Player) {
 	delete(room.players, player)
 	room.notifyPlayerLeft(player)
 	if len(room.players) == 0 {
+		log.Printf("Room %s is empty. Cleaning room...", room.Code)
 		delete(rooms, room)
 		delete(availableRoomCodes, room.Code)
 		room = nil
 	}
 }
 
-func (room *Room) broadcastToClientsInRoom(message []byte) {
+func (room *Room) broadcastToPlayersInRoom(message []byte) {
 	for client := range room.players {
 		client.send <- message
 	}
@@ -110,7 +111,7 @@ func (room *Room) notifyPlayerJoined(player *Player) {
 		RoomCode: room.Code,
 	}
 
-	room.broadcastToClientsInRoom(message.encode())
+	room.broadcastToPlayersInRoom(message.encode())
 	log.Println("Broadcasting", message.toString())
 }
 
@@ -121,7 +122,7 @@ func (room *Room) notifyPlayerLeft(player *Player) {
 		RoomCode: player.RoomCode,
 	}
 
-	room.broadcastToClientsInRoom(message.encode())
+	room.broadcastToPlayersInRoom(message.encode())
 }
 
 // GetCode returns the code string of room

@@ -13,6 +13,7 @@ export type PlayerContextType = {
     setId: (id: number) => void
     setNickname: (name: string) => void
     getAvatarPath: () => string
+    closeConnection?: () => void
 }
 
 function PlayerProvider({ children }: PlayerContextProp){
@@ -40,11 +41,22 @@ function PlayerProvider({ children }: PlayerContextProp){
                 handleMessage(JSON.parse(evt.data));
             };
             ws.current.onclose = () => {
-            console.log("disconnected");
+                console.log("disconnected");
             // automatically try to reconnect on connection loss
             };
         }
     }, [connected, nickname, ws, code])
+
+    const onExitRoom = () => {
+        ws?.current?.send(
+            JSON.stringify({
+              action: "player-left",
+              sender: nickname,
+              roomcode: code,
+              payload: ""
+            })
+          )
+    }
 
     return <PlayerContext.Provider value={
         {
@@ -52,6 +64,7 @@ function PlayerProvider({ children }: PlayerContextProp){
             setId,
             nickname,
             setNickname,
+            closeConnection: onExitRoom
         }
     }>
         {children}
