@@ -36,9 +36,7 @@ export default function JoinRoom(){
             payload: roomCode,
             method: "GET"
         }).then((j:any) => {
-            console.log("json: ", j)
             setRoomInfoFound({...j, loading: false})
-            console.log(roomInfoFound)
         })
     }
 
