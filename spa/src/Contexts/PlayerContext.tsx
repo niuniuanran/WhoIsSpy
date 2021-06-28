@@ -1,5 +1,6 @@
 import React, {useState, useRef, useEffect} from "react";
 import { useParams } from "react-router-dom";
+import { BroadcastMessage } from "../Interfaces/Messages";
 
 const PlayerContext = React.createContext<any>(undefined)
 
@@ -23,7 +24,7 @@ function PlayerProvider({ children }: PlayerContextProp){
     const [connected, setConnected] = useState(false);
     const ws = useRef<WebSocket|null>(null);
 
-    const handleMessage = (message:string) => {
+    const handleMessage = (message:BroadcastMessage) => {
         console.log(message);
     };
 
@@ -32,8 +33,8 @@ function PlayerProvider({ children }: PlayerContextProp){
         ws?.current?.send(
             JSON.stringify({
               action: "player-left",
-              sender: nickname,
-              roomcode: code,
+              senderNickname: nickname,
+              roomCode: code,
               payload: ""
             })
           )
@@ -48,8 +49,6 @@ function PlayerProvider({ children }: PlayerContextProp){
                 setConnected(true);
             };
             ws.current.onmessage = (evt) => {
-                // listen to data sent from the websocket server
-                console.log(evt.data);
                 handleMessage(JSON.parse(evt.data));
             };
             ws.current.onclose = () => {

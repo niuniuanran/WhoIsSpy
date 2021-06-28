@@ -59,7 +59,7 @@ func handleCreateRoom(w http.ResponseWriter, r *http.Request) {
 	var rs RoomSettings
 
 	// Try to decode the request body into the struct. If there is an error,
-	// respond to the client with the error message and a 400 status code.
+	// respond to the player with the error message and a 400 status code.
 	err := json.NewDecoder(r.Body).Decode(&rs)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -103,11 +103,11 @@ func handleFindRoom(w http.ResponseWriter, r *http.Request) {
 func (room *Room) RunRoom() {
 	for {
 		select {
-		case client := <-room.register:
-			room.registerClientInRoom(client)
+		case player := <-room.register:
+			room.registerPlayerInRoom(player)
 
-		case client := <-room.unregister:
-			room.unregisterPlayerInRoom(client)
+		case player := <-room.unregister:
+			room.unregisterPlayerInRoom(player)
 
 		case message := <-room.broadcast:
 			room.broadcastToPlayersInRoom(message.encode())
@@ -115,7 +115,7 @@ func (room *Room) RunRoom() {
 	}
 }
 
-func (room *Room) registerClientInRoom(player *Player) {
+func (room *Room) registerPlayerInRoom(player *Player) {
 	room.notifyPlayerJoined(player)
 	room.players[player] = true
 }
@@ -133,8 +133,8 @@ func (room *Room) unregisterPlayerInRoom(player *Player) {
 }
 
 func (room *Room) broadcastToPlayersInRoom(message []byte) {
-	for client := range room.players {
-		client.send <- message
+	for player := range room.players {
+		player.send <- message
 	}
 }
 
