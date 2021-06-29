@@ -8,8 +8,8 @@ const BroadcastActions = {
 }
 
 interface BroadcastMessage{
-    action?: string
-    payload?: string
+    action: string
+    payload: string
     roomcode?: string
 }
 

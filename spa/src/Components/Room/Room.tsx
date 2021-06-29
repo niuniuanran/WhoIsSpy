@@ -7,7 +7,7 @@ import ContentContainer from "../Shared/ContentContainer"
 import PlayerAvatar from "../Shared/PlayerAvatar";
 
 export default function Room(){
-    const { nickname, reportExitRoom } = useContext(PlayerContext) as PlayerContextType
+    const { nickname, reportExitRoom, playersInRoom } = useContext(PlayerContext) as PlayerContextType
     const { code } = useParams<{code?: string}>()
 
     if (!nickname) {
@@ -18,8 +18,9 @@ export default function Room(){
     return <ContentContainer allowExit onExit={reportExitRoom}> 
         <div>   
             {code}
-            <PlayerAvatar size="large" nickname="anran"/>
-            <Paper>Anran's turn to talk</Paper>
+            {playersInRoom && playersInRoom.map((p, i) => <div key={i}>
+                <PlayerAvatar nickname={p} size="large"/>
+                </div>) }
         </div>
     </ContentContainer>
 }

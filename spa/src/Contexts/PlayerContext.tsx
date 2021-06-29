@@ -1,6 +1,6 @@
 import React, {useState, useRef, useEffect, useCallback} from "react";
 import { useParams } from "react-router-dom";
-import { BroadcastMessage } from "../Interfaces/Messages";
+import { BroadcastActions, BroadcastMessage } from "../Interfaces/Messages";
 
 const PlayerContext = React.createContext<any>(undefined)
 
@@ -15,6 +15,7 @@ export type PlayerContextType = {
     setNickname: (name: string) => void
     getAvatarPath: () => string
     reportExitRoom?: () => void
+    playersInRoom?: [string]
 }
 
 function PlayerProvider({ children }: PlayerContextProp){
@@ -22,10 +23,15 @@ function PlayerProvider({ children }: PlayerContextProp){
     const [id, setId] = useState(undefined)
     const [nickname, setNickname] = useState(undefined)
     const [connected, setConnected] = useState(false);
+    const [playersInRoom, setPlayersInRoom] = useState<[string]>()
     const ws = useRef<WebSocket|null>(null);
 
     const handleMessage = (message:BroadcastMessage) => {
         console.log(message);
+        if (message.action === BroadcastActions.PlayerJoinedBroadcast) {
+            setPlayersInRoom(JSON.parse(message.payload))
+            console.log("Players in room:", playersInRoom)
+        }
     };
 
     const reportExitRoom = useCallback(async () => {
@@ -63,7 +69,8 @@ function PlayerProvider({ children }: PlayerContextProp){
             setId,
             nickname,
             setNickname,
-            reportExitRoom
+            reportExitRoom,
+            playersInRoom
         }
     }>
         {children}
