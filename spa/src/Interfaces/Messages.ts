@@ -11,6 +11,7 @@ interface BroadcastMessage{
     action: string
     payload: string
     roomcode?: string
+    line?: string
 }
 
 const ReportActions = {

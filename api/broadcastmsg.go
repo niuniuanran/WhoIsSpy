@@ -22,6 +22,7 @@ type BroadcastMessage struct {
 	Action   string `json:"action"`
 	Payload  string `json:"payload"`
 	RoomCode string `json:"roomcode"`
+	Line     string `json:"line"`
 }
 
 func (message *BroadcastMessage) encode() []byte {
