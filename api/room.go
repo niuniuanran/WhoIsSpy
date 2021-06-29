@@ -55,11 +55,7 @@ func NewRoom(roomSettings RoomSettings) *Room {
 }
 
 func handleCreateRoom(w http.ResponseWriter, r *http.Request) {
-	// Declare a new Person struct.
 	var rs RoomSettings
-
-	// Try to decode the request body into the struct. If there is an error,
-	// respond to the player with the error message and a 400 status code.
 	err := json.NewDecoder(r.Body).Decode(&rs)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -185,11 +181,6 @@ func (room *Room) notifyPlayerLeft(player *Player) {
 	room.broadcastToPlayersInRoom(message.encode())
 }
 
-// GetCode returns the code string of room
-func (room *Room) GetCode() string {
-	return room.Code
-}
-
 func findRoomByCode(code string) *Room {
 	for room := range rooms {
 		if room.Code == code && rooms[room] {
@@ -199,16 +190,6 @@ func findRoomByCode(code string) *Room {
 
 	return nil
 }
-
-// func (room *Room) findPlayerByNickname(nickname string) *Player {
-// 	for player := range room.players {
-// 		if player.Nickname == nickname {
-// 			return player
-// 		}
-// 	}
-
-// 	return nil
-// }
 
 func generateCode() string {
 	for {
