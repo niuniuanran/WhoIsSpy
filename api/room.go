@@ -116,8 +116,8 @@ func (room *Room) RunRoom() {
 }
 
 func (room *Room) registerPlayerInRoom(player *Player) {
-	room.notifyPlayerJoined(player)
 	room.players[player] = true
+	room.notifyPlayerJoined(player)
 }
 
 func (room *Room) unregisterPlayerInRoom(player *Player) {
@@ -141,7 +141,7 @@ func (room *Room) broadcastToPlayersInRoom(message []byte) {
 func (room *Room) notifyPlayerJoined(player *Player) {
 	players := make([]string, 0, len(room.players))
 	for p, present := range room.players {
-		if present {
+		if present && p.Nickname != player.Nickname {
 			players = append(players, p.Nickname)
 		}
 	}

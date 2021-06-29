@@ -30,7 +30,6 @@ function PlayerProvider({ children }: PlayerContextProp){
         console.log(message);
         if (message.action === BroadcastActions.PlayerJoinedBroadcast) {
             setPlayersInRoom(JSON.parse(message.payload))
-            console.log("Players in room:", playersInRoom)
         }
     };
 

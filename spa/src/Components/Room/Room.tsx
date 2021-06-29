@@ -1,13 +1,13 @@
 import { useParams } from "react-router-dom";
 import { useContext } from "react"
-import { Paper } from "@material-ui/core"
 import { PlayerContext, PlayerContextType } from "../../Contexts/PlayerContext";
 import NameUserForRoom from "./NameUserForRoom";
 import ContentContainer from "../Shared/ContentContainer"
-import PlayerAvatar from "../Shared/PlayerAvatar";
+import { Typography } from "@material-ui/core";
+import PlayerList from "./PlayerList";
 
 export default function Room(){
-    const { nickname, reportExitRoom, playersInRoom } = useContext(PlayerContext) as PlayerContextType
+    const { nickname, reportExitRoom } = useContext(PlayerContext) as PlayerContextType
     const { code } = useParams<{code?: string}>()
 
     if (!nickname) {
@@ -16,11 +16,11 @@ export default function Room(){
         </ContentContainer>
     }
     return <ContentContainer allowExit onExit={reportExitRoom}> 
-        <div>   
-            {code}
-            {playersInRoom && playersInRoom.map((p, i) => <div key={i}>
-                <PlayerAvatar nickname={p} size="large"/>
-                </div>) }
+        <div>
+            <Typography variant="h2">
+                Room {code}
+            </Typography>
+            <PlayerList/>
         </div>
     </ContentContainer>
 }
