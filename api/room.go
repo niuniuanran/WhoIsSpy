@@ -156,6 +156,7 @@ func (room *Room) notifyPlayerJoined(player *Player) {
 		Action:   PlayerJoinedBroadcast,
 		Payload:  string(bs),
 		RoomCode: room.Code,
+		Line:     fmt.Sprintf("%s joint the room", player.Nickname),
 	}
 
 	room.broadcastToPlayersInRoom(message.encode())
@@ -163,10 +164,22 @@ func (room *Room) notifyPlayerJoined(player *Player) {
 }
 
 func (room *Room) notifyPlayerLeft(player *Player) {
+	players := make([]string, 0, len(room.players))
+	for p, present := range room.players {
+		if present {
+			players = append(players, p.Nickname)
+		}
+	}
+	bs, err := json.Marshal(players)
+	if err != nil {
+		log.Println("Service error: failed to create player list json")
+		return
+	}
 	message := &BroadcastMessage{
 		Action:   PlayerLeftBroadcast,
-		Payload:  player.Nickname,
+		Payload:  string(bs),
 		RoomCode: player.RoomCode,
+		Line:     fmt.Sprintf("%s left the room", player.Nickname),
 	}
 
 	room.broadcastToPlayersInRoom(message.encode())
