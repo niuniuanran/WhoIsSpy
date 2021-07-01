@@ -16,19 +16,25 @@ export type PlayerContextType = {
     getAvatarPath: () => string
     reportExitRoom?: () => void
     playersInRoom?: [string]
+    alertLine?: string
 }
 
 function PlayerProvider({ children }: PlayerContextProp){
     const { code } = useParams<{code?: string}>()
     const [id, setId] = useState(undefined)
     const [nickname, setNickname] = useState(undefined)
-    const [connected, setConnected] = useState(false);
+    const [connected, setConnected] = useState(false)
+    const [alertLine, setAlertLine] = useState("")
     const [playersInRoom, setPlayersInRoom] = useState<[string]>()
     const ws = useRef<WebSocket|null>(null);
 
     const handleMessage = (message:BroadcastMessage) => {
         console.log(message);
-        if (message.action === BroadcastActions.PlayerJoinedBroadcast) {
+        if (message.line) {
+            setAlertLine(message.line)
+            setTimeout(()=>setAlertLine(""), 2000)
+        }
+        if (message.action === BroadcastActions.PlayerJoinedBroadcast || message.action == BroadcastActions.PlayerLeftBroadcast) {
             setPlayersInRoom(JSON.parse(message.payload))
         }
     };
@@ -69,7 +75,8 @@ function PlayerProvider({ children }: PlayerContextProp){
             nickname,
             setNickname,
             reportExitRoom,
-            playersInRoom
+            playersInRoom,
+            alertLine
         }
     }>
         {children}

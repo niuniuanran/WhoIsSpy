@@ -5,9 +5,10 @@ import NameUserForRoom from "./NameUserForRoom";
 import ContentContainer from "../Shared/ContentContainer"
 import { Typography } from "@material-ui/core";
 import PlayerList from "./PlayerList";
+import RoomTopAlert from "./RoomTopAlert"
 
 export default function Room(){
-    const { nickname, reportExitRoom } = useContext(PlayerContext) as PlayerContextType
+    const { nickname, reportExitRoom, alertLine } = useContext(PlayerContext) as PlayerContextType
     const { code } = useParams<{code?: string}>()
 
     if (!nickname) {
@@ -17,6 +18,7 @@ export default function Room(){
     }
     return <ContentContainer allowExit onExit={reportExitRoom}> 
         <div>
+            {alertLine && <RoomTopAlert alertLine={alertLine}/>}
             <Typography variant="h2">
                 Room {code}
             </Typography>

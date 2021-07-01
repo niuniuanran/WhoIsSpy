@@ -95,7 +95,7 @@ func handleFindRoom(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, string(bs))
 }
 
-// RunRoom runs our room, accepting various requests
+// RunRoom runs the room, accepting various requests
 func (room *Room) RunRoom() {
 	for {
 		select {
@@ -112,12 +112,13 @@ func (room *Room) RunRoom() {
 }
 
 func (room *Room) registerPlayerInRoom(player *Player) {
+	log.Printf("Player %s joins room %s", player.Nickname, room.Code)
 	room.players[player] = true
 	room.notifyPlayerJoined(player)
 }
 
 func (room *Room) unregisterPlayerInRoom(player *Player) {
-	log.Printf("Player %s is leaving room %s", player.Nickname, room.Code)
+	log.Printf("Player %s leaves room %s", player.Nickname, room.Code)
 	delete(room.players, player)
 	room.notifyPlayerLeft(player)
 	if len(room.players) == 0 {
