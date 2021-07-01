@@ -34,7 +34,7 @@ function PlayerProvider({ children }: PlayerContextProp){
             setAlertLine(message.line)
             setTimeout(()=>setAlertLine(""), 2000)
         }
-        if (message.action === BroadcastActions.PlayerJoinedBroadcast || message.action == BroadcastActions.PlayerLeftBroadcast) {
+        if (message.action === BroadcastActions.PlayerJoinedBroadcast || message.action === BroadcastActions.PlayerLeftBroadcast) {
             setPlayersInRoom(JSON.parse(message.payload))
         }
     };

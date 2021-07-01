@@ -25,7 +25,7 @@ export default function PlayerList() {
             {playersInRoom && playersInRoom.map((p, i) => (
                 <div key={i}>
                     <div className={classes.root}>
-                        <PlayerAvatar nickname={p} size="large" className={(p==nickname)? classes.me : classes.others}/>
+                        <PlayerAvatar nickname={p} size="large" className={(p === nickname)? classes.me : classes.others}/>
                         <Typography>
                             {p}
                         </Typography>
