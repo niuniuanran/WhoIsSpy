@@ -19,7 +19,7 @@ export default function Room(){
     return <ContentContainer allowExit onExit={reportExitRoom}> 
         <div>
             {alertLine && <RoomTopAlert alertLine={alertLine}/>}
-            <Typography variant="h2">
+            <Typography variant="h4">
                 Room {code}
             </Typography>
             <PlayerList/>
