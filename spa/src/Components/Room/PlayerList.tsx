@@ -34,7 +34,9 @@ export default function PlayerList() {
                 <Grid xs={3} item key={i} className={`${classes.player} ${(i === playersInRoom.length - 1)? classes.new: ""}`}>
                     <PlayerAvatar nickname={p} size="large" className={(p === nickname)? classes.me : classes.others}/>
                     <Typography>
-                        {p}
+                        {
+                            nickname === p ?`${p} (you)`: p
+                        }
                     </Typography>
                 </Grid>)) }
         </Grid>

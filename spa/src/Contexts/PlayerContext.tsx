@@ -1,6 +1,8 @@
 import React, {useState, useRef, useEffect, useCallback} from "react";
 import { useParams } from "react-router-dom";
 import { BroadcastActions, BroadcastMessage } from "../Interfaces/Messages";
+import { CallApi } from "../Utils/Api"
+import { Modal } from "@material-ui/core"
 
 const PlayerContext = React.createContext<any>(undefined)
 
@@ -26,6 +28,8 @@ function PlayerProvider({ children }: PlayerContextProp){
     const [connected, setConnected] = useState(false)
     const [alertLine, setAlertLine] = useState("")
     const [playersInRoom, setPlayersInRoom] = useState<[string]>()
+    const [joinFailedMessage, setJoinFailedMessage] = useState("")
+
     const ws = useRef<WebSocket|null>(null);
 
     const handleMessage = (message:BroadcastMessage) => {
@@ -53,18 +57,25 @@ function PlayerProvider({ children }: PlayerContextProp){
 
     useEffect(() => {
         if (nickname && code && !connected){
-            ws.current = new WebSocket(`ws://${process.env.REACT_APP_API_BASE_URL}/ws?nickname=${nickname}&roomcode=${code}`)
-            ws.current.onopen = () => {
-                console.log("connected");
-                setConnected(true);
-            };
-            ws.current.onmessage = (evt) => {
-                handleMessage(JSON.parse(evt.data));
-            };
-            ws.current.onclose = () => {
-                reportExitRoom()
-                console.log("disconnected");
-            };
+            CallApi({path: "ayt?nickname=${nickname}&roomcode=${code}" })
+            .then((r:string) => {
+                if (r === "") {
+                    ws.current = new WebSocket(`ws://${process.env.REACT_APP_API_BASE_URL}/ws?nickname=${nickname}&roomcode=${code}`)
+                    ws.current.onopen = () => {
+                        console.log("connected");
+                        setConnected(true);
+                    };
+                    ws.current.onmessage = (evt) => {
+                        handleMessage(JSON.parse(evt.data));
+                    };
+                    ws.current.onclose = () => {
+                        reportExitRoom()
+                        console.log("disconnected");
+                    };
+                } else {
+                    setJoinFailedMessage(r)
+                }
+            })
         }
     }, [reportExitRoom, code, nickname, ws, connected])
 
@@ -80,6 +91,16 @@ function PlayerProvider({ children }: PlayerContextProp){
         }
     }>
         {children}
+        <Modal
+            open={joinFailedMessage !== ""}
+            onClose={() => setJoinFailedMessage("")}
+            aria-labelledby="join-room-failed"
+            aria-describedby="join-room-failed"
+            >
+            <span>
+                {joinFailedMessage}
+            </span>
+        </Modal>
     </PlayerContext.Provider>
 }
 
