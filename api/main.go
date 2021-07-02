@@ -31,6 +31,11 @@ func main() {
 		handleFindRoom(w, r)
 	})
 
+	http.HandleFunc("/ayt", func(w http.ResponseWriter, r *http.Request) {
+		setupResponse(&w, r)
+		handleAyt(w, r)
+	})
+
 	log.Println("Running on :8080")
 
 	log.Fatal(http.ListenAndServe(*addr, nil))

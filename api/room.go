@@ -54,6 +54,39 @@ func NewRoom(roomSettings RoomSettings) *Room {
 	}
 }
 
+func handleAyt(w http.ResponseWriter, r *http.Request) {
+	roomCode, ok := r.URL.Query()["roomcode"]
+	if !ok {
+		http.Error(w, "Url Param 'roomcode' is missing", http.StatusBadRequest)
+		return
+	}
+	room := findRoomByCode(roomCode[0])
+	if room == nil {
+		fmt.Fprint(w, "Cannot find room with code", roomCode[0])
+		return
+	}
+
+	if len(room.players) >= room.numPlayer {
+		fmt.Fprintf(w, "Room %s is full", roomCode[0])
+		return
+	}
+
+	nickname, ok := r.URL.Query()["nickname"]
+	if !ok {
+		http.Error(w, "Url Param 'nickname' is missing", http.StatusBadRequest)
+		return
+	}
+
+	for name, present := range room.players {
+		if present && name.Nickname == nickname[0] {
+			fmt.Fprintf(w, "Nickname %s already taken", nickname[0])
+			return
+		}
+	}
+
+	fmt.Fprint(w, "")
+}
+
 func handleCreateRoom(w http.ResponseWriter, r *http.Request) {
 	var rs RoomSettings
 	err := json.NewDecoder(r.Body).Decode(&rs)
@@ -66,7 +99,7 @@ func handleCreateRoom(w http.ResponseWriter, r *http.Request) {
 	room := NewRoom(rs)
 	rooms[room] = true
 	go room.RunRoom()
-	fmt.Fprintf(w, room.Code)
+	fmt.Fprint(w, room.Code)
 	log.Println("Room created: ", room.Code)
 }
 
