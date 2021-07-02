@@ -2,7 +2,6 @@ import React, {useState, useRef, useEffect, useCallback} from "react";
 import { useParams } from "react-router-dom";
 import { BroadcastActions, BroadcastMessage } from "../Interfaces/Messages";
 import { CallApi } from "../Utils/Api"
-import { Modal } from "@material-ui/core"
 
 const PlayerContext = React.createContext<any>(undefined)
 
@@ -19,6 +18,8 @@ export type PlayerContextType = {
     reportExitRoom?: () => void
     playersInRoom?: [string]
     alertLine?: string
+    joinFailedMessage?: string
+    setJoinFailedMessage?: (s: string) => void
 }
 
 function PlayerProvider({ children }: PlayerContextProp){
@@ -57,7 +58,7 @@ function PlayerProvider({ children }: PlayerContextProp){
 
     useEffect(() => {
         if (nickname && code && !connected){
-            CallApi({path: "ayt?nickname=${nickname}&roomcode=${code}" })
+            CallApi({path: `ayt?nickname=${nickname}&roomcode=${code}` })
             .then((r:string) => {
                 if (r === "") {
                     ws.current = new WebSocket(`ws://${process.env.REACT_APP_API_BASE_URL}/ws?nickname=${nickname}&roomcode=${code}`)
@@ -87,20 +88,12 @@ function PlayerProvider({ children }: PlayerContextProp){
             setNickname,
             reportExitRoom,
             playersInRoom,
-            alertLine
+            alertLine,
+            joinFailedMessage,
+            setJoinFailedMessage
         }
     }>
         {children}
-        <Modal
-            open={joinFailedMessage !== ""}
-            onClose={() => setJoinFailedMessage("")}
-            aria-labelledby="join-room-failed"
-            aria-describedby="join-room-failed"
-            >
-            <span>
-                {joinFailedMessage}
-            </span>
-        </Modal>
     </PlayerContext.Provider>
 }
 
