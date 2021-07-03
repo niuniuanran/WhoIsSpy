@@ -14,6 +14,11 @@ const JoinRoomFailedReasons = {
     NicknameInvalid: "nickname-illegal"
 }
 
+interface AytMessage {
+    line?: string
+    playerNum?: number
+}
+
 interface BroadcastMessage{
     action: string
     payload: string

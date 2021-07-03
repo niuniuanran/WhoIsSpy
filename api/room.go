@@ -61,20 +61,29 @@ func NewRoom(roomSettings RoomSettings) *Room {
 	}
 }
 
+type AytMessage struct {
+	Line      string `json:"line"`
+	NumPlayer int    `json:"numPlayer"`
+}
+
 func handleAyt(w http.ResponseWriter, r *http.Request) {
 	roomCode, ok := r.URL.Query()["roomcode"]
 	if !ok {
 		http.Error(w, "Url Param 'roomcode' is missing", http.StatusBadRequest)
 		return
 	}
+	aytMessage := AytMessage{"", 0}
+
 	room := findRoomByCode(roomCode[0])
+
 	if room == nil {
-		fmt.Fprint(w, RoomClosed)
-		return
+		aytMessage.writeResponse(RoomClosed, w)
 	}
 
+	aytMessage.NumPlayer = room.numPlayer
+
 	if len(room.players) >= room.numPlayer {
-		fmt.Fprint(w, RoomFull)
+		aytMessage.writeResponse(RoomFull, w)
 		return
 	}
 
@@ -85,17 +94,25 @@ func handleAyt(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if nickname[0] == "" {
-		fmt.Fprint(w, NicknameInvalid)
+		aytMessage.writeResponse(NicknameInvalid, w)
+		return
 	}
 
 	for name, present := range room.players {
 		if present && name.Nickname == nickname[0] {
-			fmt.Fprint(w, NicknameTaken)
+			aytMessage.writeResponse(NicknameTaken, w)
 			return
 		}
 	}
+}
 
-	fmt.Fprint(w, "")
+func (aytMessage *AytMessage) writeResponse(line string, w http.ResponseWriter) {
+	aytMessage.Line = line
+	bs, err := json.Marshal(aytMessage)
+	if err != nil {
+		http.Error(w, "Failed to create response", http.StatusInternalServerError)
+	}
+	fmt.Fprint(w, string(bs))
 }
 
 func handleCreateRoom(w http.ResponseWriter, r *http.Request) {
