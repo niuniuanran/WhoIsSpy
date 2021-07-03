@@ -89,6 +89,10 @@ function LanguageProvider({language, children}:LanguageContextProp){
         findRoom: {
             en: "Find room",
             cn: "查找房间"
+        },
+        failJoinRoom: {
+            en: "Failed to join room",
+            cn: "加入房间失败"
         }
     }
 
