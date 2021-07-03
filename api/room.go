@@ -105,6 +105,7 @@ func handleAyt(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+	aytMessage.writeResponse("", w)
 }
 
 func (aytMessage *AytMessage) writeResponse(line string, w http.ResponseWriter) {
@@ -124,7 +125,6 @@ func handleCreateRoom(w http.ResponseWriter, r *http.Request) {
 		log.Println("Error: ", err.Error())
 		return
 	}
-	log.Println("Room settings received: ", rs)
 	room := NewRoom(rs)
 	rooms[room] = true
 	go room.RunRoom()

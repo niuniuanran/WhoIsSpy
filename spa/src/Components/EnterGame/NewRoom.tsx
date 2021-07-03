@@ -41,7 +41,6 @@ export default function NewRoom(){
 
     const onClickCreate = () => {
         setCreatedRoomInfo((createdRoomInfo) => ({...createdRoomInfo, loading: true}))
-        console.log("Room settings submitted: ", roomSettings)
         CallApi({path: "create-room", payload: roomSettings})
             .then((code:string) => {
                 setCreatedRoomInfo(() => ({...createdRoomInfo, loading: false, code, capacity: roomSettings.numPlayer}))

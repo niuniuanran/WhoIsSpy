@@ -2,6 +2,7 @@ import React, {useState, useRef, useEffect, useCallback} from "react";
 import { useParams } from "react-router-dom";
 import { BroadcastActions, BroadcastMessage } from "../Interfaces/Messages";
 import { CallApi } from "../Utils/Api"
+import {AytMessage} from "../Interfaces/Messages"
 
 const PlayerContext = React.createContext<any>(undefined)
 
@@ -20,6 +21,7 @@ export type PlayerContextType = {
     alertLine?: string
     joinFailedMessage?: string
     setJoinFailedMessage?: (s: string) => void
+    roomPlayerNum?: number
 }
 
 function PlayerProvider({ children }: PlayerContextProp){
@@ -30,6 +32,7 @@ function PlayerProvider({ children }: PlayerContextProp){
     const [alertLine, setAlertLine] = useState("")
     const [playersInRoom, setPlayersInRoom] = useState<[string]>()
     const [joinFailedMessage, setJoinFailedMessage] = useState("")
+    const [roomPlayerNum, setRoomPlayerNum] = useState(0)
 
     const ws = useRef<WebSocket|null>(null);
 
@@ -59,24 +62,27 @@ function PlayerProvider({ children }: PlayerContextProp){
     useEffect(() => {
         if (nickname && code && !connected){
             CallApi({path: `ayt?nickname=${nickname}&roomcode=${code}` })
-            .then((r:string) => {
-                if (r === "") {
-                    ws.current = new WebSocket(`ws://${process.env.REACT_APP_API_BASE_URL}/ws?nickname=${nickname}&roomcode=${code}`)
-                    ws.current.onopen = () => {
-                        console.log("connected");
-                        setConnected(true);
-                    };
-                    ws.current.onmessage = (evt) => {
-                        handleMessage(JSON.parse(evt.data));
-                    };
-                    ws.current.onclose = () => {
-                        reportExitRoom()
-                        console.log("disconnected");
-                    };
-                } else {
-                    setJoinFailedMessage(r)
+            .then((m: AytMessage) => {
+                if (m.line) {
+                    setJoinFailedMessage(m.line)
+                    return
                 }
-            })
+
+                m.playerNum && setRoomPlayerNum(m.playerNum)
+
+                ws.current = new WebSocket(`ws://${process.env.REACT_APP_API_BASE_URL}/ws?nickname=${nickname}&roomcode=${code}`)
+                ws.current.onopen = () => {
+                    console.log("connected");
+                    setConnected(true);
+                };
+                ws.current.onmessage = (evt) => {
+                    handleMessage(JSON.parse(evt.data));
+                };
+                ws.current.onclose = () => {
+                    reportExitRoom()
+                    console.log("disconnected");
+
+            }})
         }
     }, [reportExitRoom, code, nickname, ws, connected])
 
@@ -90,7 +96,8 @@ function PlayerProvider({ children }: PlayerContextProp){
             playersInRoom,
             alertLine,
             joinFailedMessage,
-            setJoinFailedMessage
+            setJoinFailedMessage,
+            roomPlayerNum
         }
     }>
         {children}

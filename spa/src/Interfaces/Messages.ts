@@ -40,5 +40,5 @@ interface ReportMessage{
     payload?: string
 }
 
-export type {BroadcastMessage, ReportMessage}
+export type {BroadcastMessage, ReportMessage, AytMessage}
 export {BroadcastActions, ReportActions}
