@@ -30,8 +30,8 @@ export default function PlayerList() {
     const classes = useStyles()
     const {nickname, playersInRoom, roomPlayerNum} = useContext(PlayerContext) as PlayerContextType
     console.log(playersInRoom)
-    // const spotNum = (roomPlayerNum || 0) - (playersInRoom?.length || 0)
-
+    const spotNum = (roomPlayerNum || 0) - (playersInRoom?.length || 0)
+    console.log(spotNum)
     return <Grid container spacing={1} className={classes.root}>
             {
                 playersInRoom && playersInRoom.map((p, i) => (
@@ -43,8 +43,9 @@ export default function PlayerList() {
                             }
                         </Typography>
                     </Grid>))}
-            {/* {
-                spotNum && [...Array(spotNum)].map((_, i) => (
+
+            {
+                spotNum > 0 && [...Array(spotNum)].map((_, i) => (
                     <Grid xs={3} item key={i} className={classes.player}>
                         <Skeleton>
                             <PlayerAvatar nickname="" size="large" />
@@ -52,6 +53,6 @@ export default function PlayerList() {
                         <Skeleton>
                             <Typography>...</Typography>
                         </Skeleton>
-                    </Grid>))} */}
+                    </Grid>))}
         </Grid>
 }
