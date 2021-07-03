@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useContext } from "react"
 import { PlayerContext, PlayerContextType } from "../../Contexts/PlayerContext";
 import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext"
-import NameUserForRoom from "./NameUserForRoom";
+import NamePlayerForRoom from "./NamePlayerForRoom";
 import ContentContainer from "../Shared/ContentContainer"
 import { Typography, Modal, Paper, Button } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles"
@@ -40,7 +40,7 @@ export default function Room(){
 
     if (!nickname) {
         return <ContentContainer allowExit>
-                <NameUserForRoom />
+                <NamePlayerForRoom />
             </ContentContainer>
     }
 

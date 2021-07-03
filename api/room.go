@@ -11,9 +11,10 @@ import (
 var roomCodeIncr = 1001
 
 const (
-	RoomFull      = "room-full"
-	NicknameTaken = "nickname-taken"
-	RoomClosed    = "room-closed"
+	RoomFull        = "room-full"
+	NicknameTaken   = "nickname-taken"
+	RoomClosed      = "room-closed"
+	NicknameInvalid = "nickname-invalid"
 )
 
 type Room struct {
@@ -81,6 +82,10 @@ func handleAyt(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		http.Error(w, "Url Param 'nickname' is missing", http.StatusBadRequest)
 		return
+	}
+
+	if nickname[0] == "" {
+		fmt.Fprint(w, NicknameInvalid)
 	}
 
 	for name, present := range room.players {

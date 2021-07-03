@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-export default function NameUserForRoom() {
+export default function NamePlayerForRoom() {
     const classes = useStyles()
     const { getText } = useContext(LanguageContext) as LanguageContextType
     const { setNickname } = useContext(PlayerContext) as PlayerContextType
@@ -35,9 +35,14 @@ export default function NameUserForRoom() {
                         const targetInput = e.target as HTMLInputElement
                         setTryNickname(targetInput.value)
                     }}
+                    required
                 />
             </FormGroup>
-            <Button className={classes.submitButton} onClick={() => setNickname(tryNickname)}
+            <Button type="submit" className={classes.submitButton} 
+                    onClick={e => {
+                        e.preventDefault()
+                        setNickname(tryNickname)
+                    }}
                     size="large" variant="contained" color="primary">
                 { getText("ok") }
         </Button>      

@@ -10,7 +10,8 @@ const BroadcastActions = {
 const JoinRoomFailedReasons = {
     RoomFull: "room-full",
     NicknameTaken: "nickname-taken",
-    RoomClosed: "room-closed"
+    RoomClosed: "room-closed",
+    NicknameInvalid: "nickname-illegal"
 }
 
 interface BroadcastMessage{
