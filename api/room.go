@@ -10,6 +10,12 @@ import (
 
 var roomCodeIncr = 1001
 
+const (
+	RoomFull      = "room-full"
+	NicknameTaken = "nickname-taken"
+	RoomClosed    = "room-closed"
+)
+
 type Room struct {
 	Code         string
 	numPlayer    int
@@ -62,12 +68,12 @@ func handleAyt(w http.ResponseWriter, r *http.Request) {
 	}
 	room := findRoomByCode(roomCode[0])
 	if room == nil {
-		fmt.Fprint(w, "Cannot find room with code", roomCode[0])
+		fmt.Fprint(w, RoomClosed)
 		return
 	}
 
 	if len(room.players) >= room.numPlayer {
-		fmt.Fprintf(w, "Room %s is full", roomCode[0])
+		fmt.Fprint(w, RoomFull)
 		return
 	}
 
@@ -79,7 +85,7 @@ func handleAyt(w http.ResponseWriter, r *http.Request) {
 
 	for name, present := range room.players {
 		if present && name.Nickname == nickname[0] {
-			fmt.Fprintf(w, "Nickname %s already taken", nickname[0])
+			fmt.Fprint(w, NicknameTaken)
 			return
 		}
 	}

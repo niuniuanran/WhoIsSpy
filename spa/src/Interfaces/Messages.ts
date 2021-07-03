@@ -7,6 +7,12 @@ const BroadcastActions = {
      VoteResultBroadcast: "vote-result"
 }
 
+const JoinRoomFailedReasons = {
+    RoomFull: "room-full",
+    NicknameTaken: "nickname-taken",
+    RoomClosed: "room-closed"
+}
+
 interface BroadcastMessage{
     action: string
     payload: string
