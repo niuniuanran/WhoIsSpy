@@ -78,6 +78,7 @@ func handleAyt(w http.ResponseWriter, r *http.Request) {
 
 	if room == nil {
 		aytMessage.writeResponse(RoomClosed, w)
+		return
 	}
 
 	aytMessage.NumPlayer = room.numPlayer
