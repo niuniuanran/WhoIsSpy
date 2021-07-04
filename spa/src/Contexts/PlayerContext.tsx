@@ -23,6 +23,7 @@ export type PlayerContextType = {
     joinFailedMessage?: string
     setJoinFailedMessage?: (s: string) => void
     roomCapacity?: number
+    getReady?: () => void
 }
 
 function PlayerProvider({ children }: PlayerContextProp){
@@ -59,6 +60,17 @@ function PlayerProvider({ children }: PlayerContextProp){
             })
           )
     }, [ws, nickname, code])
+
+    const getReady = () => {
+        ws?.current?.send(
+            JSON.stringify({
+              action: "player-ready",
+              senderNickname: nickname,
+              roomCode: code,
+              payload: ""
+            })
+          )
+    }
 
     useEffect(() => {
         if (nickname && code && !connected){
@@ -98,7 +110,8 @@ function PlayerProvider({ children }: PlayerContextProp){
             alertLine,
             joinFailedMessage,
             setJoinFailedMessage,
-            roomCapacity
+            roomCapacity,
+            getReady
         }
     }>
         {children}

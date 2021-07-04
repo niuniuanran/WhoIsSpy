@@ -179,7 +179,7 @@ func (player *Player) handleNewMessage(jsonMessage []byte) {
 	log.Println("received message", message.toString(), "from", player.Nickname)
 
 	switch message.Action {
-	case ReadyStartAction:
+	case PlayerReadyAction:
 		{
 			broadcast := BroadcastMessage{
 				Payload:  player.Nickname,

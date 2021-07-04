@@ -27,12 +27,16 @@ const useStyle = makeStyles(theme => ({
         marginLeft: "200px"
     },
     roomTitle: {
-        marginBottom: "2rem"
+        marginBottom: "1rem"
+    },
+    readyButton: {
+        marginTop: "1rem"
     }
 }))
 
 export default function Room(){
-    const { nickname, setNickname, reportExitRoom, alertLine, joinFailedMessage, setJoinFailedMessage } = useContext(PlayerContext) as PlayerContextType
+    const { nickname, setNickname, reportExitRoom, alertLine, joinFailedMessage, 
+        setJoinFailedMessage, roomCapacity, playersInRoom, getReady } = useContext(PlayerContext) as PlayerContextType
     const { getText } = useContext(LanguageContext) as LanguageContextType
     const { code } = useParams<{code?: string}>()
     const classes = useStyle()
@@ -73,6 +77,12 @@ export default function Room(){
                     Room {code}
                 </Typography>
                 <PlayerList/>
+                {
+                    playersInRoom && roomCapacity && (roomCapacity > playersInRoom?.length) && 
+                     <Button size="large" variant="contained" color="secondary" className={classes.readyButton} onClick={getReady}>
+                        Ready
+                    </Button>
+                }
             </div>
         </ContentContainer>
     </>
