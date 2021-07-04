@@ -29,9 +29,7 @@ const useStyles = makeStyles(theme => ({
 export default function PlayerList() {
     const classes = useStyles()
     const {nickname, playersInRoom, roomCapacity: roomCapacity} = useContext(PlayerContext) as PlayerContextType
-    console.log(playersInRoom)
     const spotNum = (roomCapacity || 0) - (playersInRoom?.length || 0)
-    console.log(spotNum)
     return <Grid container spacing={1} className={classes.root}>
             {
                 playersInRoom && playersInRoom.map((p, i) => (

@@ -68,7 +68,6 @@ function PlayerProvider({ children }: PlayerContextProp){
                     return
                 }
 
-                console.log("ayt message: ", m)
                 m.numPlayer && setRoomCapacity(m.numPlayer)
 
                 ws.current = new WebSocket(`ws://${process.env.REACT_APP_API_BASE_URL}/ws?nickname=${nickname}&roomcode=${code}`)
