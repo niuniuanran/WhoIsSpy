@@ -1,7 +1,7 @@
 import PlayerAvatar from "../Shared/PlayerAvatar";
 import { PlayerContext, PlayerContextType } from "../../Contexts/PlayerContext";
 import { useContext } from "react";
-import { Typography, Grid } from "@material-ui/core";
+import { Typography, Grid, Badge } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/core";
 
@@ -35,14 +35,15 @@ export default function PlayerList() {
             {
                 playersInRoom && playersInRoom.sort((a, b) => a.serialNumber - b.serialNumber).map((p, i) => (
                     <Grid xs={3} item key={i} className={`${classes.player} ${(i === playersInRoom.length - 1)? classes.new: ""}`}>
-                        <PlayerAvatar nickname={p.nickname} size="large" className={(p.nickname === nickname)? classes.me : classes.others}/>
+                        <Badge color="secondary" badgeContent={p.ready? "ready": 0}>
+                            <PlayerAvatar nickname={p.nickname} size="large" className={(p.nickname === nickname)? classes.me : classes.others}/>
+                        </Badge>
                         <Typography>
                             {
                                 nickname === p.nickname ?`${p.nickname} (you)`: p.nickname
                             }
                         </Typography>
                     </Grid>))}
-
             {
                 spotNum > 0 && [...Array(spotNum)].map((_, i) => (
                     <Grid xs={3} item key={i} className={classes.player}>
