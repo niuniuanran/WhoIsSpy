@@ -34,10 +34,10 @@ export default function PlayerList() {
             {
                 playersInRoom && playersInRoom.map((p, i) => (
                     <Grid xs={3} item key={i} className={`${classes.player} ${(i === playersInRoom.length - 1)? classes.new: ""}`}>
-                        <PlayerAvatar nickname={p} size="large" className={(p === nickname)? classes.me : classes.others}/>
+                        <PlayerAvatar nickname={p.nickname} size="large" className={(p.nickname === nickname)? classes.me : classes.others}/>
                         <Typography>
                             {
-                                nickname === p ?`${p} (you)`: p
+                                nickname === p.nickname ?`${p.nickname} (you)`: p.nickname
                             }
                         </Typography>
                     </Grid>))}

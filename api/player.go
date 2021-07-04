@@ -36,12 +36,12 @@ var upgrader = websocket.Upgrader{
 }
 
 type Player struct {
-	// The actual websocket connection.
+	RoomCode string `json:"roomCode"`
+	Nickname string `json:"nickname"`
+	Ready    bool   `json:"ready"`
 	conn     *websocket.Conn
 	send     chan []byte
-	RoomCode string `json:"roomCode"`
 	room     *Room
-	Nickname string `json:"nickname"`
 }
 
 func newPlayer(conn *websocket.Conn, room *Room, nickname string) *Player {

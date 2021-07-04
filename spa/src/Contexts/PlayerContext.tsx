@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { BroadcastActions, BroadcastMessage } from "../Interfaces/Messages";
 import { CallApi } from "../Utils/Api"
 import {AytMessage} from "../Interfaces/Messages"
+import Player from "../Interfaces/Player"
 
 const PlayerContext = React.createContext<any>(undefined)
 
@@ -17,7 +18,7 @@ export type PlayerContextType = {
     setNickname: (name: string) => void
     getAvatarPath: () => string
     reportExitRoom?: () => void
-    playersInRoom?: [string]
+    playersInRoom?: [Player]
     alertLine?: string
     joinFailedMessage?: string
     setJoinFailedMessage?: (s: string) => void
@@ -30,7 +31,7 @@ function PlayerProvider({ children }: PlayerContextProp){
     const [nickname, setNickname] = useState(undefined)
     const [connected, setConnected] = useState(false)
     const [alertLine, setAlertLine] = useState("")
-    const [playersInRoom, setPlayersInRoom] = useState<[string]>()
+    const [playersInRoom, setPlayersInRoom] = useState<[Player]>()
     const [joinFailedMessage, setJoinFailedMessage] = useState("")
     const [roomCapacity, setRoomCapacity] = useState(0)
 
