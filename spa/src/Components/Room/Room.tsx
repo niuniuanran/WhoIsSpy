@@ -25,6 +25,9 @@ const useStyle = makeStyles(theme => ({
     },
     modalButton: {
         marginLeft: "200px"
+    },
+    roomTitle: {
+        marginBottom: "2rem"
     }
 }))
 
@@ -66,7 +69,7 @@ export default function Room(){
         <ContentContainer allowExit onExit={reportExitRoom}> 
             <div>
                 {alertLine && <RoomTopAlert alertLine={alertLine}/>}
-                <Typography variant="h4">
+                <Typography variant="h4" className={classes.roomTitle}>
                     Room {code}
                 </Typography>
                 <PlayerList/>

@@ -7,13 +7,6 @@ const BroadcastActions = {
      VoteResultBroadcast: "vote-result"
 }
 
-const JoinRoomFailedReasons = {
-    RoomFull: "room-full",
-    NicknameTaken: "nickname-taken",
-    RoomClosed: "room-closed",
-    NicknameInvalid: "nickname-illegal"
-}
-
 interface AytMessage {
     line?: string
     numPlayer?: number

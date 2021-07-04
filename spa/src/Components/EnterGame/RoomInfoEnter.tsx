@@ -60,7 +60,7 @@ export default function RoomInfoEnter({loading, code, capacity, currentPlayerNum
                         }
                         </div>
                     ) : (
-                        <Skeleton className={classes.skeleton}>
+                        <Skeleton className={classes.skeleton} animation="wave">
                             {[...Array(7)].map((_, i) => <PersonIcon color="primary" key={i}/>)}
                         </Skeleton>
                     )
@@ -72,7 +72,7 @@ export default function RoomInfoEnter({loading, code, capacity, currentPlayerNum
                             {getText(`${roomLanguage}Room`)}
                         </Typography>
                     ) : (
-                        <Skeleton className={classes.skeleton}>
+                        <Skeleton className={classes.skeleton} animation="wave">
                             <Typography>Room in English</Typography>
                         </Skeleton>
                     )
