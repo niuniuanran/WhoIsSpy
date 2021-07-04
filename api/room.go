@@ -198,13 +198,7 @@ func (room *Room) broadcastToPlayersInRoom(message []byte) {
 }
 
 func (room *Room) notifyPlayerJoined(player *Player) {
-	players := make([]string, 0, len(room.players))
-	for p, present := range room.players {
-		if present && p.Nickname != player.Nickname {
-			players = append(players, p.Nickname)
-		}
-	}
-	players = append(players, player.Nickname)
+	players := room.getPlayersInRoom()
 	bs, err := json.Marshal(players)
 	if err != nil {
 		log.Println("Service error: failed to create player list json")
@@ -223,12 +217,7 @@ func (room *Room) notifyPlayerJoined(player *Player) {
 }
 
 func (room *Room) notifyPlayerLeft(player *Player) {
-	players := make([]string, 0, len(room.players))
-	for p, present := range room.players {
-		if present {
-			players = append(players, p.Nickname)
-		}
-	}
+	players := room.getPlayersInRoom()
 	bs, err := json.Marshal(players)
 	if err != nil {
 		log.Println("Service error: failed to create player list json")
@@ -242,6 +231,16 @@ func (room *Room) notifyPlayerLeft(player *Player) {
 	}
 
 	room.broadcastToPlayersInRoom(message.encode())
+}
+
+func (room *Room) getPlayersInRoom() []Player {
+	players := make([]Player, 0, len(room.players))
+	for p, present := range room.players {
+		if present {
+			players = append(players, *p)
+		}
+	}
+	return players
 }
 
 func findRoomByCode(code string) *Room {
