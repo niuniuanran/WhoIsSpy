@@ -215,7 +215,7 @@ func (room *Room) notifyPlayerJoined(player *Player) {
 		Action:   PlayerJoinedBroadcast,
 		Payload:  string(bs),
 		RoomCode: room.Code,
-		Line:     fmt.Sprintf("%s joint the room", player.Nickname),
+		Line:     fmt.Sprintf("%s just joined", player.Nickname),
 	}
 
 	room.broadcastToPlayersInRoom(message.encode())

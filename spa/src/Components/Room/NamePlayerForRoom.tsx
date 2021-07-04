@@ -21,7 +21,7 @@ export default function NamePlayerForRoom() {
     const { setNickname } = useContext(PlayerContext) as PlayerContextType
     const [ tryNickname, setTryNickname ] = useState("")
 
-    return  <form>
+    return  <form autoComplete="off">
             <PlayerAvatar nickname={tryNickname} size="xlarge"/>
             <FormGroup className={classes.formGroup}>
                 <TextField
@@ -31,6 +31,7 @@ export default function NamePlayerForRoom() {
                     color="primary"
                     value={tryNickname}
                     autoFocus
+                    inputProps={{ maxLength: 6, minLength: 1 }}
                     onInput={(e) => {
                         const targetInput = e.target as HTMLInputElement
                         setTryNickname(targetInput.value)

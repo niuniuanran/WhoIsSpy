@@ -54,6 +54,7 @@ export default function JoinRoom(){
                             color="primary"
                             value={roomCode}
                             autoFocus
+                            inputProps={{ maxLength: 4, minLength: 4 }}
                             onChange={(e) => {
                                 setRoomCode(e.target.value)
                             }}
