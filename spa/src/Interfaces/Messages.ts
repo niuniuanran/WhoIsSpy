@@ -1,10 +1,18 @@
-
 const BroadcastActions = {
      PlayerJoinedBroadcast: "player-joined",
      PlayerReadyBroadcast: "player-ready",
      PlayerLeftBroadcast : "player-left",
      TalkTurnBroadcast: "talk-turn",
-     VoteResultBroadcast: "vote-result"
+     VoteResultBroadcast: "vote-result",
+     PlayerUndoReadyBroadcast: "player-undo-ready"
+}
+
+const ReportActions = {
+    TalkFinishAction: "talk-finish",
+	VoteAction:        "vote",
+	PlayerReadyAction: "player-ready",
+	PlayerLeftAction:  "player-left",
+    PlayerUndoReadyAction: "player-undo-ready"
 }
 
 interface AytMessage {
@@ -17,13 +25,6 @@ interface BroadcastMessage{
     payload: string
     roomcode?: string
     line?: string
-}
-
-const ReportActions = {
-    TalkFinishAction: "talk-finish",
-	VoteAction: "vote",
-	ReadyStartAction: "ready-start",
-	PlayerLeftAction: "player-left"
 }
 
 interface ReportMessage{

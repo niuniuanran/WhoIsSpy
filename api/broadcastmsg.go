@@ -11,11 +11,12 @@ type Message interface {
 }
 
 const (
-	PlayerJoinedBroadcast = "player-joined"
-	PlayerReadyBroadcast  = "player-ready"
-	PlayerLeftBroadcast   = "player-left"
-	TalkTurnBroadcast     = "talk-turn"
-	VoteResultBroadcast   = "vote-result"
+	PlayerJoinedBroadcast    = "player-joined"
+	PlayerReadyBroadcast     = "player-ready"
+	PlayerLeftBroadcast      = "player-left"
+	TalkTurnBroadcast        = "talk-turn"
+	VoteResultBroadcast      = "vote-result"
+	PlayerUndoReadyBroadcast = "player-undo-ready"
 )
 
 type BroadcastMessage struct {

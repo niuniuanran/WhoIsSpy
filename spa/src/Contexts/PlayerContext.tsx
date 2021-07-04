@@ -1,6 +1,6 @@
 import React, {useState, useRef, useEffect, useCallback} from "react";
 import { useParams } from "react-router-dom";
-import { BroadcastActions, BroadcastMessage } from "../Interfaces/Messages";
+import { BroadcastActions, BroadcastMessage, ReportActions } from "../Interfaces/Messages";
 import { CallApi } from "../Utils/Api"
 import {AytMessage} from "../Interfaces/Messages"
 import Player from "../Interfaces/Player"
@@ -24,6 +24,7 @@ export type PlayerContextType = {
     setJoinFailedMessage?: (s: string) => void
     roomCapacity?: number
     getReady?: () => void
+    undoReady?: () => void
 }
 
 function PlayerProvider({ children }: PlayerContextProp){
@@ -39,12 +40,14 @@ function PlayerProvider({ children }: PlayerContextProp){
     const ws = useRef<WebSocket|null>(null);
 
     const handleMessage = (message:BroadcastMessage) => {
-        console.log(message);
         if (message.line) {
             setAlertLine(message.line)
             setTimeout(()=>setAlertLine(""), 2000)
         }
-        if (message.action === BroadcastActions.PlayerJoinedBroadcast || message.action === BroadcastActions.PlayerLeftBroadcast) {
+        if (message.action === BroadcastActions.PlayerJoinedBroadcast || 
+            message.action === BroadcastActions.PlayerLeftBroadcast || 
+            message.action === BroadcastActions.PlayerReadyBroadcast ||
+            message.action === BroadcastActions.PlayerUndoReadyBroadcast ) {
             setPlayersInRoom(JSON.parse(message.payload))
         }
     };
@@ -53,7 +56,7 @@ function PlayerProvider({ children }: PlayerContextProp){
         console.log("Leaving room ", code)
         ws?.current?.send(
             JSON.stringify({
-              action: "player-left",
+              action: ReportActions.PlayerLeftAction,
               senderNickname: nickname,
               roomCode: code,
               payload: ""
@@ -61,16 +64,27 @@ function PlayerProvider({ children }: PlayerContextProp){
           )
     }, [ws, nickname, code])
 
-    const getReady = () => {
+    const getReady = useCallback(async () => {
         ws?.current?.send(
             JSON.stringify({
-              action: "player-ready",
+              action: ReportActions.PlayerReadyAction,
               senderNickname: nickname,
               roomCode: code,
               payload: ""
             })
           )
-    }
+        }, [ws, nickname, code])
+    
+    const undoReady = useCallback(async () => {
+        ws?.current?.send(
+            JSON.stringify({
+                action: ReportActions.PlayerUndoReadyAction,
+                senderNickname: nickname,
+                roomCode: code,
+                payload: ""
+            })
+            )
+        }, [ws, nickname, code])
 
     useEffect(() => {
         if (nickname && code && !connected){
@@ -111,7 +125,8 @@ function PlayerProvider({ children }: PlayerContextProp){
             joinFailedMessage,
             setJoinFailedMessage,
             roomCapacity,
-            getReady
+            getReady,
+            undoReady
         }
     }>
         {children}

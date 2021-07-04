@@ -36,7 +36,7 @@ const useStyle = makeStyles(theme => ({
 
 export default function Room(){
     const { nickname, setNickname, reportExitRoom, alertLine, joinFailedMessage, 
-        setJoinFailedMessage, roomCapacity, playersInRoom, getReady } = useContext(PlayerContext) as PlayerContextType
+        setJoinFailedMessage, roomCapacity, playersInRoom, getReady, undoReady } = useContext(PlayerContext) as PlayerContextType
     const { getText } = useContext(LanguageContext) as LanguageContextType
     const { code } = useParams<{code?: string}>()
     const classes = useStyle()
@@ -78,10 +78,14 @@ export default function Room(){
                 </Typography>
                 <PlayerList/>
                 {
-                    playersInRoom && roomCapacity && (roomCapacity > playersInRoom?.length) && 
+                    playersInRoom && roomCapacity && (roomCapacity > playersInRoom?.length) && (
+                        playersInRoom.find(p => p.nickname === nickname)?.ready ?
+                    <Button size="large" variant="contained" color="secondary"  className={classes.readyButton} onClick={undoReady}>
+                        I'm not ready
+                    </Button>:
                      <Button size="large" variant="contained" color="secondary" className={classes.readyButton} onClick={getReady}>
-                        Ready
-                    </Button>
+                        I'm ready
+                    </Button>)
                 }
             </div>
         </ContentContainer>

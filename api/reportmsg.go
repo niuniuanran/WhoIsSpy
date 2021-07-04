@@ -7,10 +7,11 @@ import (
 )
 
 const (
-	TalkFinishAction  = "talk-finish"
-	VoteAction        = "vote"
-	PlayerReadyAction = "player-ready"
-	PlayerLeftAction  = "player-left"
+	TalkFinishAction      = "talk-finish"
+	VoteAction            = "vote"
+	PlayerReadyAction     = "player-ready"
+	PlayerLeftAction      = "player-left"
+	PlayerUndoReadyAction = "player-undo-ready"
 )
 
 // Message is sent through websocket connections between the room and client.

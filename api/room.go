@@ -193,6 +193,40 @@ func (room *Room) unregisterPlayerInRoom(player *Player) {
 	}
 }
 
+func (room *Room) playerReadyInRoom(player *Player) {
+	players := room.getPlayersInRoom()
+	bs, err := json.Marshal(players)
+	if err != nil {
+		log.Println("Service error: failed to create player list json")
+		return
+	}
+	message := BroadcastMessage{
+		Action:   PlayerReadyBroadcast,
+		Payload:  string(bs),
+		RoomCode: player.RoomCode,
+		Line:     fmt.Sprintf("%s is ready", player.Nickname),
+	}
+	room.broadcastToPlayersInRoom(message.encode())
+	log.Println("Broadcasting", message.toString())
+}
+
+func (room *Room) playerUndoReadyInRoom(player *Player) {
+	players := room.getPlayersInRoom()
+	bs, err := json.Marshal(players)
+	if err != nil {
+		log.Println("Service error: failed to create player list json")
+		return
+	}
+	message := BroadcastMessage{
+		Action:   PlayerUndoReadyBroadcast,
+		Payload:  string(bs),
+		RoomCode: player.RoomCode,
+		Line:     fmt.Sprintf("%s is not ready", player.Nickname),
+	}
+	room.broadcastToPlayersInRoom(message.encode())
+	log.Println("Broadcasting", message.toString())
+}
+
 func (room *Room) broadcastToPlayersInRoom(message []byte) {
 	for player := range room.players {
 		player.send <- message

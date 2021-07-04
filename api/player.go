@@ -179,18 +179,19 @@ func (player *Player) handleNewMessage(jsonMessage []byte) {
 	log.Println("received message", message.toString(), "from", player.Nickname)
 
 	switch message.Action {
-	case PlayerReadyAction:
-		{
-			broadcast := BroadcastMessage{
-				Payload:  player.Nickname,
-				Action:   PlayerReadyBroadcast,
-				RoomCode: player.RoomCode,
-			}
-			player.room.broadcast <- &broadcast
-		}
 	case PlayerLeftAction:
 		{
 			player.room.unregisterPlayerInRoom(player)
+		}
+	case PlayerReadyAction:
+		{
+			player.Ready = true
+			player.room.playerReadyInRoom(player)
+		}
+	case PlayerUndoReadyAction:
+		{
+			player.Ready = false
+			player.room.playerUndoReadyInRoom(player)
 		}
 	}
 }

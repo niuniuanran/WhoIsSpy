@@ -30,7 +30,6 @@ export default function PlayerList() {
     const classes = useStyles()
     const {nickname, playersInRoom, roomCapacity} = useContext(PlayerContext) as PlayerContextType
     const spotNum = (roomCapacity || 0) - (playersInRoom?.length || 0)
-    console.log(playersInRoom)
     return <Grid container spacing={1} className={classes.root}>
             {
                 playersInRoom && playersInRoom.sort((a, b) => a.serialNumber - b.serialNumber).map((p, i) => (
