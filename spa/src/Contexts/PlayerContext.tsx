@@ -21,7 +21,7 @@ export type PlayerContextType = {
     alertLine?: string
     joinFailedMessage?: string
     setJoinFailedMessage?: (s: string) => void
-    roomPlayerNum?: number
+    roomCapacity?: number
 }
 
 function PlayerProvider({ children }: PlayerContextProp){
@@ -32,7 +32,7 @@ function PlayerProvider({ children }: PlayerContextProp){
     const [alertLine, setAlertLine] = useState("")
     const [playersInRoom, setPlayersInRoom] = useState<[string]>()
     const [joinFailedMessage, setJoinFailedMessage] = useState("")
-    const [roomPlayerNum, setRoomPlayerNum] = useState(0)
+    const [roomCapacity, setRoomCapacity] = useState(0)
 
     const ws = useRef<WebSocket|null>(null);
 
@@ -68,7 +68,8 @@ function PlayerProvider({ children }: PlayerContextProp){
                     return
                 }
 
-                m.playerNum && setRoomPlayerNum(m.playerNum)
+                console.log("ayt message: ", m)
+                m.numPlayer && setRoomCapacity(m.numPlayer)
 
                 ws.current = new WebSocket(`ws://${process.env.REACT_APP_API_BASE_URL}/ws?nickname=${nickname}&roomcode=${code}`)
                 ws.current.onopen = () => {
@@ -97,7 +98,7 @@ function PlayerProvider({ children }: PlayerContextProp){
             alertLine,
             joinFailedMessage,
             setJoinFailedMessage,
-            roomPlayerNum
+            roomCapacity
         }
     }>
         {children}

@@ -16,7 +16,7 @@ const JoinRoomFailedReasons = {
 
 interface AytMessage {
     line?: string
-    playerNum?: number
+    numPlayer?: number
 }
 
 interface BroadcastMessage{
