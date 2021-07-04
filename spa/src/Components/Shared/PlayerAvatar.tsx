@@ -37,18 +37,19 @@ const useStyles = makeStyles((theme: Theme) =>
 interface PlayerAvatarProps {
     size: "xlarge"|"large"|"small"|"xsmall"
     nickname?: string,
-    className?: string
+    className?: string,
+    stayLoading?: boolean
 }
 
-export default function PlayerAvatar({nickname, size, className}: PlayerAvatarProps){
+export default function PlayerAvatar({nickname, size, className, stayLoading=false}: PlayerAvatarProps){
     const classes = useStyles()
     const [loading, setLoading] = useState(true)
     useEffect(()=>setLoading(true),[nickname])
 
     return <div className={classes.root}>
             <Avatar alt={nickname} src={`https://avatars.dicebear.com/api/bottts/${nickname}.svg`} 
-                    className={`${classes.avatar} ${classes[size]} ${className}`} onLoad={()=>setLoading(false)} style={loading? {display: 'none'}: {display: 'block'}}/>
+                    className={`${classes.avatar} ${classes[size]} ${className}`} onLoad={()=>setLoading(false)} style={(loading || stayLoading)? {display: 'none'}: {display: 'block'}}/>
             <Skeleton variant="circle" animation="wave" className={`${classes[size]}`} 
-                    style={loading? {display: 'block'}: {display: 'none'}}/>
+                    style={(loading || stayLoading)? {display: 'block'}: {display: 'none'}}/>
         </div>
 }

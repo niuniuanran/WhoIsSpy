@@ -45,12 +45,8 @@ export default function PlayerList() {
             {
                 spotNum > 0 && [...Array(spotNum)].map((_, i) => (
                     <Grid xs={3} item key={i} className={classes.player}>
-                        <Skeleton>
-                            <PlayerAvatar nickname="" size="large" />
-                        </Skeleton>
-                        <Skeleton>
-                            <Typography>...</Typography>
-                        </Skeleton>
+                        <PlayerAvatar size="large" stayLoading/>
+                        <Skeleton width={70} height={23.64} style={{margin: "0 auto"}} animation="wave"/>
                     </Grid>))}
         </Grid>
 }
