@@ -179,7 +179,6 @@ func (room *Room) registerPlayerInRoom(player *Player) {
 	log.Printf("Player %s joins room %s", player.Nickname, room.Code)
 	room.players[player] = true
 	room.notifyPlayerJoined(player)
-	fmt.Println("Players: ", room.players)
 }
 
 func (room *Room) unregisterPlayerInRoom(player *Player) {
@@ -192,7 +191,6 @@ func (room *Room) unregisterPlayerInRoom(player *Player) {
 		delete(availableRoomCodes, room.Code)
 		room = nil
 	}
-	fmt.Println("Players: ", room.players)
 }
 
 func (room *Room) broadcastToPlayersInRoom(message []byte) {
@@ -235,6 +233,7 @@ func (room *Room) notifyPlayerLeft(player *Player) {
 	}
 
 	room.broadcastToPlayersInRoom(message.encode())
+	log.Println("Broadcasting", message.toString())
 }
 
 func (room *Room) getPlayersInRoom() []Player {
