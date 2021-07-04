@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"sort"
 	"strconv"
 )
 
@@ -174,9 +175,11 @@ func (room *Room) RunRoom() {
 }
 
 func (room *Room) registerPlayerInRoom(player *Player) {
+	player.SerialNumber = 100
 	log.Printf("Player %s joins room %s", player.Nickname, room.Code)
 	room.players[player] = true
 	room.notifyPlayerJoined(player)
+	fmt.Println("Players: ", room.players)
 }
 
 func (room *Room) unregisterPlayerInRoom(player *Player) {
@@ -189,6 +192,7 @@ func (room *Room) unregisterPlayerInRoom(player *Player) {
 		delete(availableRoomCodes, room.Code)
 		room = nil
 	}
+	fmt.Println("Players: ", room.players)
 }
 
 func (room *Room) broadcastToPlayersInRoom(message []byte) {
@@ -234,13 +238,26 @@ func (room *Room) notifyPlayerLeft(player *Player) {
 }
 
 func (room *Room) getPlayersInRoom() []Player {
-	players := make([]Player, 0, len(room.players))
+	ps := make([]*Player, 0, len(room.players))
 	for p, present := range room.players {
 		if present {
-			players = append(players, *p)
+			ps = append(ps, p)
 		}
 	}
+	assignSerialNumbers(ps)
+
+	players := make([]Player, 0, len(room.players))
+	for _, p := range ps {
+		players = append(players, *p)
+	}
 	return players
+}
+
+func assignSerialNumbers(players []*Player) {
+	sort.Sort(BySerialNumber(players))
+	for i := 0; i < len(players); i++ {
+		players[i].SerialNumber = i
+	}
 }
 
 func findRoomByCode(code string) *Room {

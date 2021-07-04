@@ -36,12 +36,13 @@ var upgrader = websocket.Upgrader{
 }
 
 type Player struct {
-	RoomCode string `json:"roomCode"`
-	Nickname string `json:"nickname"`
-	Ready    bool   `json:"ready"`
-	conn     *websocket.Conn
-	send     chan []byte
-	room     *Room
+	RoomCode     string `json:"roomCode"`
+	Nickname     string `json:"nickname"`
+	Ready        bool   `json:"ready"`
+	SerialNumber int    `json:"serialNumber"`
+	conn         *websocket.Conn
+	send         chan []byte
+	room         *Room
 }
 
 func newPlayer(conn *websocket.Conn, room *Room, nickname string) *Player {
@@ -193,3 +194,10 @@ func (player *Player) handleNewMessage(jsonMessage []byte) {
 		}
 	}
 }
+
+// BySerialNumber implements sort.Interface for []*Player based on the SerialNumber field.
+type BySerialNumber []*Player
+
+func (a BySerialNumber) Len() int           { return len(a) }
+func (a BySerialNumber) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a BySerialNumber) Less(i, j int) bool { return a[i].SerialNumber < a[j].SerialNumber }

@@ -30,9 +30,10 @@ export default function PlayerList() {
     const classes = useStyles()
     const {nickname, playersInRoom, roomCapacity} = useContext(PlayerContext) as PlayerContextType
     const spotNum = (roomCapacity || 0) - (playersInRoom?.length || 0)
+    console.log(playersInRoom)
     return <Grid container spacing={1} className={classes.root}>
             {
-                playersInRoom && playersInRoom.map((p, i) => (
+                playersInRoom && playersInRoom.sort((a, b) => a.serialNumber - b.serialNumber).map((p, i) => (
                     <Grid xs={3} item key={i} className={`${classes.player} ${(i === playersInRoom.length - 1)? classes.new: ""}`}>
                         <PlayerAvatar nickname={p.nickname} size="large" className={(p.nickname === nickname)? classes.me : classes.others}/>
                         <Typography>
