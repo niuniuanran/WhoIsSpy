@@ -43,6 +43,7 @@ type Player struct {
 	conn         *websocket.Conn
 	send         chan []byte
 	room         *Room
+	talked       bool
 }
 
 func newPlayer(conn *websocket.Conn, room *Room, nickname string) *Player {
@@ -193,7 +194,20 @@ func (player *Player) handleNewMessage(jsonMessage []byte) {
 			player.Ready = false
 			player.room.playerUndoReadyInRoom(player)
 		}
+	case VoteAction:
+		{
+			player.room.vote(player, message.Payload)
+		}
+	case TalkFinishAction:
+		{
+			player.talked = true
+		}
+	case WordReadAction:
+		{
+			player.room.wordReadByPlayers++
+		}
 	}
+
 }
 
 // BySerialNumber implements sort.Interface for []*Player based on the SerialNumber field.

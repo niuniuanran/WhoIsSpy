@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"sort"
 	"strconv"
-	"time"
 )
 
 var roomCodeIncr = 1001
@@ -20,16 +19,22 @@ const (
 )
 
 type Room struct {
-	Code         string
-	numPlayer    int
-	numSpy       int
-	Language     string
-	EighteenPlus bool
-	RandomBlank  bool
-	players      map[*Player]bool
-	register     chan *Player
-	unregister   chan *Player
-	broadcast    chan *BroadcastMessage
+	Code              string
+	numPlayer         int
+	numSpy            int
+	Language          string
+	EighteenPlus      bool
+	RandomBlank       bool
+	players           map[*Player]bool
+	register          chan *Player
+	unregister        chan *Player
+	broadcast         chan *BroadcastMessage
+	spy               *Player
+	normalWord        string
+	spyWord           string
+	votes             map[string]int
+	startPosition     int
+	wordReadByPlayers int
 }
 
 type RoomSettings struct {
@@ -220,16 +225,6 @@ func (room *Room) playerReadyInRoom(player *Player) {
 	go room.startGame()
 }
 
-func (room *Room) startGame() {
-	message := BroadcastMessage{
-		Action:   GameWillStartBroadcast,
-		RoomCode: room.Code,
-	}
-	time.Sleep(500 * time.Millisecond)
-	room.broadcastToPlayersInRoom((message.encode()))
-	time.Sleep(3 * time.Second)
-}
-
 func (room *Room) playerUndoReadyInRoom(player *Player) {
 	players := room.getPlayersInRoom()
 	bs, err := json.Marshal(players)
@@ -291,6 +286,15 @@ func (room *Room) notifyPlayerLeft(player *Player) {
 }
 
 func (room *Room) getPlayersInRoom() []Player {
+	ps := room.getPlayerPointersInRoom()
+	players := make([]Player, 0, len(room.players))
+	for _, p := range ps {
+		players = append(players, *p)
+	}
+	return players
+}
+
+func (room *Room) getPlayerPointersInRoom() []*Player {
 	ps := make([]*Player, 0, len(room.players))
 	for p, present := range room.players {
 		if present {
@@ -298,12 +302,7 @@ func (room *Room) getPlayersInRoom() []Player {
 		}
 	}
 	assignSerialNumbers(ps)
-
-	players := make([]Player, 0, len(room.players))
-	for _, p := range ps {
-		players = append(players, *p)
-	}
-	return players
+	return ps
 }
 
 func assignSerialNumbers(players []*Player) {

@@ -15,7 +15,8 @@ const ReportActions = {
 	VoteAction:        "vote",
 	PlayerReadyAction: "player-ready",
 	PlayerLeftAction:  "player-left",
-    PlayerUndoReadyAction: "player-undo-ready"
+    PlayerUndoReadyAction: "player-undo-ready",
+    WordReadAction: "word-read"
 }
 
 const PlayInstructions = {
