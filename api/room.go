@@ -227,8 +227,7 @@ func (room *Room) startRoundOfGame() {
 		RoomCode: room.Code,
 	}
 	room.broadcastToPlayersInRoom((message.encode()))
-	time.Sleep(400)
-
+	time.Sleep(3 * time.Second)
 }
 
 func (room *Room) playerUndoReadyInRoom(player *Player) {

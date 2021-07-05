@@ -25,6 +25,8 @@ export type PlayerContextType = {
     roomCapacity?: number
     getReady?: () => void
     undoReady?: () => void
+    gameWillStart: boolean
+    setGameWillStart: (b: boolean) => void
 }
 
 function PlayerProvider({ children }: PlayerContextProp){
@@ -33,6 +35,7 @@ function PlayerProvider({ children }: PlayerContextProp){
     const [nickname, setNickname] = useState(undefined)
     const [connected, setConnected] = useState(false)
     const [alertLine, setAlertLine] = useState("")
+    const [gameWillStart, setGameWillStart] = useState(false)
     const [playersInRoom, setPlayersInRoom] = useState<[Player]>()
     const [joinFailedMessage, setJoinFailedMessage] = useState("")
     const [roomCapacity, setRoomCapacity] = useState(0)
@@ -49,6 +52,9 @@ function PlayerProvider({ children }: PlayerContextProp){
             message.action === BroadcastActions.PlayerReadyBroadcast ||
             message.action === BroadcastActions.PlayerUndoReadyBroadcast ) {
             setPlayersInRoom(JSON.parse(message.payload))
+        }
+        if (message.action === BroadcastActions.GameWillStartBroadcast) {
+            setGameWillStart(true)
         }
     };
 
@@ -126,7 +132,9 @@ function PlayerProvider({ children }: PlayerContextProp){
             setJoinFailedMessage,
             roomCapacity,
             getReady,
-            undoReady
+            undoReady,
+            gameWillStart,
+            setGameWillStart
         }
     }>
         {children}

@@ -4,7 +4,7 @@ import { PlayerContext, PlayerContextType } from "../../Contexts/PlayerContext";
 import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext"
 import NamePlayerForRoom from "./NamePlayerForRoom";
 import ContentContainer from "../Shared/ContentContainer"
-import { Typography, Modal, Paper, Button } from "@material-ui/core";
+import { Typography, Modal, Paper, Button, CircularProgress } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles"
 import PlayerList from "./PlayerList";
 import RoomTopAlert from "./RoomTopAlert"
@@ -35,7 +35,7 @@ const useStyle = makeStyles(theme => ({
 }))
 
 export default function Room(){
-    const { nickname, setNickname, reportExitRoom, alertLine, joinFailedMessage, 
+    const { nickname, setNickname, reportExitRoom, alertLine, joinFailedMessage, gameWillStart, setGameWillStart,
         setJoinFailedMessage, roomCapacity, playersInRoom, getReady, undoReady } = useContext(PlayerContext) as PlayerContextType
     const { getText } = useContext(LanguageContext) as LanguageContextType
     const { code } = useParams<{code?: string}>()
@@ -49,6 +49,18 @@ export default function Room(){
         return <ContentContainer allowExit>
                 <NamePlayerForRoom />
             </ContentContainer>
+    }
+
+    if (gameWillStart) {
+        setTimeout(() => setGameWillStart(false), 3000)
+        return <ContentContainer allowExit onExit={reportExitRoom}> 
+            <div>
+                <CircularProgress />
+                <Typography>
+                Game starting....
+                </Typography>         
+            </div>
+        </ContentContainer>
     }
 
     return <> 
@@ -78,7 +90,7 @@ export default function Room(){
                 </Typography>
                 <PlayerList/>
                 {
-                    playersInRoom && roomCapacity && (roomCapacity > playersInRoom?.length) && (
+                    playersInRoom && roomCapacity && (roomCapacity === playersInRoom?.length) && (
                         playersInRoom.find(p => p.nickname === nickname)?.ready ?
                     <Button size="large" variant="contained" color="secondary"  className={classes.readyButton} onClick={undoReady}>
                         I'm not ready
