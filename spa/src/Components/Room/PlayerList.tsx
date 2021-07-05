@@ -23,6 +23,9 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: 'inherit',
         width: 'fit-content',
         borderRadius: '5px'
+    },
+    playerName: {
+        textAlign: "center"
     }
 }))
 
@@ -37,7 +40,7 @@ export default function PlayerList() {
                         <Badge color="secondary" badgeContent={p.ready? "ready": 0}>
                             <PlayerAvatar nickname={p.nickname} size="large" className={(p.nickname === nickname)? classes.me : classes.others}/>
                         </Badge>
-                        <Typography>
+                        <Typography className={classes.playerName}>
                             {
                                 nickname === p.nickname ?`${p.nickname} (you)`: p.nickname
                             }

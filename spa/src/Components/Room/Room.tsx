@@ -48,11 +48,7 @@ export default function Room(){
         setNickname("")
     }
 
-    if (state === "play" ) {
-        if ((playersInRoom?.length || 0) < (roomCapacity || 1)) {
-            history.push(`/${getCurrentLanguage()}/room/${code}`)
-        }
-
+    if (state === "play") {
         return <Play/>
     }
 
