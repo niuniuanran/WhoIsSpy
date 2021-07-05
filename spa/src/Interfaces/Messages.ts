@@ -4,7 +4,8 @@ const BroadcastActions = {
      PlayerLeftBroadcast : "player-left",
      TalkTurnBroadcast: "talk-turn",
      VoteResultBroadcast: "vote-result",
-     PlayerUndoReadyBroadcast: "player-undo-ready"
+     PlayerUndoReadyBroadcast: "player-undo-ready",
+     GameWillStartBroadcast: "game-will-start"
 }
 
 const ReportActions = {

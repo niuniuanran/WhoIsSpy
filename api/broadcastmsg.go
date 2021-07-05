@@ -17,6 +17,7 @@ const (
 	TalkTurnBroadcast        = "talk-turn"
 	VoteResultBroadcast      = "vote-result"
 	PlayerUndoReadyBroadcast = "player-undo-ready"
+	GameWillStartBroadcast   = "game-will-start"
 )
 
 type BroadcastMessage struct {

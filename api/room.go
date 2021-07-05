@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"sort"
 	"strconv"
+	"time"
 )
 
 var roomCodeIncr = 1001
@@ -208,6 +209,26 @@ func (room *Room) playerReadyInRoom(player *Player) {
 	}
 	room.broadcastToPlayersInRoom(message.encode())
 	log.Println("Broadcasting", message.toString())
+	if len(players) < room.numPlayer {
+		return
+	}
+	for _, p := range players {
+		if !p.Ready {
+			return
+		}
+	}
+	go room.startRoundOfGame()
+}
+
+func (room *Room) startRoundOfGame() {
+	message := BroadcastMessage{
+		Action:   GameWillStartBroadcast,
+		Payload:  "4",
+		RoomCode: room.Code,
+	}
+	room.broadcastToPlayersInRoom((message.encode()))
+	time.Sleep(400)
+
 }
 
 func (room *Room) playerUndoReadyInRoom(player *Player) {
