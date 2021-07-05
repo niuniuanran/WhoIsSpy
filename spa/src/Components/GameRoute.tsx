@@ -23,7 +23,7 @@ export default function GameRoute(){
                 <Route path={`${match.path}/contribute`}>
                     <Contribute/>
                 </Route>
-                <Route path={`${match.path}/room/:code`}>
+                <Route path={`${match.path}/room/:code/:state?`}>
                     <RoomProvider>
                         <Room/>
                     </RoomProvider>

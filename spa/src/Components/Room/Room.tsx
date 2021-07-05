@@ -1,13 +1,14 @@
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { useContext } from "react"
 import { RoomContext, RoomContextType } from "../../Contexts/RoomContext";
 import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext"
 import NamePlayerForRoom from "./NamePlayerForRoom";
 import ContentContainer from "../Shared/ContentContainer"
 import { Typography, Modal, Paper, Button, CircularProgress } from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles"
+import { makeStyles } from "@material-ui/core/styles"
 import PlayerList from "./PlayerList";
 import RoomTopAlert from "./RoomTopAlert"
+import Play from "../Play/Play"
 
 const useStyle = makeStyles(theme => ({
     modalBody: {
@@ -37,12 +38,22 @@ const useStyle = makeStyles(theme => ({
 export default function Room(){
     const { nickname, setNickname, reportExitRoom, alertLine, joinFailedMessage, gameWillStart, setGameWillStart,
         setJoinFailedMessage, roomCapacity, playersInRoom, getReady, undoReady } = useContext(RoomContext) as RoomContextType
-    const { getText } = useContext(LanguageContext) as LanguageContextType
+    const { getText, getCurrentLanguage } = useContext(LanguageContext) as LanguageContextType
     const { code } = useParams<{code?: string}>()
+    const { state } = useParams<{state?: string}>()
     const classes = useStyle()
+    const history = useHistory()
     const onModalClose = () => {
         setJoinFailedMessage && setJoinFailedMessage("")
         setNickname("")
+    }
+
+    if (state === "play" ) {
+        if ((playersInRoom?.length || 0) < (roomCapacity || 1)) {
+            history.push(`/${getCurrentLanguage()}/room/${code}`)
+        }
+
+        return <Play/>
     }
 
     if (!nickname) {
