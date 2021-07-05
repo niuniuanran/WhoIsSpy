@@ -25,8 +25,8 @@ export type RoomContextType = {
     roomCapacity?: number
     getReady?: () => void
     undoReady?: () => void
-    gameWillStart: boolean
-    setGameWillStart: (b: boolean) => void
+    gameStarted: boolean
+    setGameStarted: (b: boolean) => void
 }
 
 function RoomProvider({ children }: RoomContextProp){
@@ -35,7 +35,7 @@ function RoomProvider({ children }: RoomContextProp){
     const [nickname, setNickname] = useState(undefined)
     const [connected, setConnected] = useState(false)
     const [alertLine, setAlertLine] = useState("")
-    const [gameWillStart, setGameWillStart] = useState(false)
+    const [gameStarted, setGameStarted] = useState(false)
     const [playersInRoom, setPlayersInRoom] = useState<[Player]>()
     const [joinFailedMessage, setJoinFailedMessage] = useState("")
     const [roomCapacity, setRoomCapacity] = useState(0)
@@ -54,7 +54,7 @@ function RoomProvider({ children }: RoomContextProp){
             setPlayersInRoom(JSON.parse(message.payload))
         }
         if (message.action === BroadcastActions.GameWillStartBroadcast) {
-            setGameWillStart(true)
+            setGameStarted(true)
         }
     };
 
@@ -133,8 +133,8 @@ function RoomProvider({ children }: RoomContextProp){
             roomCapacity,
             getReady,
             undoReady,
-            gameWillStart,
-            setGameWillStart
+            gameStarted,
+            setGameStarted
         }
     }>
         {children}

@@ -2,10 +2,10 @@ import { useParams, useHistory } from "react-router-dom";
 import { useContext } from "react"
 import { RoomContext, RoomContextType } from "../../Contexts/RoomContext";
 import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext"
-import NamePlayerForRoom from "./NamePlayerForRoom";
-import ContentContainer from "../Shared/ContentContainer"
 import { Typography, Modal, Paper, Button, CircularProgress } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles"
+import NamePlayerForRoom from "./NamePlayerForRoom";
+import ContentContainer from "../Shared/ContentContainer"
 import PlayerList from "./PlayerList";
 import RoomTopAlert from "./RoomTopAlert"
 import Play from "../Play/Play"
@@ -36,7 +36,7 @@ const useStyle = makeStyles(theme => ({
 }))
 
 export default function Room(){
-    const { nickname, setNickname, reportExitRoom, alertLine, joinFailedMessage, gameWillStart, setGameWillStart,
+    const { nickname, setNickname, reportExitRoom, alertLine, joinFailedMessage, gameStarted,
         setJoinFailedMessage, roomCapacity, playersInRoom, getReady, undoReady } = useContext(RoomContext) as RoomContextType
     const { getText, getCurrentLanguage } = useContext(LanguageContext) as LanguageContextType
     const { code } = useParams<{code?: string}>()
@@ -62,7 +62,7 @@ export default function Room(){
             </ContentContainer>
     }
 
-    if (gameWillStart) {
+    if (gameStarted) {
         setTimeout(() => {
             history.push(`/${getCurrentLanguage()}/room/${code}/play`)
         }, 3000)

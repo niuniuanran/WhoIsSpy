@@ -217,10 +217,10 @@ func (room *Room) playerReadyInRoom(player *Player) {
 			return
 		}
 	}
-	go room.startRoundOfGame()
+	go room.startGame()
 }
 
-func (room *Room) startRoundOfGame() {
+func (room *Room) startGame() {
 	message := BroadcastMessage{
 		Action:   GameWillStartBroadcast,
 		Payload:  "4",
