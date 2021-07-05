@@ -63,7 +63,9 @@ export default function Room(){
     }
 
     if (gameWillStart) {
-        setTimeout(() => setGameWillStart(false), 3000)
+        setTimeout(() => {
+            history.push(`/${getCurrentLanguage()}/room/${code}/play`)
+        }, 3000)
         return <ContentContainer allowExit onExit={reportExitRoom}> 
             <div>
                 <CircularProgress size="5rem" className={classes.marginBottom}/>

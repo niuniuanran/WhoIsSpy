@@ -226,6 +226,7 @@ func (room *Room) startRoundOfGame() {
 		Payload:  "4",
 		RoomCode: room.Code,
 	}
+	time.Sleep(1 * time.Second)
 	room.broadcastToPlayersInRoom((message.encode()))
 	time.Sleep(3 * time.Second)
 }
