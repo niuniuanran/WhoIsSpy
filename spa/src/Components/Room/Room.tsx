@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useContext } from "react"
-import { PlayerContext, PlayerContextType } from "../../Contexts/PlayerContext";
+import { RoomContext, RoomContextType } from "../../Contexts/RoomContext";
 import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext"
 import NamePlayerForRoom from "./NamePlayerForRoom";
 import ContentContainer from "../Shared/ContentContainer"
@@ -26,17 +26,17 @@ const useStyle = makeStyles(theme => ({
     modalButton: {
         marginLeft: "200px"
     },
-    roomTitle: {
+    marginBottom: {
         marginBottom: "1rem"
     },
-    readyButton: {
+    marginTop: {
         marginTop: "1rem"
     }
 }))
 
 export default function Room(){
     const { nickname, setNickname, reportExitRoom, alertLine, joinFailedMessage, gameWillStart, setGameWillStart,
-        setJoinFailedMessage, roomCapacity, playersInRoom, getReady, undoReady } = useContext(PlayerContext) as PlayerContextType
+        setJoinFailedMessage, roomCapacity, playersInRoom, getReady, undoReady } = useContext(RoomContext) as RoomContextType
     const { getText } = useContext(LanguageContext) as LanguageContextType
     const { code } = useParams<{code?: string}>()
     const classes = useStyle()
@@ -55,9 +55,9 @@ export default function Room(){
         setTimeout(() => setGameWillStart(false), 3000)
         return <ContentContainer allowExit onExit={reportExitRoom}> 
             <div>
-                <CircularProgress />
-                <Typography>
-                Game starting....
+                <CircularProgress size="5rem" className={classes.marginBottom}/>
+                <Typography variant="h5" className={classes.marginTop}>
+                    Game starting....
                 </Typography>         
             </div>
         </ContentContainer>
@@ -85,17 +85,17 @@ export default function Room(){
         <ContentContainer allowExit onExit={reportExitRoom}> 
             <div>
                 {alertLine && <RoomTopAlert alertLine={alertLine}/>}
-                <Typography variant="h4" className={classes.roomTitle}>
+                <Typography variant="h4" className={classes.marginBottom}>
                     Room {code}
                 </Typography>
                 <PlayerList/>
                 {
                     playersInRoom && roomCapacity && (roomCapacity === playersInRoom?.length) && (
                         playersInRoom.find(p => p.nickname === nickname)?.ready ?
-                    <Button size="large" variant="contained" color="secondary"  className={classes.readyButton} onClick={undoReady}>
+                    <Button size="large" variant="contained" color="secondary"  className={classes.marginTop} onClick={undoReady}>
                         I'm not ready
                     </Button>:
-                     <Button size="large" variant="contained" color="secondary" className={classes.readyButton} onClick={getReady}>
+                     <Button size="large" variant="contained" color="secondary" className={classes.marginTop} onClick={getReady}>
                         I'm ready
                     </Button>)
                 }

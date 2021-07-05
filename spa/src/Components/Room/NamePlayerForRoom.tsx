@@ -2,7 +2,7 @@ import {useState, useContext} from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import { FormGroup, TextField, Button, } from "@material-ui/core";
 import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext";
-import { PlayerContext, PlayerContextType } from "../../Contexts/PlayerContext";
+import { RoomContext, RoomContextType } from "../../Contexts/RoomContext";
 import PlayerAvatar from "../Shared/PlayerAvatar";
 
 const useStyles = makeStyles((theme) => ({
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
 export default function NamePlayerForRoom() {
     const classes = useStyles()
     const { getText } = useContext(LanguageContext) as LanguageContextType
-    const { setNickname } = useContext(PlayerContext) as PlayerContextType
+    const { setNickname } = useContext(RoomContext) as RoomContextType
     const [ tryNickname, setTryNickname ] = useState("")
 
     return  <form autoComplete="off">

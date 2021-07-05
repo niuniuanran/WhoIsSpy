@@ -1,5 +1,5 @@
 import PlayerAvatar from "../Shared/PlayerAvatar";
-import { PlayerContext, PlayerContextType } from "../../Contexts/PlayerContext";
+import { RoomContext, RoomContextType } from "../../Contexts/RoomContext";
 import { useContext } from "react";
 import { Typography, Grid, Badge } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function PlayerList() {
     const classes = useStyles()
-    const {nickname, playersInRoom, roomCapacity} = useContext(PlayerContext) as PlayerContextType
+    const {nickname, playersInRoom, roomCapacity} = useContext(RoomContext) as RoomContextType
     const spotNum = (roomCapacity || 0) - (playersInRoom?.length || 0)
     return <Grid container spacing={1} className={classes.root}>
             {

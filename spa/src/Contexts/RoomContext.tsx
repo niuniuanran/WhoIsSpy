@@ -5,13 +5,13 @@ import { CallApi } from "../Utils/Api"
 import {AytMessage} from "../Interfaces/Messages"
 import Player from "../Interfaces/Player"
 
-const PlayerContext = React.createContext<any>(undefined)
+const RoomContext = React.createContext<any>(undefined)
 
-interface PlayerContextProp {
+interface RoomContextProp {
     children:JSX.Element,
 }
 
-export type PlayerContextType = {
+export type RoomContextType = {
     id?: number,
     nickname?: string,
     setId: (id: number) => void
@@ -29,7 +29,7 @@ export type PlayerContextType = {
     setGameWillStart: (b: boolean) => void
 }
 
-function PlayerProvider({ children }: PlayerContextProp){
+function RoomProvider({ children }: RoomContextProp){
     const { code } = useParams<{code?: string}>()
     const [id, setId] = useState(undefined)
     const [nickname, setNickname] = useState(undefined)
@@ -119,7 +119,7 @@ function PlayerProvider({ children }: PlayerContextProp){
         }
     }, [reportExitRoom, code, nickname, ws, connected])
 
-    return <PlayerContext.Provider value={
+    return <RoomContext.Provider value={
         {
             id,
             setId,
@@ -138,7 +138,7 @@ function PlayerProvider({ children }: PlayerContextProp){
         }
     }>
         {children}
-    </PlayerContext.Provider>
+    </RoomContext.Provider>
 }
 
-export {PlayerProvider, PlayerContext}
+export {RoomProvider, RoomContext}
