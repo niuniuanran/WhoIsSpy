@@ -27,6 +27,8 @@ export type RoomContextType = {
     undoReady?: () => void
     gameStarted: boolean
     setGameStarted: (b: boolean) => void
+    word: string
+    instruction: string
 }
 
 function RoomProvider({ children }: RoomContextProp){
@@ -39,6 +41,8 @@ function RoomProvider({ children }: RoomContextProp){
     const [playersInRoom, setPlayersInRoom] = useState<[Player]>()
     const [joinFailedMessage, setJoinFailedMessage] = useState("")
     const [roomCapacity, setRoomCapacity] = useState(0)
+    const [word, setWord] = useState("")
+    const [instruction, setInstruction] = useState("")
 
     const ws = useRef<WebSocket|null>(null);
 
@@ -134,7 +138,9 @@ function RoomProvider({ children }: RoomContextProp){
             getReady,
             undoReady,
             gameStarted,
-            setGameStarted
+            setGameStarted,
+            word,
+            instruction
         }
     }>
         {children}

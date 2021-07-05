@@ -18,6 +18,8 @@ const (
 	VoteResultBroadcast      = "vote-result"
 	PlayerUndoReadyBroadcast = "player-undo-ready"
 	GameWillStartBroadcast   = "game-will-start"
+	PleaseVoteBroadcast      = "please-vote"
+	YourWordBroadcast        = "your-word"
 )
 
 type BroadcastMessage struct {

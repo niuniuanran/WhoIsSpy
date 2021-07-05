@@ -223,10 +223,9 @@ func (room *Room) playerReadyInRoom(player *Player) {
 func (room *Room) startGame() {
 	message := BroadcastMessage{
 		Action:   GameWillStartBroadcast,
-		Payload:  "4",
 		RoomCode: room.Code,
 	}
-	time.Sleep(1 * time.Second)
+	time.Sleep(500 * time.Millisecond)
 	room.broadcastToPlayersInRoom((message.encode()))
 	time.Sleep(3 * time.Second)
 }

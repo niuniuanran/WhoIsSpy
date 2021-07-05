@@ -5,7 +5,9 @@ const BroadcastActions = {
      TalkTurnBroadcast: "talk-turn",
      VoteResultBroadcast: "vote-result",
      PlayerUndoReadyBroadcast: "player-undo-ready",
-     GameWillStartBroadcast: "game-will-start"
+     GameWillStartBroadcast: "game-will-start", 	
+     PleaseVoteBroadcast: "please-vote",
+     YourWordBroadcast: "your-word"
 }
 
 const ReportActions = {
@@ -14,6 +16,12 @@ const ReportActions = {
 	PlayerReadyAction: "player-ready",
 	PlayerLeftAction:  "player-left",
     PlayerUndoReadyAction: "player-undo-ready"
+}
+
+const PlayInstructions = {
+    PleaseTalk: "please-talk",
+    PleaseVote: "please-vote",
+    YourWord: "your-word"
 }
 
 interface AytMessage {
@@ -36,4 +44,4 @@ interface ReportMessage{
 }
 
 export type {BroadcastMessage, ReportMessage, AytMessage}
-export {BroadcastActions, ReportActions}
+export {BroadcastActions, ReportActions, PlayInstructions}
