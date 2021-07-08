@@ -1,7 +1,9 @@
 const BroadcastActions = {
-     PlayerJoinedBroadcast: "player-joined",
-     PlayerReadyBroadcast: "player-ready",
      PlayerLeftBroadcast : "player-left",
+     PlayerJoinedBroadcast: "player-joined",
+     PlayerNewStateBroadcast: "player-state",
+
+     PlayerReadyBroadcast: "player-ready",
      TalkTurnBroadcast: "talk-turn",
      VoteResultBroadcast: "vote-result",
      PlayerUndoReadyBroadcast: "player-undo-ready",

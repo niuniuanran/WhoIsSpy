@@ -11,9 +11,11 @@ type Message interface {
 }
 
 const (
-	PlayerJoinedBroadcast    = "player-joined"
+	PlayerJoinedBroadcast   = "player-joined"
+	PlayerLeftBroadcast     = "player-left"
+	PlayerNewStateBroadcast = "player-state"
+
 	PlayerReadyBroadcast     = "player-ready"
-	PlayerLeftBroadcast      = "player-left"
 	TalkTurnBroadcast        = "talk-turn"
 	VoteResultBroadcast      = "vote-result"
 	PlayerUndoReadyBroadcast = "player-undo-ready"
