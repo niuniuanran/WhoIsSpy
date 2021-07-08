@@ -126,7 +126,7 @@ function RoomProvider({ children }: RoomContextProp){
               payload: ""
             })
           )
-    }, [ws, nickname, code])
+    }, [ws, nickname, code, wordRead])
 
     const getReady = useCallback(() => {
         ws?.current?.send(
