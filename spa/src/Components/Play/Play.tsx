@@ -11,7 +11,7 @@ export default function Play() {
     
     if (instruction === PlayInstructions.YourWord) {
         return <ContentContainer>
-            <WordCard word={word} central/>
+            <WordCard word={word} central onRead={onWordRead}/>
         </ContentContainer>
     }
 
