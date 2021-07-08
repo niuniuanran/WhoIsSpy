@@ -46,6 +46,7 @@ function RoomProvider({ children }: RoomContextProp){
     const [roomCapacity, setRoomCapacity] = useState(0)
     const [word, setWord] = useState("")
     const [instruction, setInstruction] = useState("")
+    const [wordRead, setWordRead] = useState(false)
 
     const ws = useRef<WebSocket|null>(null);
 
@@ -113,6 +114,10 @@ function RoomProvider({ children }: RoomContextProp){
     }, [ws, nickname, code])
 
     const onWordRead = useCallback(() => {
+        if (wordRead) {
+            return
+        }
+        setWordRead(true)
         ws?.current?.send(
             JSON.stringify({
               action: ReportActions.WordReadAction,
