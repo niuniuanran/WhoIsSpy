@@ -3,17 +3,16 @@ import { useContext } from "react"
 import { RoomContext, RoomContextType } from "../../Contexts/RoomContext"
 import { PlayInstructions } from "../../Interfaces/Messages"
 import PlayerList from "../Room/PlayerList"
+import WordCard from "./WordCard"
+import ContentContainer from "../Shared/ContentContainer"
 
 export default function Play() {
     const { instruction, word, onVote, onTalkFinish, onWordRead} = useContext(RoomContext) as RoomContextType
     
     if (instruction === PlayInstructions.YourWord) {
-        return <div>
-            Your word: <span>{word}</span>
-            <button onClick={onWordRead}>
-                Got it
-            </button>
-        </div>
+        return <ContentContainer>
+            <WordCard word={word} central/>
+        </ContentContainer>
     }
 
     if (instruction === PlayInstructions.PleaseTalk) {
