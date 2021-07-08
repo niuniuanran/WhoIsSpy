@@ -24,6 +24,17 @@ const (
 	maxMessageSize = 10000
 )
 
+const (
+	IdleState        = iota
+	ReadyState       = iota
+	WordReadingState = iota
+	ListeningState   = iota
+	TalkingState     = iota
+	VotingState      = iota
+	KilledState      = iota
+	WinState         = iota
+)
+
 var (
 	newline = []byte{'\n'}
 	// space   = []byte{' '}
@@ -38,12 +49,13 @@ var upgrader = websocket.Upgrader{
 type Player struct {
 	RoomCode     string `json:"roomCode"`
 	Nickname     string `json:"nickname"`
-	Ready        bool   `json:"ready"`
 	SerialNumber int    `json:"serialNumber"`
+	State        int    `json:"state"`
 	conn         *websocket.Conn
 	send         chan []byte
 	room         *Room
 	talked       bool
+	Ready        bool `json:"ready"`
 }
 
 func newPlayer(conn *websocket.Conn, room *Room, nickname string) *Player {
