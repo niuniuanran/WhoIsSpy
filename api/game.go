@@ -126,23 +126,24 @@ func (room *Room) deliverWords() {
 	room.spyWord = "cat"
 	room.startPosition = rand.Intn(room.numPlayer)
 	i := room.startPosition
+
 	for {
 		word := room.normalWord
 		if spy == i {
 			word = room.spyWord
 		}
-		log.Printf("Deliver your-word message to %s", players[i].Nickname)
+		log.Printf("Deliver your-word message to player number %d: %s", i, players[i].Nickname)
 		players[i].send <- (&BroadcastMessage{
 			Action:  YourWordBroadcast,
 			Payload: word,
 		}).encode()
 		players[i].State = PlayerWordReadingState
 		i++
-		if i == room.startPosition {
-			break
-		}
 		if i == room.numPlayer {
 			i = 0
+		}
+		if i == room.startPosition {
+			break
 		}
 	}
 	waitForState(func() bool { return room.allAlivePlayersInState(PlayerWordGotState) })

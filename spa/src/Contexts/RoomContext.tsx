@@ -34,6 +34,7 @@ export type RoomContextType = {
     playerState: string
     instruction: string
     voteTargets: [string]
+    setPlayerState: (s: string) => void
 }
 
 function RoomProvider({ children }: RoomContextProp){
@@ -65,9 +66,9 @@ function RoomProvider({ children }: RoomContextProp){
 
         if (message.action === BroadcastActions.PlayerNewStateBroadcast) {
             let players: [Player] = JSON.parse(message.payload) 
-            console.log("parsed message payload: ", players)
             setPlayersInRoom(players)
             console.log("Players in room: ", playersInRoom)
+            console.log("Setting player state: ", (playersInRoom?.find(p => p.nickname === nickname)?.state))
             setPlayerState((playersInRoom?.find(p => p.nickname === nickname)?.state) || PlayerStates.IdleState)
         }
 
@@ -213,7 +214,8 @@ function RoomProvider({ children }: RoomContextProp){
             onTalkFinish,
             onWordRead,
             instruction,
-            voteTargets
+            voteTargets,
+            setPlayerState
         }
     }>
         {children}

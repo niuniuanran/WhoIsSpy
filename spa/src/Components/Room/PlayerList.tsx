@@ -38,7 +38,7 @@ export default function PlayerList() {
             {
                 playersInRoom && playersInRoom.sort((a, b) => a.serialNumber - b.serialNumber).map((p, i) => (
                     <Grid xs={3} item key={i} className={`${classes.player} ${(i === playersInRoom.length - 1)? classes.new: ""}`}>
-                        <Badge color="secondary" badgeContent={p.state === PlayerStates.ReadyState? "ready": 0}>
+                        <Badge color="secondary" badgeContent={p.state? p.state: 0}>
                             <PlayerAvatar nickname={p.nickname} size="large" className={(p.nickname === nickname)? classes.me : classes.others}/>
                         </Badge>
                         <Typography className={classes.playerName}>

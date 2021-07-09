@@ -7,22 +7,30 @@ import ContentContainer from "../Shared/ContentContainer"
 import { PlayerStates } from "../../Interfaces/Player"
 
 export default function Play() {
-    const { playerState, word, onTalkFinish, onWordRead, instruction} = useContext(RoomContext) as RoomContextType
-    console.log("Player state: ", playerState)
+    const {word, onTalkFinish, onWordRead, instruction, playersInRoom, nickname, playerState, setPlayerState} = useContext(RoomContext) as RoomContextType
+    if (!playerState) {
+        setPlayerState(playersInRoom?.find(p => p.nickname === nickname)?.state || "")
+    }
+    console.log(playerState)
     if (playerState === PlayerStates.WordReadingState) {
         return <ContentContainer>
+            <>
+            <PlayerList/>
             <WordCard word={word} central onRead={onWordRead}/>
+            </>
         </ContentContainer>
     }
 
     if (playerState === PlayerStates.ListeningState) {
         return <div>
+            <PlayerList/>
             {instruction}
         </div>
     }
 
     if (playerState === PlayerStates.TalkingState) {
         return <div>
+            <PlayerList/>
             Your turn to talk
             <button onClick={onTalkFinish}>
                 I Finish
@@ -34,5 +42,5 @@ export default function Play() {
         return <PlayerList/>
     }
 
-    return <CircularProgress size="5rem"/>
+    return <><CircularProgress size="5rem"/><PlayerList/></>
 }
