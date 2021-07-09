@@ -64,9 +64,9 @@ function RoomProvider({ children }: RoomContextProp){
         }  
 
         if (message.action === BroadcastActions.PlayerNewStateBroadcast) {
-            console.log("message payload: ", message.payload)
-            console.log("parsed message payload: ", JSON.parse(message.payload))
-            setPlayersInRoom(JSON.parse(message.payload))
+            let players: [Player] = JSON.parse(message.payload) 
+            console.log("parsed message payload: ", players)
+            setPlayersInRoom(players)
             console.log("Players in room: ", playersInRoom)
             setPlayerState((playersInRoom?.find(p => p.nickname === nickname)?.state) || PlayerStates.IdleState)
         }
