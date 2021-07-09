@@ -62,13 +62,13 @@ export default function JoinRoom(){
             </FormGroup>
         {
             roomInfoFound.loading? (
-                <Button className={classes.submitButton} onClick={findRoom}
+                <Button className={classes.submitButton} 
                     size="large" variant="contained" color="primary" disabled>
                     <CircularProgress />
                 </Button> 
             ):(
-                <Button className={classes.submitButton} onClick={findRoom}
-                    size="large" variant="contained" color="primary">
+                <Button className={classes.submitButton} onClick={e => {e.preventDefault(); findRoom();}}
+                    size="large" variant="contained" color="primary" type="submit">
                         { getText("findRoom") }
                  </Button>   
             )

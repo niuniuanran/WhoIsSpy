@@ -7,12 +7,18 @@ import ContentContainer from "../Shared/ContentContainer"
 import { PlayerStates } from "../../Interfaces/Player"
 
 export default function Play() {
-    const { playerState, word, onTalkFinish, onWordRead} = useContext(RoomContext) as RoomContextType
-    
+    const { playerState, word, onTalkFinish, onWordRead, instruction} = useContext(RoomContext) as RoomContextType
+    console.log("Player state: ", playerState)
     if (playerState === PlayerStates.WordReadingState) {
         return <ContentContainer>
             <WordCard word={word} central onRead={onWordRead}/>
         </ContentContainer>
+    }
+
+    if (playerState === PlayerStates.ListeningState) {
+        return <div>
+            {instruction}
+        </div>
     }
 
     if (playerState === PlayerStates.TalkingState) {

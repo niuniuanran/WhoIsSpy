@@ -6,17 +6,17 @@ export default interface Player{
 }
 
 const PlayerStates = {
-    IdleState: "player-idle",
-	ReadyState: "player-ready",
-	WordReadingState: "player-reading",
-    PlayerWordGotState: "player-word-got",
-	ListeningState: "player-listening",
-	TalkingState:"player-talking",
-	VotingState: "player-voting",
-	KilledState: "player-killed",
-	WinState: "player-win",
-    TalkFinishState: "talk-finish",
-    PlayerVotedState: "player-voted"
+    IdleState: "",
+	ReadyState: "ready",
+	WordReadingState: "reading",
+    PlayerWordGotState: "got",
+	ListeningState: "listening",
+	TalkingState:"talking",
+	VotingState: "voting",
+	KilledState: "killed",
+	WinState: "win",
+    TalkFinishState: "talked",
+    PlayerVotedState: "voted"
 }
 
 export {PlayerStates}

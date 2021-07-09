@@ -33,6 +33,7 @@ export type RoomContextType = {
     onWordRead: () => void
     playerState: string
     instruction: string
+    voteTargets: [string]
 }
 
 function RoomProvider({ children }: RoomContextProp){
@@ -49,33 +50,51 @@ function RoomProvider({ children }: RoomContextProp){
     const [playerState, setPlayerState] = useState(PlayerStates.IdleState)
     const [instruction, setInstruction] = useState("")
     const [wordRead, setWordRead] = useState(false)
+    const [voteTargets, setVoteTargets] = useState<[string]>()
 
     const ws = useRef<WebSocket|null>(null);
 
     const handleMessage = useCallback((message:BroadcastMessage) => {
-        if (message.line) {
-            setAlertLine(message.line)
-            setTimeout(()=>setAlertLine(""), 2000)
-        }
-        if (message.action === BroadcastActions.PlayerJoinedBroadcast || 
-            message.action === BroadcastActions.PlayerLeftBroadcast) {
-            setPlayersInRoom(JSON.parse(message.payload))
-        }
-        if (message.action === BroadcastActions.GameWillStartBroadcast) {
-            setGameStarted(true)
-        }
+        console.log("Received message: ", message)
 
         if (message.action === BroadcastActions.PlayerNewStateBroadcast) {
-            console.log(message)
+            if (message.line) {
+                setInstruction(message.line)
+            }
+            console.log("message payload: ", message.payload)
+            console.log("parsed message payload: ", JSON.parse(message.payload))
             setPlayersInRoom(JSON.parse(message.payload))
+            console.log("Players in room: ", playersInRoom)
             setPlayerState((playersInRoom?.find(p => p.nickname === nickname)?.state) || PlayerStates.IdleState)
             message.line && setInstruction(message.line)
+        }
+
+        if (message.action === BroadcastActions.PlayerJoinedBroadcast || 
+            message.action === BroadcastActions.PlayerLeftBroadcast) {
+            if (message.line) {
+                setAlertLine(message.line)
+                setTimeout(()=>setAlertLine(""), 2000)
+            }    
+            setPlayersInRoom(JSON.parse(message.payload))
+        }
+
+        if (message.action === BroadcastActions.GameWillStartBroadcast) {
+            setGameStarted(true)
         }
 
         if (message.action === BroadcastActions.YourWordBroadcast) {
             setWord(message.payload)
             setPlayerState(PlayerStates.WordReadingState)
         }
+
+        if (message.action === BroadcastActions.AskVoteBroadcast) {
+            if (message.line) {
+                setInstruction(message.line)
+            }   
+            console.log("ask to vote: ", message.payload)
+            setVoteTargets(JSON.parse(message.payload))
+        }
+
     }, [nickname, playersInRoom]);
 
     const reportExitRoom = useCallback(() => {
@@ -113,6 +132,7 @@ function RoomProvider({ children }: RoomContextProp){
     }, [ws, nickname, code])
 
     const onWordRead = useCallback(() => {
+        console.log("word read: ", wordRead)
         if (wordRead) {
             return
         }
@@ -197,7 +217,8 @@ function RoomProvider({ children }: RoomContextProp){
             onVote,
             onTalkFinish,
             onWordRead,
-            instruction
+            instruction,
+            voteTargets
         }
     }>
         {children}
