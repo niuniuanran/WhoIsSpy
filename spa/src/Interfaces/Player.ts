@@ -3,18 +3,20 @@ export default interface Player{
     serialNumber: number
     ready?: boolean,
     roomCode?: string,
-    state: number
+    state: string
 }
 
 const PlayerStates = {
-    IdleState: 0,
-	ReadyState: 1,
-	WordReadingState: 2,
-	ListeningState: 3,
-	TalkingState: 4,
-	VotingState: 5,
-	KilledState: 6,
-	WinState: 7
+    IdleState: "player-idle",
+	ReadyState: "player-ready",
+	WordReadingState: "player-reading",
+    PlayerWordGotState: "player-word-got",
+	ListeningState: "player-listening",
+	TalkingState:"player-talking",
+    TalkFinishState: "talk-finish",
+	VotingState: "player-voting",
+	KilledState: "player-killed",
+	WinState: "player-win",
 }
 
 export {PlayerStates}

@@ -25,14 +25,16 @@ const (
 )
 
 const (
-	IdleState        = iota
-	ReadyState       = iota
-	WordReadingState = iota
-	ListeningState   = iota
-	TalkingState     = iota
-	VotingState      = iota
-	KilledState      = iota
-	WinState         = iota
+	PlayerIdleState         = "player-idle"
+	PlayerReadyState        = "player-ready"
+	PlayerWordReadingState  = "player-reading"
+	PlayerWordGotState      = "player-word-got"
+	PlayerListeningState    = "player-listening"
+	PlayerTalkingState      = "player-talking"
+	PlayerVotingState       = "player-voting"
+	PlayerKilledState       = "player-killed"
+	PlayerWinState          = "player-win"
+	PlayerTalkFinishedState = "talk-finish"
 )
 
 var (
@@ -50,18 +52,17 @@ type Player struct {
 	RoomCode     string `json:"roomCode"`
 	Nickname     string `json:"nickname"`
 	SerialNumber int    `json:"serialNumber"`
-	State        int    `json:"state"`
+	State        string `json:"state"`
 	conn         *websocket.Conn
 	send         chan []byte
 	room         *Room
-	talked       bool
-	Ready        bool `json:"ready"`
 }
 
 func newPlayer(conn *websocket.Conn, room *Room, nickname string) *Player {
 	player := Player{
 		RoomCode: room.Code,
 		Nickname: nickname,
+		State:    PlayerIdleState,
 		conn:     conn,
 		room:     room,
 		send:     make(chan []byte),
@@ -198,12 +199,10 @@ func (player *Player) handleNewMessage(jsonMessage []byte) {
 		}
 	case PlayerReadyAction:
 		{
-			player.Ready = true
 			player.room.playerReadyInRoom(player)
 		}
 	case PlayerUndoReadyAction:
 		{
-			player.Ready = false
 			player.room.playerUndoReadyInRoom(player)
 		}
 	case VoteAction:
@@ -212,11 +211,11 @@ func (player *Player) handleNewMessage(jsonMessage []byte) {
 		}
 	case TalkFinishAction:
 		{
-			player.talked = true
+			player.State = PlayerTalkFinishedState
 		}
 	case WordReadAction:
 		{
-			player.room.wordReadByPlayers++
+			player.State = PlayerWordGotState
 		}
 	}
 

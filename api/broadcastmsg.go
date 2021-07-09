@@ -14,14 +14,15 @@ const (
 	PlayerJoinedBroadcast   = "player-joined"
 	PlayerLeftBroadcast     = "player-left"
 	PlayerNewStateBroadcast = "player-state"
+	VoteResultBroadcast     = "vote-result"
+	GameWillStartBroadcast  = "game-will-start"
+	YourWordBroadcast       = "your-word"
 
-	PlayerReadyBroadcast     = "player-ready"
-	TalkTurnBroadcast        = "talk-turn"
-	VoteResultBroadcast      = "vote-result"
-	PlayerUndoReadyBroadcast = "player-undo-ready"
-	GameWillStartBroadcast   = "game-will-start"
-	PleaseVoteBroadcast      = "please-vote"
-	YourWordBroadcast        = "your-word"
+	// PlayerReadyBroadcast     = "player-ready"
+	// TalkTurnBroadcast        = "talk-turn"
+	// PlayerUndoReadyBroadcast = "player-undo-ready"
+	// GameWillStartBroadcast   = "game-will-start"
+	// PleaseVoteBroadcast      = "please-vote"
 )
 
 type BroadcastMessage struct {

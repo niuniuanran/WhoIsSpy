@@ -17,6 +17,16 @@ func (room *Room) startGame() {
 }
 
 func (room *Room) runGame() {
+	room.state = RoomPlayingState
+	room.deliverWords()
+
+}
+
+func (room *Room) vote(player *Player, target string) {
+
+}
+
+func (room *Room) deliverWords() {
 	rand.Seed(time.Now().UnixNano())
 	spy := rand.Intn(room.numPlayer)
 	players := room.getPlayerPointersInRoom()
@@ -35,33 +45,7 @@ func (room *Room) runGame() {
 			Action:  YourWordBroadcast,
 			Payload: word,
 		}).encode()
-		i++
-		if i == room.startPosition {
-			break
-		}
-		if i == room.numPlayer {
-			i = 0
-		}
-		room.wordReadByPlayers = 0
-	}
-
-	for room.wordReadByPlayers < room.numPlayer {
-		continue
-	}
-
-	for {
-		players[i].talked = false
-		players[i].send <- (&BroadcastMessage{
-			Action:  TalkTurnBroadcast,
-			Payload: "",
-		}).encode()
-
-		for {
-			if players[i].talked {
-				break
-			}
-		}
-
+		players[i].State = PlayerWordReadingState
 		i++
 		if i == room.startPosition {
 			break
@@ -72,20 +56,17 @@ func (room *Room) runGame() {
 	}
 
 	for {
-		players[i].send <- (&BroadcastMessage{
-			Action: PleaseVoteBroadcast,
-		}).encode()
-		i++
-		if i == room.startPosition {
-			break
-		}
-		if i == room.numPlayer {
-			i = 0
+		if room.AllPlayersInState(PlayerWordGotState) {
+			return
 		}
 	}
-
 }
 
-func (room *Room) vote(player *Player, target string) {
-
+func (room *Room) AllPlayersInState(state string) bool {
+	for _, p := range room.getPlayerPointersInRoom() {
+		if p.State != state {
+			return false
+		}
+	}
+	return true
 }

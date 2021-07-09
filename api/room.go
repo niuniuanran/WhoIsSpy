@@ -18,23 +18,28 @@ const (
 	NicknameInvalid = "nickname-invalid"
 )
 
+const (
+	RoomIdleState    = "room-idle"
+	RoomPlayingState = "room-playing"
+)
+
 type Room struct {
-	Code              string
-	numPlayer         int
-	numSpy            int
-	Language          string
-	EighteenPlus      bool
-	RandomBlank       bool
-	players           map[*Player]bool
-	register          chan *Player
-	unregister        chan *Player
-	broadcast         chan *BroadcastMessage
-	spy               *Player
-	normalWord        string
-	spyWord           string
-	votes             map[string]int
-	startPosition     int
-	wordReadByPlayers int
+	Code          string
+	numPlayer     int
+	numSpy        int
+	Language      string
+	EighteenPlus  bool
+	RandomBlank   bool
+	players       map[*Player]bool
+	register      chan *Player
+	unregister    chan *Player
+	broadcast     chan *BroadcastMessage
+	spy           *Player
+	normalWord    string
+	spyWord       string
+	votes         map[string]int
+	startPosition int
+	state         string
 }
 
 type RoomSettings struct {
@@ -65,6 +70,7 @@ func NewRoom(roomSettings RoomSettings) *Room {
 		register:     make(chan *Player),
 		unregister:   make(chan *Player),
 		broadcast:    make(chan *BroadcastMessage),
+		state:        RoomIdleState,
 	}
 }
 
@@ -199,7 +205,7 @@ func (room *Room) unregisterPlayerInRoom(player *Player) {
 	}
 }
 
-func (room *Room) playerReadyInRoom(player *Player) {
+func (room *Room) BroadcastPlayersState(line string) {
 	players := room.getPlayersInRoom()
 	bs, err := json.Marshal(players)
 	if err != nil {
@@ -207,18 +213,24 @@ func (room *Room) playerReadyInRoom(player *Player) {
 		return
 	}
 	message := BroadcastMessage{
-		Action:   PlayerReadyBroadcast,
+		Action:   PlayerNewStateBroadcast,
 		Payload:  string(bs),
-		RoomCode: player.RoomCode,
-		Line:     fmt.Sprintf("%s is ready", player.Nickname),
+		RoomCode: room.Code,
+		Line:     line,
 	}
 	room.broadcastToPlayersInRoom(message.encode())
 	log.Println("Broadcasting", message.toString())
+}
+
+func (room *Room) playerReadyInRoom(player *Player) {
+	player.State = PlayerReadyState
+	room.BroadcastPlayersState(fmt.Sprintf("%s is ready", player.Nickname))
+	players := room.getPlayerPointersInRoom()
 	if len(players) < room.numPlayer {
 		return
 	}
 	for _, p := range players {
-		if !p.Ready {
+		if p.State == PlayerIdleState {
 			return
 		}
 	}
@@ -226,20 +238,8 @@ func (room *Room) playerReadyInRoom(player *Player) {
 }
 
 func (room *Room) playerUndoReadyInRoom(player *Player) {
-	players := room.getPlayersInRoom()
-	bs, err := json.Marshal(players)
-	if err != nil {
-		log.Println("Service error: failed to create player list json")
-		return
-	}
-	message := BroadcastMessage{
-		Action:   PlayerUndoReadyBroadcast,
-		Payload:  string(bs),
-		RoomCode: player.RoomCode,
-		Line:     fmt.Sprintf("%s is not ready", player.Nickname),
-	}
-	room.broadcastToPlayersInRoom(message.encode())
-	log.Println("Broadcasting", message.toString())
+	player.State = PlayerIdleState
+	room.BroadcastPlayersState(fmt.Sprintf("%s is not ready", player.Nickname))
 }
 
 func (room *Room) broadcastToPlayersInRoom(message []byte) {

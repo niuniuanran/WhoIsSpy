@@ -2,10 +2,10 @@ const BroadcastActions = {
      PlayerLeftBroadcast : "player-left",
      PlayerJoinedBroadcast: "player-joined",
      PlayerNewStateBroadcast: "player-state",
+     VoteResultBroadcast: "vote-result",
 
      PlayerReadyBroadcast: "player-ready",
      TalkTurnBroadcast: "talk-turn",
-     VoteResultBroadcast: "vote-result",
      PlayerUndoReadyBroadcast: "player-undo-ready",
      GameWillStartBroadcast: "game-will-start", 	
      PleaseVoteBroadcast: "please-vote",
