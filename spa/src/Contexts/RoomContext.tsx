@@ -56,25 +56,23 @@ function RoomProvider({ children }: RoomContextProp){
 
     const handleMessage = useCallback((message:BroadcastMessage) => {
         console.log("Received message: ", message)
+        message.instruction && setInstruction(message.instruction)
+
+        if (message.alert) {
+            setAlertLine(message.alert)
+            setTimeout(()=>setAlertLine(""), 2000)
+        }  
 
         if (message.action === BroadcastActions.PlayerNewStateBroadcast) {
-            if (message.line) {
-                setInstruction(message.line)
-            }
             console.log("message payload: ", message.payload)
             console.log("parsed message payload: ", JSON.parse(message.payload))
             setPlayersInRoom(JSON.parse(message.payload))
             console.log("Players in room: ", playersInRoom)
             setPlayerState((playersInRoom?.find(p => p.nickname === nickname)?.state) || PlayerStates.IdleState)
-            message.line && setInstruction(message.line)
         }
 
         if (message.action === BroadcastActions.PlayerJoinedBroadcast || 
             message.action === BroadcastActions.PlayerLeftBroadcast) {
-            if (message.line) {
-                setAlertLine(message.line)
-                setTimeout(()=>setAlertLine(""), 2000)
-            }    
             setPlayersInRoom(JSON.parse(message.payload))
         }
 
@@ -88,9 +86,6 @@ function RoomProvider({ children }: RoomContextProp){
         }
 
         if (message.action === BroadcastActions.AskVoteBroadcast) {
-            if (message.line) {
-                setInstruction(message.line)
-            }   
             console.log("ask to vote: ", message.payload)
             setVoteTargets(JSON.parse(message.payload))
         }

@@ -25,7 +25,8 @@ interface BroadcastMessage{
     action: string
     payload: string
     roomcode?: string
-    line?: string
+    alert?: string
+    instruction?: string
 }
 
 interface ReportMessage{
