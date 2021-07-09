@@ -35,6 +35,7 @@ const (
 	PlayerKilledState       = "player-killed"
 	PlayerWinState          = "player-win"
 	PlayerTalkFinishedState = "talk-finish"
+	PlayerVotedState        = "player-voted"
 )
 
 var (
@@ -207,7 +208,7 @@ func (player *Player) handleNewMessage(jsonMessage []byte) {
 		}
 	case VoteAction:
 		{
-			player.room.vote(player, message.Payload)
+			player.vote(message.Payload)
 		}
 	case TalkFinishAction:
 		{
@@ -218,7 +219,11 @@ func (player *Player) handleNewMessage(jsonMessage []byte) {
 			player.State = PlayerWordGotState
 		}
 	}
+}
 
+func (player *Player) vote(target string) {
+	player.room.votes[player.Nickname] = target
+	player.State = PlayerVotedState
 }
 
 // BySerialNumber implements sort.Interface for []*Player based on the SerialNumber field.

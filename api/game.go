@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"math/rand"
 	"time"
 )
@@ -19,11 +20,52 @@ func (room *Room) startGame() {
 func (room *Room) runGame() {
 	room.state = RoomPlayingState
 	room.deliverWords()
+	for room.state != RoomGameFinishState {
+		room.runTalkRound()
+		room.collectVote()
+	}
+	room.announceResult()
+	room.tidyUp()
+}
+
+func (room *Room) runTalkRound() {
+	message := &BroadcastMessage{
+		Action:   PlayerNewStateBroadcast,
+		Payload:  PlayerTalkingState,
+		RoomCode: room.Code,
+	}
+	room.broadcastToPlayersInRoom(message.encode())
+	for {
+		if room.AllPlayersInState(PlayerTalkFinishedState) {
+			return
+		}
+	}
+}
+
+func (room *Room) collectVote() {
+	message := &BroadcastMessage{
+		Action:   PlayerNewStateBroadcast,
+		Payload:  PlayerVotingState,
+		RoomCode: room.Code,
+	}
+	room.broadcastToPlayersInRoom(message.encode())
+	for {
+		if room.AllPlayersInState(PlayerVotedState) {
+			break
+		}
+	}
 
 }
 
-func (room *Room) vote(player *Player, target string) {
+func (room *Room) announceResult() {
 
+}
+
+func (room *Room) tidyUp() {
+	room.state = RoomIdleState
+	for _, p := range room.getPlayerPointersInRoom() {
+		p.State = PlayerIdleState
+	}
 }
 
 func (room *Room) deliverWords() {
@@ -33,7 +75,7 @@ func (room *Room) deliverWords() {
 	room.spy = players[spy]
 	room.normalWord = "dog"
 	room.spyWord = "cat"
-	room.votes = make(map[string]int, room.numPlayer)
+	room.votes = make(map[string]string, room.numPlayer)
 	room.startPosition = rand.Intn(room.numPlayer)
 	i := room.startPosition
 	for {
@@ -57,6 +99,7 @@ func (room *Room) deliverWords() {
 
 	for {
 		if room.AllPlayersInState(PlayerWordGotState) {
+			log.Println("Words read by all players")
 			return
 		}
 	}

@@ -19,8 +19,9 @@ const (
 )
 
 const (
-	RoomIdleState    = "room-idle"
-	RoomPlayingState = "room-playing"
+	RoomIdleState       = "room-idle"
+	RoomPlayingState    = "room-playing"
+	RoomGameFinishState = "room-game-finish"
 )
 
 type Room struct {
@@ -37,7 +38,7 @@ type Room struct {
 	spy           *Player
 	normalWord    string
 	spyWord       string
-	votes         map[string]int
+	votes         map[string]string
 	startPosition int
 	state         string
 }

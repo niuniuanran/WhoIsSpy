@@ -12,10 +12,11 @@ const PlayerStates = {
     PlayerWordGotState: "player-word-got",
 	ListeningState: "player-listening",
 	TalkingState:"player-talking",
-    TalkFinishState: "talk-finish",
 	VotingState: "player-voting",
 	KilledState: "player-killed",
 	WinState: "player-win",
+    TalkFinishState: "talk-finish",
+    PlayerVotedState: "player-voted"
 }
 
 export {PlayerStates}
