@@ -38,7 +38,7 @@ type Room struct {
 	spy           *Player
 	normalWord    string
 	spyWord       string
-	votes         map[string]string
+	votes         map[string][]string
 	startPosition int
 	state         string
 }
@@ -206,7 +206,7 @@ func (room *Room) unregisterPlayerInRoom(player *Player) {
 	}
 }
 
-func (room *Room) BroadcastPlayersState(line string) {
+func (room *Room) broadcastPlayersState(line string) {
 	players := room.getPlayersInRoom()
 	bs, err := json.Marshal(players)
 	if err != nil {
@@ -225,7 +225,7 @@ func (room *Room) BroadcastPlayersState(line string) {
 
 func (room *Room) playerReadyInRoom(player *Player) {
 	player.State = PlayerReadyState
-	room.BroadcastPlayersState(fmt.Sprintf("%s is ready", player.Nickname))
+	room.broadcastPlayersState(fmt.Sprintf("%s is ready", player.Nickname))
 	players := room.getPlayerPointersInRoom()
 	if len(players) < room.numPlayer {
 		return
@@ -240,7 +240,7 @@ func (room *Room) playerReadyInRoom(player *Player) {
 
 func (room *Room) playerUndoReadyInRoom(player *Player) {
 	player.State = PlayerIdleState
-	room.BroadcastPlayersState(fmt.Sprintf("%s is not ready", player.Nickname))
+	room.broadcastPlayersState(fmt.Sprintf("%s is not ready", player.Nickname))
 }
 
 func (room *Room) broadcastToPlayersInRoom(message []byte) {
@@ -299,6 +299,17 @@ func (room *Room) getPlayerPointersInRoom() []*Player {
 	ps := make([]*Player, 0, len(room.players))
 	for p, present := range room.players {
 		if present {
+			ps = append(ps, p)
+		}
+	}
+	assignSerialNumbers(ps)
+	return ps
+}
+
+func (room *Room) getAlivePlayerPointersInRoom() []*Player {
+	ps := make([]*Player, 0, len(room.players))
+	for p, present := range room.players {
+		if present && p.State != PlayerKilledState {
 			ps = append(ps, p)
 		}
 	}

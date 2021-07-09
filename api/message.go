@@ -17,6 +17,7 @@ const (
 	VoteResultBroadcast     = "vote-result"
 	GameWillStartBroadcast  = "game-will-start"
 	YourWordBroadcast       = "your-word"
+	AskVoteBroadcast        = "please-vote"
 )
 
 type BroadcastMessage struct {

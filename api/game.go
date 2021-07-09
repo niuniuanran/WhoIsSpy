@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	"log"
 	"math/rand"
 	"time"
@@ -22,39 +24,83 @@ func (room *Room) runGame() {
 	room.deliverWords()
 	for room.state != RoomGameFinishState {
 		room.runTalkRound()
-		room.collectVote()
+		room.runVoteRound(room.getAlivePlayerPointersInRoom())
 	}
 	room.announceResult()
 	room.tidyUp()
 }
 
 func (room *Room) runTalkRound() {
-	message := &BroadcastMessage{
-		Action:   PlayerNewStateBroadcast,
-		Payload:  PlayerTalkingState,
-		RoomCode: room.Code,
-	}
-	room.broadcastToPlayersInRoom(message.encode())
+	players := room.getAlivePlayerPointersInRoom()
+	room.setAllAlivePlayersToState(PlayerListeningState)
+	i := room.startPosition
 	for {
-		if room.AllPlayersInState(PlayerTalkFinishedState) {
-			return
-		}
-	}
-}
+		players[i].State = PlayerTalkingState
+		room.broadcastPlayersState(fmt.Sprintf("%s's turn to talk", players[i].Nickname))
 
-func (room *Room) collectVote() {
-	message := &BroadcastMessage{
-		Action:   PlayerNewStateBroadcast,
-		Payload:  PlayerVotingState,
-		RoomCode: room.Code,
-	}
-	room.broadcastToPlayersInRoom(message.encode())
-	for {
-		if room.AllPlayersInState(PlayerVotedState) {
+		waitForState(func() bool { return players[i].State == PlayerTalkFinishedState })
+		players[i].State = PlayerListeningState
+
+		i++
+		if i == room.startPosition {
 			break
 		}
+		if i == room.numPlayer {
+			i = 0
+		}
 	}
 
+}
+
+func (room *Room) runVoteRound(targets []*Player) {
+	room.votes = make(map[string][]string, room.numPlayer)
+	players := room.getAlivePlayerPointersInRoom()
+	for _, p := range players {
+		p.State = PlayerVotingState
+	}
+
+	targetNames := make([]string, len(targets))
+	for _, p := range targets {
+		targetNames = append(targetNames, p.Nickname)
+	}
+	bs, err := json.Marshal(targetNames)
+	if err != nil {
+		log.Println("Failed to marshal target names")
+	}
+
+	message := BroadcastMessage{
+		Action:   AskVoteBroadcast,
+		Payload:  string(bs),
+		RoomCode: room.Code,
+		Line:     "Please vote",
+	}
+	room.broadcastToPlayersInRoom(message.encode())
+	waitForState(func() bool { return room.allAlivePlayersInState(PlayerVotedState) })
+	room.calculateVotes()
+}
+
+func (room *Room) calculateVotes() {
+	players := room.getAlivePlayerPointersInRoom()
+	maxVoteCount := 0
+	maxVoteTargets := make([]*Player, 0)
+	for _, p := range players {
+		count := len(room.votes[p.Nickname])
+		if count > maxVoteCount {
+			maxVoteTargets = make([]*Player, 0)
+			maxVoteTargets = append(maxVoteTargets, p)
+			maxVoteCount = count
+		}
+		if count == maxVoteCount {
+			maxVoteTargets = append(maxVoteTargets, p)
+		}
+	}
+	if len(maxVoteTargets) == 1 {
+		maxVoteTargets[0].State = PlayerKilledState
+		room.broadcastPlayersState(fmt.Sprintf("%s is killed", maxVoteTargets[0].Nickname))
+		return
+	} else {
+		room.runVoteRound(maxVoteTargets)
+	}
 }
 
 func (room *Room) announceResult() {
@@ -75,7 +121,6 @@ func (room *Room) deliverWords() {
 	room.spy = players[spy]
 	room.normalWord = "dog"
 	room.spyWord = "cat"
-	room.votes = make(map[string]string, room.numPlayer)
 	room.startPosition = rand.Intn(room.numPlayer)
 	i := room.startPosition
 	for {
@@ -96,20 +141,29 @@ func (room *Room) deliverWords() {
 			i = 0
 		}
 	}
-
-	for {
-		if room.AllPlayersInState(PlayerWordGotState) {
-			log.Println("Words read by all players")
-			return
-		}
-	}
+	waitForState(func() bool { return room.allAlivePlayersInState(PlayerWordGotState) })
 }
 
-func (room *Room) AllPlayersInState(state string) bool {
-	for _, p := range room.getPlayerPointersInRoom() {
+func (room *Room) allAlivePlayersInState(state string) bool {
+	for _, p := range room.getAlivePlayerPointersInRoom() {
 		if p.State != state {
 			return false
 		}
 	}
 	return true
+}
+
+func (room *Room) setAllAlivePlayersToState(state string) {
+	for _, p := range room.getAlivePlayerPointersInRoom() {
+		p.State = state
+	}
+}
+
+func waitForState(check func() bool) {
+	for {
+		time.Sleep(time.Second)
+		if check() {
+			return
+		}
+	}
 }

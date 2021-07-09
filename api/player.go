@@ -222,7 +222,12 @@ func (player *Player) handleNewMessage(jsonMessage []byte) {
 }
 
 func (player *Player) vote(target string) {
-	player.room.votes[player.Nickname] = target
+	v, ok := player.room.votes[target]
+	if !ok {
+		v = make([]string, 1)
+	}
+	v = append(v, player.Nickname)
+	player.room.votes[target] = v
 	player.State = PlayerVotedState
 }
 

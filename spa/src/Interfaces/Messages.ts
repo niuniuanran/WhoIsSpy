@@ -5,6 +5,7 @@ const BroadcastActions = {
      VoteResultBroadcast: "vote-result",
      YourWordBroadcast: "your-word",
      GameWillStartBroadcast: "game-will-start", 	
+     AskVoteBroadcast: "please-vote"
 }
 
 const ReportActions = {

@@ -32,6 +32,7 @@ export type RoomContextType = {
     onTalkFinish: () => void
     onWordRead: () => void
     playerState: string
+    instruction: string
 }
 
 function RoomProvider({ children }: RoomContextProp){
@@ -46,11 +47,12 @@ function RoomProvider({ children }: RoomContextProp){
     const [roomCapacity, setRoomCapacity] = useState(0)
     const [word, setWord] = useState("")
     const [playerState, setPlayerState] = useState(PlayerStates.IdleState)
+    const [instruction, setInstruction] = useState("")
     const [wordRead, setWordRead] = useState(false)
 
     const ws = useRef<WebSocket|null>(null);
 
-    const handleMessage = (message:BroadcastMessage) => {
+    const handleMessage = useCallback((message:BroadcastMessage) => {
         if (message.line) {
             setAlertLine(message.line)
             setTimeout(()=>setAlertLine(""), 2000)
@@ -64,15 +66,17 @@ function RoomProvider({ children }: RoomContextProp){
         }
 
         if (message.action === BroadcastActions.PlayerNewStateBroadcast) {
+            console.log(message)
             setPlayersInRoom(JSON.parse(message.payload))
-            setPlayerState(message.payload)
+            setPlayerState((playersInRoom?.find(p => p.nickname === nickname)?.state) || PlayerStates.IdleState)
+            message.line && setInstruction(message.line)
         }
 
         if (message.action === BroadcastActions.YourWordBroadcast) {
             setWord(message.payload)
             setPlayerState(PlayerStates.WordReadingState)
         }
-    };
+    }, [nickname, playersInRoom]);
 
     const reportExitRoom = useCallback(() => {
         console.log("Leaving room ", code)
@@ -170,7 +174,7 @@ function RoomProvider({ children }: RoomContextProp){
 
             }})
         }
-    }, [reportExitRoom, code, nickname, ws, connected])
+    }, [reportExitRoom, handleMessage, code, nickname, ws, connected])
 
     return <RoomContext.Provider value={
         {
@@ -192,7 +196,8 @@ function RoomProvider({ children }: RoomContextProp){
             playerState,
             onVote,
             onTalkFinish,
-            onWordRead
+            onWordRead,
+            instruction
         }
     }>
         {children}
