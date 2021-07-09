@@ -5,11 +5,6 @@ const BroadcastActions = {
      VoteResultBroadcast: "vote-result",
      YourWordBroadcast: "your-word",
      GameWillStartBroadcast: "game-will-start", 	
-
-    //  PlayerReadyBroadcast: "player-ready",
-    //  TalkTurnBroadcast: "talk-turn",
-    //  PlayerUndoReadyBroadcast: "player-undo-ready",
-    //  PleaseVoteBroadcast: "please-vote",
 }
 
 const ReportActions = {
