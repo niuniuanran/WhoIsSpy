@@ -14,17 +14,17 @@ const (
 	PlayerJoinedBroadcast   = "player-joined"
 	PlayerLeftBroadcast     = "player-left"
 	PlayerNewStateBroadcast = "player-state"
-	VoteResultBroadcast     = "vote-result"
 	GameWillStartBroadcast  = "game-will-start"
 	YourWordBroadcast       = "your-word"
 	AskVoteBroadcast        = "please-vote"
 )
 
 type BroadcastMessage struct {
-	Action   string `json:"action"`
-	Payload  string `json:"payload"`
-	RoomCode string `json:"roomcode"`
-	Line     string `json:"line"`
+	Action      string `json:"action"`
+	Payload     string `json:"payload"`
+	RoomCode    string `json:"roomcode"`
+	Alert       string `json:"alert"`
+	Instruction string `json:"instruction"`
 }
 
 func (message *BroadcastMessage) encode() []byte {

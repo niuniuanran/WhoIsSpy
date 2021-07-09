@@ -25,22 +25,21 @@ const (
 )
 
 const (
-	PlayerIdleState         = "player-idle"
-	PlayerReadyState        = "player-ready"
-	PlayerWordReadingState  = "player-reading"
-	PlayerWordGotState      = "player-word-got"
-	PlayerListeningState    = "player-listening"
-	PlayerTalkingState      = "player-talking"
-	PlayerVotingState       = "player-voting"
-	PlayerKilledState       = "player-killed"
-	PlayerWinState          = "player-win"
-	PlayerTalkFinishedState = "talk-finish"
-	PlayerVotedState        = "player-voted"
+	PlayerIdleState         = ""
+	PlayerReadyState        = "ready"
+	PlayerWordReadingState  = "reading"
+	PlayerWordGotState      = "got"
+	PlayerListeningState    = "listening"
+	PlayerTalkingState      = "talking"
+	PlayerVotingState       = "voting"
+	PlayerKilledState       = "killed"
+	PlayerWinState          = "win"
+	PlayerTalkFinishedState = "talked"
+	PlayerVotedState        = "voted"
 )
 
 var (
 	newline = []byte{'\n'}
-	// space   = []byte{' '}
 )
 
 var upgrader = websocket.Upgrader{

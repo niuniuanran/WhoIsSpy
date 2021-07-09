@@ -23,6 +23,8 @@ func (room *Room) runGame() {
 	room.state = RoomPlayingState
 	room.deliverWords()
 	for room.state != RoomGameFinishState {
+		log.Println("New round...")
+		time.Sleep(time.Second * 2)
 		room.runTalkRound()
 		room.runVoteRound(room.getAlivePlayerPointersInRoom())
 	}
@@ -36,7 +38,7 @@ func (room *Room) runTalkRound() {
 	i := room.startPosition
 	for {
 		players[i].State = PlayerTalkingState
-		room.broadcastPlayersState(fmt.Sprintf("%s's turn to talk", players[i].Nickname))
+		room.broadcastPlayersState("", fmt.Sprintf("%s's turn to talk", players[i].Nickname))
 
 		waitForState(func() bool { return players[i].State == PlayerTalkFinishedState })
 		players[i].State = PlayerListeningState
@@ -69,10 +71,10 @@ func (room *Room) runVoteRound(targets []*Player) {
 	}
 
 	message := BroadcastMessage{
-		Action:   AskVoteBroadcast,
-		Payload:  string(bs),
-		RoomCode: room.Code,
-		Line:     "Please vote",
+		Action:      AskVoteBroadcast,
+		Payload:     string(bs),
+		RoomCode:    room.Code,
+		Instruction: "Please vote",
 	}
 	room.broadcastToPlayersInRoom(message.encode())
 	waitForState(func() bool { return room.allAlivePlayersInState(PlayerVotedState) })
@@ -96,7 +98,7 @@ func (room *Room) calculateVotes() {
 	}
 	if len(maxVoteTargets) == 1 {
 		maxVoteTargets[0].State = PlayerKilledState
-		room.broadcastPlayersState(fmt.Sprintf("%s is killed", maxVoteTargets[0].Nickname))
+		room.broadcastPlayersState("", fmt.Sprintf("%s is killed", maxVoteTargets[0].Nickname))
 		return
 	} else {
 		room.runVoteRound(maxVoteTargets)
@@ -108,6 +110,7 @@ func (room *Room) announceResult() {
 }
 
 func (room *Room) tidyUp() {
+	log.Println("Tidying up...")
 	room.state = RoomIdleState
 	for _, p := range room.getPlayerPointersInRoom() {
 		p.State = PlayerIdleState
@@ -128,6 +131,7 @@ func (room *Room) deliverWords() {
 		if spy == i {
 			word = room.spyWord
 		}
+		log.Printf("Deliver your-word message to %s", players[i].Nickname)
 		players[i].send <- (&BroadcastMessage{
 			Action:  YourWordBroadcast,
 			Payload: word,
