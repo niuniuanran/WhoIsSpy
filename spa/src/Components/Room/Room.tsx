@@ -9,6 +9,7 @@ import ContentContainer from "../Shared/ContentContainer"
 import PlayerList from "./PlayerList";
 import RoomTopAlert from "./RoomTopAlert"
 import Play from "../Play/Play"
+import {PlayerStates} from "../../Interfaces/Player"
 
 const useStyle = makeStyles(theme => ({
     modalBody: {
@@ -100,7 +101,7 @@ export default function Room(){
                 <PlayerList/>
                 {
                     playersInRoom && roomCapacity && (roomCapacity === playersInRoom?.length) && (
-                        playersInRoom.find(p => p.nickname === nickname)?.ready ?
+                        playersInRoom.find(p => p.nickname === nickname)?.state === PlayerStates.ReadyState ?
                     <Button size="large" variant="contained" color="secondary"  className={classes.marginTop} onClick={undoReady}>
                         I'm not ready
                     </Button>:

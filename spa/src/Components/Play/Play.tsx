@@ -1,21 +1,21 @@
 import { CircularProgress } from "@material-ui/core"
 import { useContext } from "react"
 import { RoomContext, RoomContextType } from "../../Contexts/RoomContext"
-import { PlayInstructions } from "../../Interfaces/Messages"
 import PlayerList from "../Room/PlayerList"
 import WordCard from "./WordCard"
 import ContentContainer from "../Shared/ContentContainer"
+import { PlayerStates } from "../../Interfaces/Player"
 
 export default function Play() {
-    const { instruction, word, onVote, onTalkFinish, onWordRead} = useContext(RoomContext) as RoomContextType
+    const { playerState, word, onTalkFinish, onWordRead} = useContext(RoomContext) as RoomContextType
     
-    if (instruction === PlayInstructions.YourWord) {
+    if (playerState === PlayerStates.WordReadingState) {
         return <ContentContainer>
             <WordCard word={word} central onRead={onWordRead}/>
         </ContentContainer>
     }
 
-    if (instruction === PlayInstructions.PleaseTalk) {
+    if (playerState === PlayerStates.TalkingState) {
         return <div>
             Your turn to talk
             <button onClick={onTalkFinish}>
@@ -24,7 +24,7 @@ export default function Play() {
         </div>
     }
 
-    if (instruction === PlayInstructions.PleaseVote) {
+    if (playerState === PlayerStates.VotingState) {
         return <PlayerList/>
     }
 

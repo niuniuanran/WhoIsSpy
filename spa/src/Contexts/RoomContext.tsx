@@ -1,9 +1,9 @@
 import React, {useState, useRef, useEffect, useCallback} from "react";
 import { useParams } from "react-router-dom";
-import { BroadcastActions, BroadcastMessage, ReportActions, PlayInstructions } from "../Interfaces/Messages";
+import { BroadcastActions, BroadcastMessage, ReportActions } from "../Interfaces/Messages";
 import { CallApi } from "../Utils/Api"
 import {AytMessage} from "../Interfaces/Messages"
-import Player from "../Interfaces/Player"
+import Player, { PlayerStates } from "../Interfaces/Player"
 
 const RoomContext = React.createContext<any>(undefined)
 
@@ -28,10 +28,10 @@ export type RoomContextType = {
     gameStarted: boolean
     setGameStarted: (b: boolean) => void
     word: string
-    instruction: string
     onVote: (n: string) => void
     onTalkFinish: () => void
     onWordRead: () => void
+    playerState: string
 }
 
 function RoomProvider({ children }: RoomContextProp){
@@ -45,7 +45,7 @@ function RoomProvider({ children }: RoomContextProp){
     const [joinFailedMessage, setJoinFailedMessage] = useState("")
     const [roomCapacity, setRoomCapacity] = useState(0)
     const [word, setWord] = useState("")
-    const [instruction, setInstruction] = useState("")
+    const [playerState, setPlayerState] = useState(PlayerStates.IdleState)
     const [wordRead, setWordRead] = useState(false)
 
     const ws = useRef<WebSocket|null>(null);
@@ -56,26 +56,21 @@ function RoomProvider({ children }: RoomContextProp){
             setTimeout(()=>setAlertLine(""), 2000)
         }
         if (message.action === BroadcastActions.PlayerJoinedBroadcast || 
-            message.action === BroadcastActions.PlayerLeftBroadcast || 
-            message.action === BroadcastActions.PlayerReadyBroadcast ||
-            message.action === BroadcastActions.PlayerUndoReadyBroadcast ) {
+            message.action === BroadcastActions.PlayerLeftBroadcast) {
             setPlayersInRoom(JSON.parse(message.payload))
         }
         if (message.action === BroadcastActions.GameWillStartBroadcast) {
             setGameStarted(true)
         }
 
-        if (message.action === BroadcastActions.TalkTurnBroadcast) {
-            setInstruction(PlayInstructions.PleaseTalk)
+        if (message.action === BroadcastActions.PlayerNewStateBroadcast) {
+            setPlayersInRoom(JSON.parse(message.payload))
+            setPlayerState(message.payload)
         }
 
         if (message.action === BroadcastActions.YourWordBroadcast) {
             setWord(message.payload)
-            setInstruction(PlayInstructions.YourWord)
-        }
-
-        if (message.action === BroadcastActions.PleaseVoteBroadcast) {
-            setInstruction(PlayInstructions.PleaseVote)
+            setPlayerState(PlayerStates.WordReadingState)
         }
     };
 
@@ -194,7 +189,7 @@ function RoomProvider({ children }: RoomContextProp){
             gameStarted,
             setGameStarted,
             word,
-            instruction,
+            playerState,
             onVote,
             onTalkFinish,
             onWordRead
