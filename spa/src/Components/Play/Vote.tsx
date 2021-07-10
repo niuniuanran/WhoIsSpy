@@ -16,15 +16,15 @@ export function Vote() {
             <FormLabel component="legend">Gender</FormLabel>
             <RadioGroup row aria-label="vote" name="vote" value={target} onChange={handleChange}>
                 {
-                    voteTargets.map((n, i) => {
+                    voteTargets.map((n, i) => (
                         <FormControlLabel key={i} value={n} control={<Radio />} 
                             label={<div>
                                         <PlayerAvatar nickname={n} size="large"/>
                                         <Typography variant="caption">
                                             {n}
                                         </Typography>
-                                    </div>}/>
-                    })
+                                    </div>}/>)
+                    )
                 }
             </RadioGroup>
             </FormControl>

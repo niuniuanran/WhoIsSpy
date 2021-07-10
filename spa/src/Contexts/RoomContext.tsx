@@ -81,7 +81,6 @@ function RoomProvider({ children }: RoomContextProp){
         }
 
         if (message.action === BroadcastActions.AskVoteBroadcast) {
-            console.log("ask to vote: ", message.payload)
             setVoteTargets(JSON.parse(message.payload))
         }
 

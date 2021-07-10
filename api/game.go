@@ -54,11 +54,7 @@ func (room *Room) runTalkRound() {
 
 func (room *Room) runVoteRound(targets []*Player) {
 	room.votes = make(map[string][]string, room.numPlayer)
-	players := room.getAlivePlayerPointersInRoom()
-	for _, p := range players {
-		p.State = PlayerVotingState
-	}
-
+	room.setAllAlivePlayersToState(PlayerVotingState)
 	targetNames := make([]string, len(targets))
 	for _, p := range targets {
 		targetNames = append(targetNames, p.Nickname)
@@ -69,12 +65,12 @@ func (room *Room) runVoteRound(targets []*Player) {
 	}
 
 	message := BroadcastMessage{
-		Action:      AskVoteBroadcast,
-		Payload:     string(bs),
-		RoomCode:    room.Code,
-		Instruction: "Please vote",
+		Action:   AskVoteBroadcast,
+		Payload:  string(bs),
+		RoomCode: room.Code,
 	}
 	room.broadcastToPlayersInRoom(message.encode())
+	room.broadcastPlayersState("", "Please vote")
 	log.Println("Called for vote")
 	waitForState(func() bool { return room.allAlivePlayersInState(PlayerVotedState) })
 	log.Println("All player voted")
