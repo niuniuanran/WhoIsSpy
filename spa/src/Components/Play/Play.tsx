@@ -4,6 +4,7 @@ import PlayerList from "../Room/PlayerList"
 import WordCard from "./WordCard"
 import ContentContainer from "../Shared/ContentContainer"
 import { PlayerStates } from "../../Interfaces/Player"
+import { Vote } from "./Vote"
 
 export default function Play() {
     const {word, onTalkFinish, onWordRead, instruction, playersInRoom, nickname, onVote} = useContext(RoomContext) as RoomContextType
@@ -13,36 +14,15 @@ export default function Play() {
         setPlayerState((playersInRoom?.find(p => p.nickname === nickname)?.state) || PlayerStates.IdleState)
     }, [playersInRoom, nickname])
 
-    if (!playerState) {
-        setPlayerState(playersInRoom?.find(p => p.nickname === nickname)?.state || "")
-    }
-    console.log(playerState)
-
     return <ContentContainer>
         <div>
+            {playerState === PlayerStates.VotingState && <Vote/>}
             {instruction}
-            <button onClick={() => {onTalkFinish();}}>
+            {playerState === PlayerStates.TalkingState && <button onClick={() => {onTalkFinish();}}>
                 I Finish
-            </button>
-            <button onClick={() => {onVote("a");}}>
-                I Vote
-            </button>
+            </button>}
             <WordCard word={word} onRead={onWordRead} central={playerState === PlayerStates.WordReadingState}/>
             <PlayerList/>
         </div>
     </ContentContainer>
-
-    if (playerState === PlayerStates.TalkingState) {
-        return <div>
-            <PlayerList/>
-            Your turn to talk
-            <button onClick={onTalkFinish}>
-                I Finish
-            </button>
-        </div>
-    }
-
-    if (playerState === PlayerStates.VotingState) {
-        return <PlayerList/>
-    }
 }

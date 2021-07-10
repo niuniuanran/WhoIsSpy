@@ -3,12 +3,9 @@ import { useState, useContext } from "react"
 import { RoomContext, RoomContextType } from "../../Contexts/RoomContext";
 import PlayerAvatar from "../Shared/PlayerAvatar";
 
-interface VoteProps {
-    targetNames: [string]
-}
-export function Vote({targetNames}: VoteProps) {
+export function Vote() {
     const [target, setTarget] = useState("")    
-    const {onVote} = useContext(RoomContext) as RoomContextType
+    const {onVote, voteTargets} = useContext(RoomContext) as RoomContextType
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTarget((event.target as HTMLInputElement).value);
@@ -19,7 +16,7 @@ export function Vote({targetNames}: VoteProps) {
             <FormLabel component="legend">Gender</FormLabel>
             <RadioGroup row aria-label="vote" name="vote" value={target} onChange={handleChange}>
                 {
-                    targetNames.map((n, i) => {
+                    voteTargets.map((n, i) => {
                         <FormControlLabel key={i} value={n} control={<Radio />} 
                             label={<div>
                                         <PlayerAvatar nickname={n} size="large"/>
