@@ -77,7 +77,9 @@ func (room *Room) runVoteRound(targets []*Player) {
 		Instruction: "Please vote",
 	}
 	room.broadcastToPlayersInRoom(message.encode())
+	log.Println("Called for vote")
 	waitForState(func() bool { return room.allAlivePlayersInState(PlayerVotedState) })
+	log.Println("All player voted")
 	room.calculateVotes()
 }
 
@@ -96,6 +98,7 @@ func (room *Room) calculateVotes() {
 			maxVoteTargets = append(maxVoteTargets, p)
 		}
 	}
+	log.Println("Calculation finished")
 	if len(maxVoteTargets) == 1 {
 		maxVoteTargets[0].State = PlayerKilledState
 		room.broadcastPlayersState("", fmt.Sprintf("%s is killed", maxVoteTargets[0].Nickname))
@@ -146,6 +149,7 @@ func (room *Room) deliverWords() {
 			break
 		}
 	}
+	room.broadcastPlayersState("", "")
 	waitForState(func() bool { return room.allAlivePlayersInState(PlayerWordGotState) })
 }
 

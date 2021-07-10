@@ -34,7 +34,6 @@ export type RoomContextType = {
     playerState: string
     instruction: string
     voteTargets: [string]
-    setPlayerState: (s: string) => void
 }
 
 function RoomProvider({ children }: RoomContextProp){
@@ -48,7 +47,6 @@ function RoomProvider({ children }: RoomContextProp){
     const [joinFailedMessage, setJoinFailedMessage] = useState("")
     const [roomCapacity, setRoomCapacity] = useState(0)
     const [word, setWord] = useState("")
-    const [playerState, setPlayerState] = useState(PlayerStates.IdleState)
     const [instruction, setInstruction] = useState("")
     const [wordRead, setWordRead] = useState(false)
     const [voteTargets, setVoteTargets] = useState<[string]>()
@@ -67,9 +65,6 @@ function RoomProvider({ children }: RoomContextProp){
         if (message.action === BroadcastActions.PlayerNewStateBroadcast) {
             let players: [Player] = JSON.parse(message.payload) 
             setPlayersInRoom(players)
-            console.log("Players in room: ", playersInRoom)
-            console.log("Setting player state: ", (playersInRoom?.find(p => p.nickname === nickname)?.state))
-            setPlayerState((playersInRoom?.find(p => p.nickname === nickname)?.state) || PlayerStates.IdleState)
         }
 
         if (message.action === BroadcastActions.PlayerJoinedBroadcast || 
@@ -83,7 +78,6 @@ function RoomProvider({ children }: RoomContextProp){
 
         if (message.action === BroadcastActions.YourWordBroadcast) {
             setWord(message.payload)
-            setPlayerState(PlayerStates.WordReadingState)
         }
 
         if (message.action === BroadcastActions.AskVoteBroadcast) {
@@ -209,13 +203,11 @@ function RoomProvider({ children }: RoomContextProp){
             gameStarted,
             setGameStarted,
             word,
-            playerState,
             onVote,
             onTalkFinish,
             onWordRead,
             instruction,
             voteTargets,
-            setPlayerState
         }
     }>
         {children}
