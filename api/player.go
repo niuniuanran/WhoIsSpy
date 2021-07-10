@@ -103,8 +103,6 @@ func ServePlayerWs(w http.ResponseWriter, r *http.Request) {
 
 	go player.writePump()
 	go player.readPump()
-	fmt.Printf("New player %s joined room %s!", nickname, roomCode)
-	log.Println(player.ToString())
 }
 
 func (player *Player) ToString() string {
@@ -225,8 +223,15 @@ func (player *Player) vote(target string) {
 	if !ok {
 		v = make([]string, 1)
 	}
-	v = append(v, player.Nickname)
-	player.room.votes[target] = v
+	player.room.votes[target] = append(v, player.Nickname)
+	log.Println("Current room.votes: ")
+	for t, vs := range player.room.votes {
+		log.Printf("Players who voted for %s: \t", t)
+		for _, v := range vs {
+			log.Printf("%s ", v)
+		}
+	}
+	log.Println()
 	player.State = PlayerVotedState
 }
 

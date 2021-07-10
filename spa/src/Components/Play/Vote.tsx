@@ -6,6 +6,7 @@ import PlayerAvatar from "../Shared/PlayerAvatar";
 export function Vote() {
     const [target, setTarget] = useState("")    
     const {onVote, voteTargets} = useContext(RoomContext) as RoomContextType
+    console.log("Vote targets: ", voteTargets)
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTarget((event.target as HTMLInputElement).value);

@@ -143,7 +143,6 @@ func handleCreateRoom(w http.ResponseWriter, r *http.Request) {
 	rooms[room] = true
 	go room.RunRoom()
 	fmt.Fprint(w, room.Code)
-	log.Println("Room created: ", room.Code)
 }
 
 func handleFindRoom(w http.ResponseWriter, r *http.Request) {
@@ -221,7 +220,6 @@ func (room *Room) broadcastPlayersState(alert string, instruction string) {
 		Instruction: instruction,
 	}
 	room.broadcastToPlayersInRoom(message.encode())
-	log.Println("Broadcasting", message.toString())
 }
 
 func (room *Room) playerReadyInRoom(player *Player) {
@@ -266,7 +264,6 @@ func (room *Room) notifyPlayerJoined(player *Player) {
 	}
 
 	room.broadcastToPlayersInRoom(message.encode())
-	log.Println("Broadcasting", message.toString())
 }
 
 func (room *Room) notifyPlayerLeft(player *Player) {
@@ -284,7 +281,6 @@ func (room *Room) notifyPlayerLeft(player *Player) {
 	}
 
 	room.broadcastToPlayersInRoom(message.encode())
-	log.Println("Broadcasting", message.toString())
 }
 
 func (room *Room) getPlayersInRoom() []Player {
@@ -308,7 +304,7 @@ func (room *Room) getPlayerPointersInRoom() []*Player {
 }
 
 func (room *Room) getAlivePlayerPointersInRoom() []*Player {
-	ps := make([]*Player, 0, len(room.players))
+	ps := make([]*Player, 0)
 	for p, present := range room.players {
 		if present && p.State != PlayerKilledState {
 			ps = append(ps, p)

@@ -121,7 +121,6 @@ function RoomProvider({ children }: RoomContextProp){
     }, [ws, nickname, code])
 
     const onWordRead = useCallback(() => {
-        console.log("word read: ", wordRead)
         if (wordRead) {
             return
         }

@@ -23,7 +23,6 @@ func (room *Room) runGame() {
 	room.state = RoomPlayingState
 	room.deliverWords()
 	for room.state != RoomGameFinishState {
-		log.Println("New round...")
 		time.Sleep(time.Second * 2)
 		room.runTalkRound()
 		room.runVoteRound(room.getAlivePlayerPointersInRoom())
@@ -79,6 +78,12 @@ func (room *Room) runVoteRound(targets []*Player) {
 
 func (room *Room) calculateVotes() {
 	players := room.getAlivePlayerPointersInRoom()
+	for _, p := range players {
+		log.Print("Players alive: ")
+		log.Print(p.Nickname)
+		log.Println()
+	}
+
 	maxVoteCount := 0
 	maxVoteTargets := make([]*Player, 0)
 	for _, p := range players {
@@ -96,9 +101,9 @@ func (room *Room) calculateVotes() {
 		}
 	}
 	log.Printf("Calculation finished. maxVoteTargets: %v", maxVoteCount)
-	log.Println("max vote targets: ")
+	log.Print("max vote targets: ")
 	for _, t := range maxVoteTargets {
-		log.Println(t.Nickname)
+		log.Print(t.Nickname + " ")
 	}
 
 	if len(maxVoteTargets) == 1 {
