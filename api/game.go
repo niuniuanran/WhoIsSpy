@@ -55,14 +55,6 @@ func (room *Room) runVoteRound(targets []*Player) {
 	room.votes = make(map[string][]string)
 	room.setAllAlivePlayersToState(PlayerVotingState)
 	targetNames := make([]string, 0)
-
-	log.Print("Add target: ")
-	for _, p := range targets {
-		log.Printf("%s\t", p.Nickname)
-		targetNames = append(targetNames, p.Nickname)
-	}
-	log.Println()
-
 	bs, err := json.Marshal(targetNames)
 	if err != nil {
 		log.Println("Failed to marshal target names")
@@ -73,7 +65,6 @@ func (room *Room) runVoteRound(targets []*Player) {
 		Payload:  string(bs),
 		RoomCode: room.Code,
 	}
-	log.Printf("broadcast message: %s\n", message.toString())
 
 	room.broadcastToPlayersInRoom(message.encode())
 	room.broadcastPlayersState("", "Please vote")
