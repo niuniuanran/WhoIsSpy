@@ -39,19 +39,17 @@ func (room *Room) runTalkRound() {
 	for {
 		players[i].State = PlayerTalkingState
 		room.broadcastPlayersState("", fmt.Sprintf("%s's turn to talk", players[i].Nickname))
-
 		waitForState(func() bool { return players[i].State == PlayerTalkFinishedState })
 		players[i].State = PlayerListeningState
 
 		i++
-		if i == room.startPosition {
-			break
-		}
 		if i == room.numPlayer {
 			i = 0
 		}
+		if i == room.startPosition {
+			break
+		}
 	}
-
 }
 
 func (room *Room) runVoteRound(targets []*Player) {
@@ -89,16 +87,24 @@ func (room *Room) calculateVotes() {
 	maxVoteTargets := make([]*Player, 0)
 	for _, p := range players {
 		count := len(room.votes[p.Nickname])
+		log.Printf("Vote count for player %d - %s: %d", p.SerialNumber, p.Nickname, count)
 		if count > maxVoteCount {
 			maxVoteTargets = make([]*Player, 0)
 			maxVoteTargets = append(maxVoteTargets, p)
 			maxVoteCount = count
+			log.Printf("maxVoteTargets: %v", maxVoteCount)
 		}
 		if count == maxVoteCount {
 			maxVoteTargets = append(maxVoteTargets, p)
+			log.Printf("maxVoteTargets: %v", maxVoteCount)
 		}
 	}
-	log.Println("Calculation finished")
+	log.Printf("Calculation finished. maxVoteTargets: %v", maxVoteCount)
+	log.Println("max vote targets: ")
+	for _, t := range maxVoteTargets {
+		log.Println(t.Nickname)
+	}
+
 	if len(maxVoteTargets) == 1 {
 		maxVoteTargets[0].State = PlayerKilledState
 		room.broadcastPlayersState("", fmt.Sprintf("%s is killed", maxVoteTargets[0].Nickname))
@@ -115,19 +121,18 @@ func (room *Room) announceResult() {
 func (room *Room) tidyUp() {
 	log.Println("Tidying up...")
 	room.state = RoomIdleState
-	for _, p := range room.getPlayerPointersInRoom() {
-		p.State = PlayerIdleState
-	}
+	room.setAllPlayersToState(PlayerIdleState)
 }
 
 func (room *Room) deliverWords() {
 	rand.Seed(time.Now().UnixNano())
 	spy := rand.Intn(room.numPlayer)
-	players := room.getPlayerPointersInRoom()
+	players := room.getAlivePlayerPointersInRoom()
 	room.spy = players[spy]
 	room.normalWord = "dog"
 	room.spyWord = "cat"
-	room.startPosition = rand.Intn(room.numPlayer)
+	// room.startPosition = rand.Intn(room.numPlayer)
+	room.startPosition = 3
 	i := room.startPosition
 
 	for {
@@ -164,6 +169,12 @@ func (room *Room) allAlivePlayersInState(state string) bool {
 
 func (room *Room) setAllAlivePlayersToState(state string) {
 	for _, p := range room.getAlivePlayerPointersInRoom() {
+		p.State = state
+	}
+}
+
+func (room *Room) setAllPlayersToState(state string) {
+	for _, p := range room.getPlayerPointersInRoom() {
 		p.State = state
 	}
 }
