@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { BroadcastActions, BroadcastMessage, ReportActions } from "../Interfaces/Messages";
 import { CallApi } from "../Utils/Api"
 import {AytMessage} from "../Interfaces/Messages"
-import Player, { PlayerStates } from "../Interfaces/Player"
+import Player from "../Interfaces/Player"
 
 const RoomContext = React.createContext<any>(undefined)
 
@@ -85,7 +85,7 @@ function RoomProvider({ children }: RoomContextProp){
             setVoteTargets(JSON.parse(message.payload))
         }
 
-    }, [nickname, playersInRoom]);
+    }, []);
 
     const reportExitRoom = useCallback(() => {
         console.log("Leaving room ", code)
