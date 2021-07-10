@@ -7,7 +7,7 @@ import { PlayerStates } from "../../Interfaces/Player"
 import { Vote } from "./Vote"
 
 export default function Play() {
-    const {word, onTalkFinish, onWordRead, instruction, playersInRoom, nickname, onVote} = useContext(RoomContext) as RoomContextType
+    const {word, onTalkFinish, onWordRead, instruction, playersInRoom, nickname} = useContext(RoomContext) as RoomContextType
     const [playerState, setPlayerState] = useState(PlayerStates.IdleState)
 
     useEffect(() => {

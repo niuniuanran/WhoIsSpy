@@ -34,11 +34,18 @@ export default function PlayerList() {
     const classes = useStyles()
     const {nickname, playersInRoom, roomCapacity} = useContext(RoomContext) as RoomContextType
     const spotNum = (roomCapacity || 0) - (playersInRoom?.length || 0)
+    const badgeColor = (state:string) => {
+        if (state === PlayerStates.TalkingState) {
+            return "secondary"
+        }
+        return "primary"
+    }
+
     return <Grid container spacing={1} className={classes.root}>
             {
                 playersInRoom && playersInRoom.sort((a, b) => a.serialNumber - b.serialNumber).map((p, i) => (
                     <Grid xs={3} item key={i} className={`${classes.player} ${(i === playersInRoom.length - 1)? classes.new: ""}`}>
-                        <Badge color="secondary" badgeContent={p.state? p.state: 0}>
+                        <Badge color={badgeColor(p.state)} badgeContent={p.state? p.state: 0}>
                             <PlayerAvatar nickname={p.nickname} size="large" className={(p.nickname === nickname)? classes.me : classes.others}/>
                         </Badge>
                         <Typography className={classes.playerName}>
