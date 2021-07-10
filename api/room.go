@@ -67,7 +67,7 @@ func NewRoom(roomSettings RoomSettings) *Room {
 		numSpy:       roomSettings.NumSpy,
 		EighteenPlus: roomSettings.EighteenPlus,
 		RandomBlank:  roomSettings.RandomBlank,
-		players:      make(map[*Player]bool, roomSettings.NumPlayer),
+		players:      make(map[*Player]bool),
 		register:     make(chan *Player),
 		unregister:   make(chan *Player),
 		broadcast:    make(chan *BroadcastMessage),

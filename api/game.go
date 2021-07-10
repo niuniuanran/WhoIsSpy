@@ -52,12 +52,17 @@ func (room *Room) runTalkRound() {
 }
 
 func (room *Room) runVoteRound(targets []*Player) {
-	room.votes = make(map[string][]string, room.numPlayer)
+	room.votes = make(map[string][]string)
 	room.setAllAlivePlayersToState(PlayerVotingState)
-	targetNames := make([]string, len(targets))
+	targetNames := make([]string, 0)
+
+	log.Print("Add target: ")
 	for _, p := range targets {
+		log.Printf("%s\t", p.Nickname)
 		targetNames = append(targetNames, p.Nickname)
 	}
+	log.Println()
+
 	bs, err := json.Marshal(targetNames)
 	if err != nil {
 		log.Println("Failed to marshal target names")
@@ -68,6 +73,8 @@ func (room *Room) runVoteRound(targets []*Player) {
 		Payload:  string(bs),
 		RoomCode: room.Code,
 	}
+	log.Printf("broadcast message: %s\n", message.toString())
+
 	room.broadcastToPlayersInRoom(message.encode())
 	room.broadcastPlayersState("", "Please vote")
 	log.Println("Called for vote")
@@ -78,32 +85,18 @@ func (room *Room) runVoteRound(targets []*Player) {
 
 func (room *Room) calculateVotes() {
 	players := room.getAlivePlayerPointersInRoom()
-	for _, p := range players {
-		log.Print("Players alive: ")
-		log.Print(p.Nickname)
-		log.Println()
-	}
-
 	maxVoteCount := 0
 	maxVoteTargets := make([]*Player, 0)
 	for _, p := range players {
 		count := len(room.votes[p.Nickname])
-		log.Printf("Vote count for player %d - %s: %d", p.SerialNumber, p.Nickname, count)
 		if count > maxVoteCount {
 			maxVoteTargets = make([]*Player, 0)
 			maxVoteTargets = append(maxVoteTargets, p)
 			maxVoteCount = count
-			log.Printf("maxVoteTargets: %v", maxVoteCount)
 		}
 		if count == maxVoteCount {
 			maxVoteTargets = append(maxVoteTargets, p)
-			log.Printf("maxVoteTargets: %v", maxVoteCount)
 		}
-	}
-	log.Printf("Calculation finished. maxVoteTargets: %v", maxVoteCount)
-	log.Print("max vote targets: ")
-	for _, t := range maxVoteTargets {
-		log.Print(t.Nickname + " ")
 	}
 
 	if len(maxVoteTargets) == 1 {
@@ -141,7 +134,6 @@ func (room *Room) deliverWords() {
 		if spy == i {
 			word = room.spyWord
 		}
-		log.Printf("Deliver your-word message to player number %d: %s", i, players[i].Nickname)
 		players[i].send <- (&BroadcastMessage{
 			Action:  YourWordBroadcast,
 			Payload: word,

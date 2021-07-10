@@ -221,18 +221,12 @@ func (player *Player) handleNewMessage(jsonMessage []byte) {
 func (player *Player) vote(target string) {
 	v, ok := player.room.votes[target]
 	if !ok {
-		v = make([]string, 1)
+		v = make([]string, 0)
 	}
 	player.room.votes[target] = append(v, player.Nickname)
-	log.Println("Current room.votes: ")
-	for t, vs := range player.room.votes {
-		log.Printf("Players who voted for %s: \t", t)
-		for _, v := range vs {
-			log.Printf("%s ", v)
-		}
-	}
-	log.Println()
+
 	player.State = PlayerVotedState
+	player.room.broadcastPlayersState("", "")
 }
 
 // BySerialNumber implements sort.Interface for []*Player based on the SerialNumber field.
