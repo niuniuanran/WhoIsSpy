@@ -1,4 +1,4 @@
-import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Button, Typography } from "@material-ui/core";
+import { FormControl, FormControlLabel, Radio, RadioGroup, Button, Typography } from "@material-ui/core";
 import { useState, useContext } from "react"
 import { RoomContext, RoomContextType } from "../../Contexts/RoomContext";
 import PlayerAvatar from "../Shared/PlayerAvatar";
@@ -14,7 +14,6 @@ export function Vote() {
 
     return <form>
         <FormControl component="fieldset">
-            <FormLabel component="legend">Gender</FormLabel>
             <RadioGroup row aria-label="vote" name="vote" value={target} onChange={handleChange}>
                 {
                     voteTargets.map((n, i) => (

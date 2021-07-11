@@ -32,8 +32,9 @@ func (room *Room) runGame() {
 }
 
 func (room *Room) runTalkRound() {
-	players := room.getAlivePlayerPointersInRoom()
 	room.setAllAlivePlayersToState(PlayerListeningState)
+	players := room.getAlivePlayerPointersInRoom()
+	room.startPosition = rand.Intn(len(players))
 	i := room.startPosition
 	for {
 		players[i].State = PlayerTalkingState
@@ -55,6 +56,9 @@ func (room *Room) runVoteRound(targets []*Player) {
 	room.votes = make(map[string][]string)
 	room.setAllAlivePlayersToState(PlayerVotingState)
 	targetNames := make([]string, 0)
+	for _, p := range targets {
+		targetNames = append(targetNames, p.Nickname)
+	}
 	bs, err := json.Marshal(targetNames)
 	if err != nil {
 		log.Println("Failed to marshal target names")
@@ -84,6 +88,7 @@ func (room *Room) calculateVotes() {
 			maxVoteTargets = make([]*Player, 0)
 			maxVoteTargets = append(maxVoteTargets, p)
 			maxVoteCount = count
+			continue
 		}
 		if count == maxVoteCount {
 			maxVoteTargets = append(maxVoteTargets, p)
@@ -116,11 +121,9 @@ func (room *Room) deliverWords() {
 	room.spy = players[spy]
 	room.normalWord = "dog"
 	room.spyWord = "cat"
-	// room.startPosition = rand.Intn(room.numPlayer)
-	room.startPosition = 3
-	i := room.startPosition
+	room.startPosition = rand.Intn(room.numPlayer)
 
-	for {
+	for i := 0; i < len(players); i++ {
 		word := room.normalWord
 		if spy == i {
 			word = room.spyWord
@@ -130,14 +133,8 @@ func (room *Room) deliverWords() {
 			Payload: word,
 		}).encode()
 		players[i].State = PlayerWordReadingState
-		i++
-		if i == room.numPlayer {
-			i = 0
-		}
-		if i == room.startPosition {
-			break
-		}
 	}
+
 	room.broadcastPlayersState("", "")
 	waitForState(func() bool { return room.allAlivePlayersInState(PlayerWordGotState) })
 }
