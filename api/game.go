@@ -126,6 +126,7 @@ func (room *Room) decideIfGameFinish() {
 		}
 		aliveGoodCount++
 	}
+
 	if aliveSpyCount == 0 {
 		room.goodWins()
 		return

@@ -193,15 +193,15 @@ func (player *Player) handleNewMessage(jsonMessage []byte) {
 	log.Println("received message", message.toString(), "from", player.Nickname)
 
 	switch message.Action {
-	case PlayerLeftAction:
+	case LeftAction:
 		{
 			player.room.unregisterPlayerInRoom(player)
 		}
-	case PlayerReadyAction:
+	case ReadyAction:
 		{
 			player.room.playerReadyInRoom(player)
 		}
-	case PlayerUndoReadyAction:
+	case UndoReadyAction:
 		{
 			player.room.playerUndoReadyInRoom(player)
 		}

@@ -13,7 +13,7 @@ const ReportActions = {
 	PlayerReadyAction: "player-ready",
 	PlayerLeftAction:  "player-left",
     PlayerUndoReadyAction: "player-undo-ready",
-    WordReadAction: "word-read"
+    WordReadAction: "word-read",
 }
 
 interface AytMessage {
