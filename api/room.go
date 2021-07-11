@@ -35,7 +35,7 @@ type Room struct {
 	register     chan *Player
 	unregister   chan *Player
 	broadcast    chan *BroadcastMessage
-	spy          *Player
+	spies        []*Player
 	normalWord   string
 	spyWord      string
 	votes        map[string][]string

@@ -34,6 +34,7 @@ const (
 	PlayerVotingState       = "voting"
 	PlayerKilledState       = "killed"
 	PlayerWinState          = "win"
+	PlayerLoseState         = "lose"
 	PlayerTalkFinishedState = "talked"
 	PlayerVotedState        = "voted"
 )
@@ -56,6 +57,7 @@ type Player struct {
 	conn         *websocket.Conn
 	send         chan []byte
 	room         *Room
+	isSpy        bool
 }
 
 func newPlayer(conn *websocket.Conn, room *Room, nickname string) *Player {

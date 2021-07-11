@@ -21,12 +21,14 @@ func (room *Room) startGame() {
 
 func (room *Room) runGame() {
 	room.state = RoomPlayingState
+	room.assignSpies()
 	room.deliverWords()
 	for room.state != RoomGameFinishState {
 		time.Sleep(time.Second * 2)
 		room.runTalkRound()
 		room.runVoteRound(room.getAlivePlayerPointersInRoom())
 	}
+	time.Sleep(time.Second * 2)
 	room.announceResult()
 	room.tidyUp()
 }
@@ -94,17 +96,83 @@ func (room *Room) calculateVotes() {
 		}
 	}
 
-	if len(maxVoteTargets) == 1 {
-		maxVoteTargets[0].State = PlayerKilledState
-		room.broadcastPlayersState("", fmt.Sprintf("%s is killed", maxVoteTargets[0].Nickname))
-		return
-	} else {
+	if len(maxVoteTargets) > 1 {
 		room.runVoteRound(maxVoteTargets)
+	}
+
+	maxVoteTargets[0].State = PlayerKilledState
+	room.broadcastPlayersState("", fmt.Sprintf("%s is killed", maxVoteTargets[0].Nickname))
+	room.decideIfGameFinish()
+}
+
+func (room *Room) assignSpies() {
+	players := room.getPlayerPointersInRoom()
+	room.spies = make([]*Player, 0, room.numPlayer)
+	rand.Seed(time.Now().UnixNano())
+	perm := rand.Perm(len(players))
+	for i := 0; i < room.numSpy; i++ {
+		room.spies = append(room.spies, players[perm[i]])
+		players[perm[i]].isSpy = true
 	}
 }
 
-func (room *Room) announceResult() {
+func (room *Room) decideIfGameFinish() {
+	alivePlayers := room.getAlivePlayerPointersInRoom()
+	aliveSpyCount := 0
+	aliveGoodCount := 0
+	for _, p := range alivePlayers {
+		if p.isSpy {
+			aliveSpyCount++
+			continue
+		}
+		aliveGoodCount++
+	}
+	if aliveSpyCount == 0 {
+		room.goodWins()
+		return
+	}
 
+	if room.numPlayer < 7 {
+		if aliveSpyCount >= 1 && aliveGoodCount <= 1 {
+			room.spyWins()
+			return
+		}
+	}
+
+	if room.numPlayer >= 7 {
+		if aliveSpyCount >= 1 && aliveGoodCount <= 2 {
+			room.spyWins()
+			return
+		}
+	}
+}
+
+func (room *Room) goodWins() {
+	for _, p := range room.getPlayerPointersInRoom() {
+		if p.isSpy {
+			p.State = PlayerLoseState
+			continue
+		}
+		p.State = PlayerWinState
+	}
+
+	room.state = RoomGameFinishState
+}
+
+func (room *Room) spyWins() {
+	for _, p := range room.getPlayerPointersInRoom() {
+		if p.isSpy {
+			p.State = PlayerWinState
+			continue
+		}
+		p.State = PlayerLoseState
+	}
+
+	room.state = RoomGameFinishState
+}
+
+func (room *Room) announceResult() {
+	room.broadcastPlayersState("", "")
 }
 
 func (room *Room) tidyUp() {
@@ -115,21 +183,19 @@ func (room *Room) tidyUp() {
 
 func (room *Room) deliverWords() {
 	rand.Seed(time.Now().UnixNano())
-	alivePlayers := room.getAlivePlayerPointersInRoom()
-	spyPos := rand.Intn(len(alivePlayers))
-	room.spy = alivePlayers[spyPos]
+	players := room.getAlivePlayerPointersInRoom()
 	room.normalWord = "dog"
 	room.spyWord = "cat"
-	for i := 0; i < len(alivePlayers); i++ {
+	for i := 0; i < len(players); i++ {
 		word := room.normalWord
-		if spyPos == i {
+		if players[i].isSpy {
 			word = room.spyWord
 		}
-		alivePlayers[i].send <- (&BroadcastMessage{
+		players[i].send <- (&BroadcastMessage{
 			Action:  YourWordBroadcast,
 			Payload: word,
 		}).encode()
-		alivePlayers[i].State = PlayerWordReadingState
+		players[i].State = PlayerWordReadingState
 	}
 
 	room.broadcastPlayersState("", "")
