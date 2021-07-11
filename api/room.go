@@ -25,22 +25,21 @@ const (
 )
 
 type Room struct {
-	Code          string
-	numPlayer     int
-	numSpy        int
-	Language      string
-	EighteenPlus  bool
-	RandomBlank   bool
-	players       map[*Player]bool
-	register      chan *Player
-	unregister    chan *Player
-	broadcast     chan *BroadcastMessage
-	spy           *Player
-	normalWord    string
-	spyWord       string
-	votes         map[string][]string
-	startPosition int
-	state         string
+	Code         string
+	numPlayer    int
+	numSpy       int
+	Language     string
+	EighteenPlus bool
+	RandomBlank  bool
+	players      map[*Player]bool
+	register     chan *Player
+	unregister   chan *Player
+	broadcast    chan *BroadcastMessage
+	spy          *Player
+	normalWord   string
+	spyWord      string
+	votes        map[string][]string
+	state        string
 }
 
 type RoomSettings struct {
@@ -310,7 +309,7 @@ func (room *Room) getAlivePlayerPointersInRoom() []*Player {
 			ps = append(ps, p)
 		}
 	}
-	assignSerialNumbers(ps)
+	sort.Sort(BySerialNumber(ps))
 	return ps
 }
 

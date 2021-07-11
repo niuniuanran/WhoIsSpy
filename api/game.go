@@ -33,20 +33,19 @@ func (room *Room) runGame() {
 
 func (room *Room) runTalkRound() {
 	room.setAllAlivePlayersToState(PlayerListeningState)
-	players := room.getAlivePlayerPointersInRoom()
-	room.startPosition = rand.Intn(len(players))
-	i := room.startPosition
+	alivePlayers := room.getAlivePlayerPointersInRoom()
+	startFrom := rand.Intn(len(alivePlayers))
+	i := startFrom
 	for {
-		players[i].State = PlayerTalkingState
-		room.broadcastPlayersState("", fmt.Sprintf("%s's turn to talk", players[i].Nickname))
-		waitForState(func() bool { return players[i].State == PlayerTalkFinishedState })
-		players[i].State = PlayerListeningState
-
+		alivePlayers[i].State = PlayerTalkingState
+		room.broadcastPlayersState("", fmt.Sprintf("%s's turn to talk", alivePlayers[i].Nickname))
+		waitForState(func() bool { return alivePlayers[i].State == PlayerTalkFinishedState })
+		alivePlayers[i].State = PlayerListeningState
 		i++
-		if i == room.numPlayer {
+		if i == len(alivePlayers) {
 			i = 0
 		}
-		if i == room.startPosition {
+		if i == startFrom {
 			break
 		}
 	}
@@ -79,10 +78,10 @@ func (room *Room) runVoteRound(targets []*Player) {
 }
 
 func (room *Room) calculateVotes() {
-	players := room.getAlivePlayerPointersInRoom()
+	alivePlayers := room.getAlivePlayerPointersInRoom()
 	maxVoteCount := 0
 	maxVoteTargets := make([]*Player, 0)
-	for _, p := range players {
+	for _, p := range alivePlayers {
 		count := len(room.votes[p.Nickname])
 		if count > maxVoteCount {
 			maxVoteTargets = make([]*Player, 0)
@@ -116,23 +115,21 @@ func (room *Room) tidyUp() {
 
 func (room *Room) deliverWords() {
 	rand.Seed(time.Now().UnixNano())
-	spy := rand.Intn(room.numPlayer)
-	players := room.getAlivePlayerPointersInRoom()
-	room.spy = players[spy]
+	alivePlayers := room.getAlivePlayerPointersInRoom()
+	spyPos := rand.Intn(len(alivePlayers))
+	room.spy = alivePlayers[spyPos]
 	room.normalWord = "dog"
 	room.spyWord = "cat"
-	room.startPosition = rand.Intn(room.numPlayer)
-
-	for i := 0; i < len(players); i++ {
+	for i := 0; i < len(alivePlayers); i++ {
 		word := room.normalWord
-		if spy == i {
+		if spyPos == i {
 			word = room.spyWord
 		}
-		players[i].send <- (&BroadcastMessage{
+		alivePlayers[i].send <- (&BroadcastMessage{
 			Action:  YourWordBroadcast,
 			Payload: word,
 		}).encode()
-		players[i].State = PlayerWordReadingState
+		alivePlayers[i].State = PlayerWordReadingState
 	}
 
 	room.broadcastPlayersState("", "")
