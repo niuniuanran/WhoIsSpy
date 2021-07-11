@@ -36,8 +36,13 @@ const useStyle = makeStyles(theme => ({
     }
 }))
 
+export const RoomStates = {
+    IdleState: "idle-state",
+    GameOnState: "game-on"
+}
+
 export default function Room(){
-    const { nickname, setNickname, reportExitRoom, alertLine, joinFailedMessage, gameStarted,
+    const { nickname, setNickname, reportExitRoom, alertLine, joinFailedMessage, roomState,
         setJoinFailedMessage, roomCapacity, playersInRoom, getReady, undoReady } = useContext(RoomContext) as RoomContextType
     const { getText, getCurrentLanguage } = useContext(LanguageContext) as LanguageContextType
     const { code } = useParams<{code?: string}>()
@@ -59,7 +64,7 @@ export default function Room(){
             </ContentContainer>
     }
 
-    if (gameStarted) {
+    if (roomState === RoomStates.GameOnState) {
         setTimeout(() => {
             history.push(`/${getCurrentLanguage()}/room/${code}/play`)
         }, 3000)

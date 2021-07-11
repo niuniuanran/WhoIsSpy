@@ -7,9 +7,11 @@ import { PlayerStates } from "../../Interfaces/Player"
 import { Vote } from "./Vote"
 import { useHistory, useParams } from "react-router-dom";
 import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext"
+import { RoomStates } from "../Room/Room"
 
 export default function Play() {
-    const {word, onTalkFinish, onWordRead, instruction, playersInRoom, nickname} = useContext(RoomContext) as RoomContextType
+    const {word, onTalkFinish, onWordRead, instruction, playersInRoom, 
+                    nickname, setRoomState} = useContext(RoomContext) as RoomContextType
     const { getCurrentLanguage } = useContext(LanguageContext) as LanguageContextType
     const [playerState, setPlayerState] = useState(PlayerStates.IdleState)
     const history = useHistory()
@@ -20,6 +22,7 @@ export default function Play() {
     }, [playersInRoom, nickname])
 
     const onResultReceived = () => {
+        setRoomState(RoomStates.IdleState)
         history.push(`/${getCurrentLanguage()}/room/${code}`)
     }
 

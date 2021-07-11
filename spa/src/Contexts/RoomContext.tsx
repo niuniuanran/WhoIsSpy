@@ -4,6 +4,7 @@ import { BroadcastActions, BroadcastMessage, ReportActions } from "../Interfaces
 import { CallApi } from "../Utils/Api"
 import {AytMessage} from "../Interfaces/Messages"
 import Player from "../Interfaces/Player"
+import { RoomStates } from "../Components/Room/Room";
 
 const RoomContext = React.createContext<any>(undefined)
 
@@ -25,8 +26,6 @@ export type RoomContextType = {
     roomCapacity?: number
     getReady?: () => void
     undoReady?: () => void
-    gameStarted: boolean
-    setGameStarted: (b: boolean) => void
     word: string
     onVote: (n: string) => void
     onTalkFinish: () => void
@@ -34,6 +33,8 @@ export type RoomContextType = {
     playerState: string
     instruction: string
     voteTargets: [string]
+    roomState: string
+    setRoomState: (s: string) => void
 }
 
 function RoomProvider({ children }: RoomContextProp){
@@ -42,7 +43,6 @@ function RoomProvider({ children }: RoomContextProp){
     const [nickname, setNickname] = useState(undefined)
     const [connected, setConnected] = useState(false)
     const [alertLine, setAlertLine] = useState("")
-    const [gameStarted, setGameStarted] = useState(false)
     const [playersInRoom, setPlayersInRoom] = useState<[Player]>()
     const [joinFailedMessage, setJoinFailedMessage] = useState("")
     const [roomCapacity, setRoomCapacity] = useState(0)
@@ -50,6 +50,7 @@ function RoomProvider({ children }: RoomContextProp){
     const [instruction, setInstruction] = useState("")
     const [wordRead, setWordRead] = useState(false)
     const [voteTargets, setVoteTargets] = useState<[string]>()
+    const [roomState, setRoomState] = useState(RoomStates.IdleState)
 
     const ws = useRef<WebSocket|null>(null);
 
@@ -73,7 +74,7 @@ function RoomProvider({ children }: RoomContextProp){
         }
 
         if (message.action === BroadcastActions.GameWillStartBroadcast) {
-            setGameStarted(true)
+            setRoomState(RoomStates.GameOnState)
         }
 
         if (message.action === BroadcastActions.YourWordBroadcast) {
@@ -198,8 +199,8 @@ function RoomProvider({ children }: RoomContextProp){
             roomCapacity,
             getReady,
             undoReady,
-            gameStarted,
-            setGameStarted,
+            roomState,
+            setRoomState,
             word,
             onVote,
             onTalkFinish,
