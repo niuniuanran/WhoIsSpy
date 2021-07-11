@@ -15,8 +15,9 @@ const PlayerStates = {
 	VotingState: "voting",
 	KilledState: "killed",
 	WinState: "win",
+    LoseState: "lose",
     TalkFinishState: "talked",
-    PlayerVotedState: "voted"
+    VotedState: "voted"
 }
 
 export {PlayerStates}

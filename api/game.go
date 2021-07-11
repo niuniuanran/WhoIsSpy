@@ -28,8 +28,7 @@ func (room *Room) runGame() {
 		room.runTalkRound()
 		room.runVoteRound(room.getAlivePlayerPointersInRoom())
 	}
-	time.Sleep(time.Second * 2)
-	room.announceResult()
+
 	room.tidyUp()
 }
 
@@ -155,7 +154,8 @@ func (room *Room) goodWins() {
 		}
 		p.State = PlayerWinState
 	}
-
+	time.Sleep(time.Second * 2)
+	room.broadcastPlayersState("Good players win", "")
 	room.state = RoomGameFinishState
 }
 
@@ -167,12 +167,9 @@ func (room *Room) spyWins() {
 		}
 		p.State = PlayerLoseState
 	}
-
+	time.Sleep(time.Second * 2)
+	room.broadcastPlayersState("Spies win", "")
 	room.state = RoomGameFinishState
-}
-
-func (room *Room) announceResult() {
-	room.broadcastPlayersState("", "")
 }
 
 func (room *Room) tidyUp() {
