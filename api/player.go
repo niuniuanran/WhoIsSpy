@@ -191,8 +191,6 @@ func (player *Player) handleNewMessage(jsonMessage []byte) {
 		return
 	}
 
-	log.Println("received message", message.toString(), "from", player.Nickname)
-
 	switch message.Action {
 	case LeftAction:
 		{

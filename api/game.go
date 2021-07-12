@@ -72,9 +72,7 @@ func (room *Room) runVoteRound(targets []*Player) {
 
 	room.broadcastToPlayersInRoom(message.encode())
 	room.broadcastPlayersState("", "Please vote")
-	log.Println("Called for vote")
 	waitForState(func() bool { return room.allAlivePlayersInState(PlayerVotedState) })
-	log.Println("All player voted")
 	room.calculateVotes()
 }
 
@@ -127,8 +125,6 @@ func (room *Room) decideIfGameFinish() {
 		aliveGoodCount++
 	}
 
-	log.Printf("Alive good players: %d\t Alive spies: %d", aliveGoodCount, aliveSpyCount)
-
 	if aliveSpyCount == 0 {
 		room.goodWins()
 		return
@@ -176,7 +172,6 @@ func (room *Room) spyWins() {
 }
 
 func (room *Room) tidyUp() {
-	log.Println("Tidying up...")
 	room.state = RoomIdleState
 	waitForState(func() bool { return room.allPlayersInState(ResultReceivedState) })
 	for _, s := range room.spies {
