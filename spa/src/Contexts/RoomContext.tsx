@@ -79,6 +79,7 @@ function RoomProvider({ children }: RoomContextProp){
 
         if (message.action === BroadcastActions.YourWordBroadcast) {
             setWord(message.payload)
+            setWordRead(false)
         }
 
         if (message.action === BroadcastActions.AskVoteBroadcast) {
@@ -160,7 +161,6 @@ function RoomProvider({ children }: RoomContextProp){
 
     const reportResultReceived= useCallback(async () => {
         setRoomState(RoomStates.IdleState)
-        setWordRead(false)
         setWord("")
         ws?.current?.send(
             JSON.stringify({

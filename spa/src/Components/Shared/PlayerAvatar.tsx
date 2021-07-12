@@ -21,6 +21,11 @@ const useStyles = makeStyles((theme: Theme) =>
         height: theme.spacing(7),
         padding: 3
     },
+    medium: {
+        width: theme.spacing(6),
+        height: theme.spacing(6),
+        padding: 3
+    }, 
     small: {
         width: theme.spacing(5),
         height: theme.spacing(5),
@@ -36,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface PlayerAvatarProps {
-    size: "xlarge"|"large"|"small"|"xsmall"
+    size: "xlarge"|"large"|"medium"|"small"|"xsmall"
     nickname?: string,
     className?: string,
     stayLoading?: boolean

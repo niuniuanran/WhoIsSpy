@@ -27,6 +27,9 @@ const useStyles = makeStyles(theme => ({
     },
     playerName: {
         textAlign: "center"
+    },
+    killed: {  
+        filter: "grayscale(100%)"
     }
 }))
 
@@ -38,6 +41,10 @@ export default function PlayerList() {
         if (state === PlayerStates.TalkingState) {
             return "secondary"
         }
+
+        if (state === PlayerStates.KilledState) {
+            return "default"
+        }
         return "primary"
     }
 
@@ -46,7 +53,7 @@ export default function PlayerList() {
                 playersInRoom && playersInRoom.sort((a, b) => a.serialNumber - b.serialNumber).map((p, i) => (
                     <Grid xs={3} item key={i} className={`${classes.player} ${(i === playersInRoom.length - 1)? classes.new: ""}`}>
                         <Badge color={badgeColor(p.state)} badgeContent={p.state? p.state: 0}>
-                            <PlayerAvatar nickname={p.nickname} size="large" className={(p.nickname === nickname)? classes.me : classes.others}/>
+                            <PlayerAvatar nickname={p.nickname} size="large" className={`${(p.nickname === nickname)? classes.me : classes.others} ${p.state === PlayerStates.KilledState && classes.killed}`}/>
                         </Badge>
                         <Typography className={classes.playerName}>
                             {

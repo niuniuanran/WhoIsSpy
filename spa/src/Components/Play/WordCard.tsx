@@ -5,8 +5,9 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 
 interface WordCardProps{
     word: string
-    central: boolean
+    central?: boolean
     onRead: () => void
+    defaultHide?: boolean
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -32,16 +33,16 @@ const useStyles = makeStyles((theme) => ({
         height: "100%"
     },
     side:{
-        width: "5rem",
-        height: "3rem",
+        width: "7rem",
+        height: "5rem",
         position: "absolute",
         bottom: "0",
         right: "0"
     }
 }))
 
-export default function WordCard({word, central, onRead}: WordCardProps) {
-    const [visible, setVisible] = useState(true)
+export default function WordCard({word, central, onRead, defaultHide}: WordCardProps) {
+    const [visible, setVisible] = useState(true && !defaultHide)
     const classes = useStyles()
     const onClickGotIt = () => {
         setVisible(false)
@@ -70,7 +71,10 @@ export default function WordCard({word, central, onRead}: WordCardProps) {
 
     return <Card className={central? classes.main : classes.side}>
             <CardActionArea onClick={() => setVisible(true)} className={classes.cardArea}>
-                <VisibilityIcon style={{fontSize: (central? "4rem":"2rem")}}/>
+                <VisibilityIcon style={{fontSize: (central? "4rem":"2rem")}}/> 
+                <Typography>
+                    See word
+                </Typography>
             </CardActionArea>
         </Card>
 }
