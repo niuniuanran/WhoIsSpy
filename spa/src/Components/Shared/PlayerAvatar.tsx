@@ -24,15 +24,16 @@ const useStyles = makeStyles((theme: Theme) =>
     medium: {
         width: theme.spacing(6),
         height: theme.spacing(6),
-        padding: 3
+        padding: 4
     }, 
     small: {
         width: theme.spacing(5),
         height: theme.spacing(5),
     },
     xsmall: {
-        width: theme.spacing(3),
-        height: theme.spacing(3),
+        width: theme.spacing(4),
+        height: theme.spacing(4),
+        padding: 2
     },
     avatar: {
         backgroundColor: '#343434',

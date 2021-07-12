@@ -4,7 +4,7 @@ import PlayerAvatar from "../Shared/PlayerAvatar"
 interface InstructionCardProps {
     nickname?: string
     instruction: string
-    button?: JSX.Element
+    children?: JSX.Element
 }
 
 const useStyles = makeStyles(theme => ({
@@ -23,23 +23,25 @@ const useStyles = makeStyles(theme => ({
     instruction: {
         marginLeft:"1rem"
     },
-    button: {
+    children: {
         marginTop: 3
     }
 }))
 
-export default function InstructionCard({nickname, button, instruction}: InstructionCardProps){
+export default function InstructionCard({nickname, instruction, children}: InstructionCardProps){
     const classes = useStyles()
     return <Card className={classes.root}>
         <CardContent className={classes.cardContent}>
-            <PlayerAvatar size="medium" nickname={nickname}/>
+            {nickname && <PlayerAvatar size="medium" nickname={nickname}/>}
             <div className={classes.instruction}>
                 <Typography variant="h6">
                     {instruction}
                 </Typography>
-                <div className={classes.button}>
-                    {button}
-                </div>
+                {
+                    children &&  <div className={classes.children}>
+                        {children}
+                    </div>
+                }
             </div>
          </CardContent>
     </Card>

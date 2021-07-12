@@ -5,7 +5,7 @@ import PlayerList from "../Room/PlayerList"
 import WordCard from "./WordCard"
 import ContentContainer from "../Shared/ContentContainer"
 import { PlayerStates } from "../../Interfaces/Player"
-import { Vote } from "./Vote"
+import { VoteCard } from "./VoteCard"
 import { useHistory, useParams } from "react-router-dom";
 import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext"
 import InstructionCard from "./InstructionCard"
@@ -48,8 +48,9 @@ export default function Play() {
     if (playerState === PlayerStates.TalkingState) {
         return <ContentContainer>
             <div>
-                <InstructionCard nickname={nickname} instruction={"Your turn to talk"}
-                    button={<Button variant="contained" size="small" color="primary" onClick={() => {onTalkFinish();}}>I finish</Button>}/>
+                <InstructionCard nickname={nickname} instruction={"Your turn to talk"}>
+                    <Button variant="contained" size="small" color="primary" onClick={() => {onTalkFinish();}}>I finish</Button>
+                </InstructionCard>
                 <WordCard word={word} onRead={onWordRead} defaultHide/>
             </div>
         </ContentContainer>
@@ -64,9 +65,14 @@ export default function Play() {
     </ContentContainer>
     }
 
+    if (playerState === PlayerStates.VotingState) {
+        return <ContentContainer>
+            <VoteCard/>
+        </ContentContainer>
+    }
+
     return <ContentContainer>
         <div>
-            {playerState === PlayerStates.VotingState && <Vote/>}
             <Card className={classes.instruction}>
                 <CardContent>
                     <Typography variant="h5">
