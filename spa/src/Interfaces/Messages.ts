@@ -14,6 +14,7 @@ const ReportActions = {
 	PlayerLeftAction:  "player-left",
     PlayerUndoReadyAction: "player-undo-ready",
     WordReadAction: "word-read",
+    ResultReceived: "result-received"
 }
 
 interface AytMessage {

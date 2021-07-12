@@ -48,6 +48,7 @@ const (
 	LeftAction       = "player-left"
 	UndoReadyAction  = "player-undo-ready"
 	WordReadAction   = "word-read"
+	ResultReceived   = "result-received"
 )
 
 // Message is sent through websocket connections between the room and client.
