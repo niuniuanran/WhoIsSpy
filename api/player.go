@@ -37,6 +37,7 @@ const (
 	PlayerLoseState         = "lose"
 	PlayerTalkFinishedState = "talked"
 	PlayerVotedState        = "voted"
+	ResultReceivedState     = "result-received"
 )
 
 var (
@@ -216,6 +217,10 @@ func (player *Player) handleNewMessage(jsonMessage []byte) {
 	case WordReadAction:
 		{
 			player.State = PlayerWordGotState
+		}
+	case ResultReceivedAction:
+		{
+			player.State = ResultReceivedState
 		}
 	}
 }

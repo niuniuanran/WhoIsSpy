@@ -161,8 +161,15 @@ function RoomProvider({ children }: RoomContextProp){
 
     const reportResultReceived= useCallback(async () => {
         setRoomState(RoomStates.IdleState)
-        setPlayersInRoom(ps => ps?.map(p => ({...p, state: PlayerStates.IdleState} as Player)))
-    }, [])
+        ws?.current?.send(
+            JSON.stringify({
+                action: ReportActions.ResultReceived,
+                senderNickname: nickname,
+                roomCode: code,
+                payload: ""
+            })
+            )
+    }, [ws, nickname, code])
 
     useEffect(() => {
         if (nickname && code && !connected){

@@ -176,7 +176,9 @@ func (room *Room) spyWins() {
 func (room *Room) tidyUp() {
 	log.Println("Tidying up...")
 	room.state = RoomIdleState
+	waitForState(func() bool { return room.allPlayersInState(ResultReceivedState) })
 	room.setAllPlayersToState(PlayerIdleState)
+	room.broadcastPlayersState("", "")
 }
 
 func (room *Room) deliverWords() {
@@ -202,6 +204,15 @@ func (room *Room) deliverWords() {
 
 func (room *Room) allAlivePlayersInState(state string) bool {
 	for _, p := range room.getAlivePlayerPointersInRoom() {
+		if p.State != state {
+			return false
+		}
+	}
+	return true
+}
+
+func (room *Room) allPlayersInState(state string) bool {
+	for _, p := range room.getPlayerPointersInRoom() {
 		if p.State != state {
 			return false
 		}

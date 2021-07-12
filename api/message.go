@@ -42,13 +42,13 @@ func (message *BroadcastMessage) toString() string {
 }
 
 const (
-	TalkFinishAction = "talk-finish"
-	VoteAction       = "vote"
-	ReadyAction      = "player-ready"
-	LeftAction       = "player-left"
-	UndoReadyAction  = "player-undo-ready"
-	WordReadAction   = "word-read"
-	ResultReceived   = "result-received"
+	TalkFinishAction     = "talk-finish"
+	VoteAction           = "vote"
+	ReadyAction          = "player-ready"
+	LeftAction           = "player-left"
+	UndoReadyAction      = "player-undo-ready"
+	WordReadAction       = "word-read"
+	ResultReceivedAction = "result-received"
 )
 
 // Message is sent through websocket connections between the room and client.
