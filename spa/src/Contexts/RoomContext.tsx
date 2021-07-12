@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { BroadcastActions, BroadcastMessage, ReportActions } from "../Interfaces/Messages";
 import { CallApi } from "../Utils/Api"
 import {AytMessage} from "../Interfaces/Messages"
-import Player from "../Interfaces/Player"
+import Player, { PlayerStates } from "../Interfaces/Player"
 import { RoomStates } from "../Components/Room/Room";
 
 const RoomContext = React.createContext<any>(undefined)
@@ -35,6 +35,7 @@ export type RoomContextType = {
     voteTargets: [string]
     roomState: string
     setRoomState: (s: string) => void
+    reportResultReceived: () => void
 }
 
 function RoomProvider({ children }: RoomContextProp){
@@ -43,7 +44,7 @@ function RoomProvider({ children }: RoomContextProp){
     const [nickname, setNickname] = useState(undefined)
     const [connected, setConnected] = useState(false)
     const [alertLine, setAlertLine] = useState("")
-    const [playersInRoom, setPlayersInRoom] = useState<[Player]>()
+    const [playersInRoom, setPlayersInRoom] = useState<Player[]>()
     const [joinFailedMessage, setJoinFailedMessage] = useState("")
     const [roomCapacity, setRoomCapacity] = useState(0)
     const [word, setWord] = useState("")
@@ -158,6 +159,11 @@ function RoomProvider({ children }: RoomContextProp){
             )
         }, [ws, nickname, code])
 
+    const reportResultReceived= useCallback(async () => {
+        setRoomState(RoomStates.IdleState)
+        setPlayersInRoom(ps => ps?.map(p => ({...p, state: PlayerStates.IdleState} as Player)))
+    }, [])
+
     useEffect(() => {
         if (nickname && code && !connected){
             CallApi({path: `ayt?nickname=${nickname}&roomcode=${code}` })
@@ -207,6 +213,7 @@ function RoomProvider({ children }: RoomContextProp){
             onWordRead,
             instruction,
             voteTargets,
+            reportResultReceived
         }
     }>
         {children}
