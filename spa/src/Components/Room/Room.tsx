@@ -78,6 +78,18 @@ export default function Room(){
         </ContentContainer>
     }
 
+    if (playersInRoom?.find(p => p.nickname === nickname)?.state === PlayerStates.WinState) {
+        return <ContentContainer>
+           <Paper> Some win effect </Paper>
+        </ContentContainer>
+    }
+
+    if (playersInRoom?.find(p => p.nickname === nickname)?.state === PlayerStates.LoseState) {
+        return <ContentContainer>
+           <Paper> Some lose effect </Paper>
+        </ContentContainer>
+    }
+
     return <> 
         <Modal
             open={joinFailedMessage !== ""}

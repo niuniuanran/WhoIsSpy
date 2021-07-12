@@ -24,7 +24,7 @@ func (room *Room) runGame() {
 	room.assignSpies()
 	room.deliverWords()
 	for room.state != RoomGameFinishState {
-		time.Sleep(time.Second * 2)
+		time.Sleep(time.Second * 1)
 		room.runTalkRound()
 		room.runVoteRound(room.getAlivePlayerPointersInRoom())
 	}
@@ -127,6 +127,8 @@ func (room *Room) decideIfGameFinish() {
 		aliveGoodCount++
 	}
 
+	log.Printf("Alive good players: %d\t Alive spies: %d", aliveGoodCount, aliveSpyCount)
+
 	if aliveSpyCount == 0 {
 		room.goodWins()
 		return
@@ -177,6 +179,10 @@ func (room *Room) tidyUp() {
 	log.Println("Tidying up...")
 	room.state = RoomIdleState
 	waitForState(func() bool { return room.allPlayersInState(ResultReceivedState) })
+	for _, s := range room.spies {
+		s.isSpy = false
+	}
+	room.spies = make([]*Player, 0)
 	room.setAllPlayersToState(PlayerIdleState)
 	room.broadcastPlayersState("", "")
 }
