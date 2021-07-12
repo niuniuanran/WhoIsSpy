@@ -56,7 +56,6 @@ function RoomProvider({ children }: RoomContextProp){
     const ws = useRef<WebSocket|null>(null);
 
     const handleMessage = useCallback((message:BroadcastMessage) => {
-        console.log("Received message: ", message)
         message.instruction && setInstruction(message.instruction)
 
         if (message.alert) {
