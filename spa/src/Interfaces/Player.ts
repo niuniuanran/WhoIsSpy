@@ -9,14 +9,12 @@ const PlayerStates = {
     IdleState: "",
 	ReadyState: "ready",
 	WordReadingState: "reading",
-    PlayerWordGotState: "got",
 	ListeningState: "listening",
 	TalkingState:"talking",
 	VotingState: "voting",
 	KilledState: "killed",
 	WinState: "win",
     LoseState: "lose",
-    TalkFinishState: "talked",
     VotedState: "voted"
 }
 

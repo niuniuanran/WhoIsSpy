@@ -1,7 +1,6 @@
 import { useContext, useState, useEffect } from "react"
 import { RoomContext, RoomContextType } from "../../Contexts/RoomContext"
-import { makeStyles, Card, Typography, CardContent, Button, CircularProgress } from "@material-ui/core"
-import PlayerList from "../Room/PlayerList"
+import { Button, CircularProgress } from "@material-ui/core"
 import WordCard from "./WordCard"
 import ContentContainer from "../Shared/ContentContainer"
 import { PlayerStates } from "../../Interfaces/Player"
@@ -10,17 +9,6 @@ import { useHistory, useParams } from "react-router-dom";
 import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext"
 import InstructionCard from "./InstructionCard"
 
-const useStyles = makeStyles((theme) => ({
-    players: {
-        marginTop: "4rem"
-    },
-    instruction: {
-        maxWidth: "100%",
-        width: "30rem",
-        margin: "0 auto"
-    }
-}))
-
 export default function Play() {
     const {word, onTalkFinish, onWordRead, instruction, playersInRoom, 
                     nickname, reportResultReceived} = useContext(RoomContext) as RoomContextType
@@ -28,7 +16,6 @@ export default function Play() {
     const [playerState, setPlayerState] = useState(PlayerStates.IdleState)
     const history = useHistory()
     const { code } = useParams<{code?: string}>()
-    const classes = useStyles()
 
     useEffect(() => {
         setPlayerState((playersInRoom?.find(p => p.nickname === nickname)?.state) || PlayerStates.IdleState)
@@ -36,6 +23,10 @@ export default function Play() {
 
     const onResultReceived = () => {
         reportResultReceived()
+        history.push(`/${getCurrentLanguage()}/room/${code}`)
+    }
+
+    if (playerState === PlayerStates.IdleState) {
         history.push(`/${getCurrentLanguage()}/room/${code}`)
     }
 
@@ -99,22 +90,9 @@ export default function Play() {
         </ContentContainer>
     }
 
-    return <ContentContainer>
-        <div>
-            <Card className={classes.instruction}>
-                <CardContent>
-                    <Typography variant="h5">
-                        {instruction}
-                    </Typography>
-                </CardContent>
-            </Card>
-            { (playerState === PlayerStates.WinState || playerState === PlayerStates.LoseState) && <button onClick={() => {onResultReceived();}}>
-                OK
-            </button>}
-            <WordCard word={word} onRead={onWordRead} defaultHide/>
-            <div className={classes.players}>
-                <PlayerList/>
-            </div>
-        </div>
-    </ContentContainer>
+    else {
+        return <ContentContainer>
+            <InstructionCard instruction={`Unexpected state: ${playerState}`}/>
+        </ContentContainer>
+    }
 }

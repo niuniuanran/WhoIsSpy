@@ -153,7 +153,7 @@ func (room *Room) goodWins() {
 		}
 		p.State = PlayerWinState
 	}
-	room.broadcastPlayersState("Good players win", "")
+	room.broadcastPlayersState("", "Good peope win")
 	room.state = RoomGameFinishState
 }
 
@@ -165,7 +165,7 @@ func (room *Room) spyWins() {
 		}
 		p.State = PlayerLoseState
 	}
-	room.broadcastPlayersState("Spies win", "")
+	room.broadcastPlayersState("", "Spies win")
 	room.state = RoomGameFinishState
 }
 
