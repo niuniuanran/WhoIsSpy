@@ -8,6 +8,7 @@ import { VoteCard } from "./VoteCard"
 import { useHistory, useParams } from "react-router-dom";
 import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext"
 import InstructionCard from "./InstructionCard"
+import fireworks from "fireworks"
 
 export default function Play() {
     const {word, onTalkFinish, onWordRead, instruction, playersInRoom, 
@@ -23,10 +24,6 @@ export default function Play() {
 
     const onResultReceived = () => {
         reportResultReceived()
-        history.push(`/${getCurrentLanguage()}/room/${code}`)
-    }
-
-    if (playerState === PlayerStates.IdleState) {
         history.push(`/${getCurrentLanguage()}/room/${code}`)
     }
 
@@ -70,12 +67,20 @@ export default function Play() {
         </ContentContainer>
     }
 
+    if (playerState === PlayerStates.WinState) {
+        fireworks({
+            x: window.innerWidth,
+            y: window.innerHeight,
+            colors: ['#cc3333', '#4CAF50', '#81C784']
+          })
+    }
+
     if (playerState === PlayerStates.LoseState || playerState === PlayerStates.WinState) {
         return <ContentContainer>
             <InstructionCard instruction={instruction}>
                 <div>
                     {playerState === PlayerStates.LoseState && <div>You lose</div>}
-                    {playerState === PlayerStates.WinState && <div>You win</div>}
+                    {playerState === PlayerStates.WinState && <div>You win!!</div>}
                     <Button onClick={() => {onResultReceived();}}>
                         OK
                     </Button>
@@ -92,7 +97,7 @@ export default function Play() {
 
     else {
         return <ContentContainer>
-            <InstructionCard instruction={`Unexpected state: ${playerState}`}/>
+            <InstructionCard instruction={`Unexpected state ${playerState}`}/>
         </ContentContainer>
     }
 }
