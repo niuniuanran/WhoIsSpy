@@ -79,6 +79,26 @@ export default function Play() {
         </ContentContainer>
     }
 
+    if (playerState === PlayerStates.LoseState || playerState === PlayerStates.WinState) {
+        return <ContentContainer>
+            <InstructionCard instruction={instruction}>
+                <div>
+                    {playerState === PlayerStates.LoseState && <div>You lose</div>}
+                    {playerState === PlayerStates.WinState && <div>You win</div>}
+                    <Button onClick={() => {onResultReceived();}}>
+                        OK
+                    </Button>
+                </div>
+            </InstructionCard>
+        </ContentContainer>
+    }
+
+    if (playerState === PlayerStates.KilledState) {
+        return <ContentContainer>
+                <InstructionCard instruction="You are killed" nickname={nickname} killed/>
+        </ContentContainer>
+    }
+
     return <ContentContainer>
         <div>
             <Card className={classes.instruction}>

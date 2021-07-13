@@ -219,6 +219,7 @@ func (room *Room) broadcastPlayersState(alert string, instruction string) {
 		Instruction: instruction,
 	}
 	room.broadcastToPlayersInRoom(message.encode())
+	log.Println("Broadcasting player state", message.toString())
 }
 
 func (room *Room) playerReadyInRoom(player *Player) {

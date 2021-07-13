@@ -37,8 +37,8 @@ func (message *BroadcastMessage) encode() []byte {
 }
 
 func (message *BroadcastMessage) toString() string {
-	return fmt.Sprintf("Action: %s, Payload: %s",
-		message.Action, message.Payload)
+	return fmt.Sprintf("Action: %s, Payload: %s, Instruction: %s, Alert: %s",
+		message.Action, message.Payload, message.Instruction, message.Alert)
 }
 
 const (
@@ -69,6 +69,6 @@ func (report *ReportMessage) encode() []byte {
 }
 
 func (message *ReportMessage) toString() string {
-	return fmt.Sprintf("Action: %s, Payload: %s",
-		message.Action, message.Payload)
+	return fmt.Sprintf("Action: %s, Payload: %s, From: %s",
+		message.Action, message.Payload, message.SenderNickname)
 }
