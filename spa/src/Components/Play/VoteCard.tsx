@@ -21,12 +21,12 @@ export function VoteCard() {
             <RadioGroup row aria-label="vote" name="vote" value={target} onChange={handleChange} > 
                 {                               
                     voteTargets.map((n, i) => (
-                        <div style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", padding:5}}>
+                        <div key={i} style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", padding:5}}>
                             <div onClick={() => {setTarget(n)}}>
                                 <PlayerAvatar nickname={n} size="large"/>
                             </div>
                             <FormControlLabel 
-                                key={i} value={n} control={<Radio color="primary"/>}
+                                value={n} control={<Radio color="primary"/>}
                                 label={<div>
                                             <Typography>
                                                 {n}

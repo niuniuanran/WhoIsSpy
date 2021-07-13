@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from "react"
 import { RoomContext, RoomContextType } from "../../Contexts/RoomContext"
-import { makeStyles, Card, Typography, CardContent, Button } from "@material-ui/core"
+import { makeStyles, Card, Typography, CardContent, Button, CircularProgress } from "@material-ui/core"
 import PlayerList from "../Room/PlayerList"
 import WordCard from "./WordCard"
 import ContentContainer from "../Shared/ContentContainer"
@@ -68,6 +68,14 @@ export default function Play() {
     if (playerState === PlayerStates.VotingState) {
         return <ContentContainer>
             <VoteCard/>
+        </ContentContainer>
+    }
+
+    if (playerState === PlayerStates.VotedState) {
+        return <ContentContainer>
+            <InstructionCard instruction="waiting for other players to vote">
+                <CircularProgress/>
+            </InstructionCard>
         </ContentContainer>
     }
 

@@ -2,7 +2,7 @@ import { Avatar } from "@material-ui/core";
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { useState } from "react";
 import { Skeleton } from "@material-ui/lab";
-import { useEffect } from "react";
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -50,13 +50,14 @@ interface PlayerAvatarProps {
 
 export default function PlayerAvatar({nickname, size, className, stayLoading=false}: PlayerAvatarProps){
     const classes = useStyles()
-    const [loading, setLoading] = useState(true)
-    useEffect(()=>setLoading(true),[nickname])
+    const [imageName, setImageName] = useState("")
 
     return <div className={classes.root}>
             <Avatar alt={nickname} src={`https://avatars.dicebear.com/api/bottts/${nickname}.svg`} 
-                    className={`${classes.avatar} ${classes[size]} ${className}`} onLoad={()=>setLoading(false)} style={(loading || stayLoading)? {display: 'none'}: {display: 'block'}}/>
+                    className={`${classes.avatar} ${classes[size]} ${className}`} 
+                    onLoad={()=>{ nickname && setImageName(nickname);}} 
+                    style={(imageName !== nickname || stayLoading)? {display: 'none'}: {display: 'block'}}/>
             <Skeleton variant="circle" animation="wave" className={`${classes[size]}`} 
-                    style={(loading || stayLoading)? {display: 'block'}: {display: 'none'}}/>
+                    style={(imageName !== nickname || stayLoading)? {display: 'block'}: {display: 'none'}}/>
         </div>
 }
