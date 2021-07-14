@@ -95,10 +95,11 @@ func (room *Room) calculateVotes() {
 
 	if len(maxVoteTargets) > 1 {
 		room.runVoteRound(maxVoteTargets)
+		return
 	}
 
 	maxVoteTargets[0].State = PlayerKilledState
-	room.broadcastPlayersState("", fmt.Sprintf("%s is killed", maxVoteTargets[0].Nickname))
+	room.broadcastPlayersState(fmt.Sprintf("%s is killed", maxVoteTargets[0].Nickname), fmt.Sprintf("%s is killed", maxVoteTargets[0].Nickname))
 	room.decideIfGameFinish()
 }
 

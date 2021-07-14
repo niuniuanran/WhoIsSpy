@@ -68,11 +68,13 @@ export default function Play() {
     }
 
     if (playerState === PlayerStates.WinState) {
-        fireworks({
-            x: window.innerWidth,
-            y: window.innerHeight,
-            colors: ['#cc3333', '#4CAF50', '#81C784']
-          })
+        setInterval(() =>{
+            fireworks({
+                x: window.innerWidth,
+                y: window.innerHeight,
+                colors: ['#cc3333', '#4CAF50', '#81C784']
+              })
+        }, 2000)
     }
 
     if (playerState === PlayerStates.LoseState || playerState === PlayerStates.WinState) {
