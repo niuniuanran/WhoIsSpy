@@ -39,7 +39,7 @@ func (room *Room) runTalkRound() {
 	i := startFrom
 	for {
 		alivePlayers[i].State = PlayerTalkingState
-		room.broadcastPlayersState("", fmt.Sprintf("%s's turn to talk", alivePlayers[i].Nickname))
+		room.broadcastPlayersState("", fmt.Sprintf("%s's turn to talk", alivePlayers[i].Nickname), "")
 		waitForState(func() bool { return alivePlayers[i].State == PlayerTalkFinishedState })
 		alivePlayers[i].State = PlayerListeningState
 		i++
@@ -71,7 +71,7 @@ func (room *Room) runVoteRound(targets []*Player) {
 	}
 
 	room.broadcastToPlayersInRoom(message.encode())
-	room.broadcastPlayersState("", "Please vote")
+	room.broadcastPlayersState("", "Please vote", "")
 	waitForState(func() bool { return room.allAlivePlayersInState(PlayerVotedState) })
 	room.calculateVotes()
 }
@@ -99,7 +99,7 @@ func (room *Room) calculateVotes() {
 	}
 
 	maxVoteTargets[0].State = PlayerKilledState
-	room.broadcastPlayersState(fmt.Sprintf("%s is killed", maxVoteTargets[0].Nickname), fmt.Sprintf("%s is killed", maxVoteTargets[0].Nickname))
+	room.broadcastPlayersState(fmt.Sprintf("%s is killed", maxVoteTargets[0].Nickname), fmt.Sprintf("%s is killed", maxVoteTargets[0].Nickname), "")
 	room.decideIfGameFinish()
 }
 
@@ -154,7 +154,7 @@ func (room *Room) goodWins() {
 		}
 		p.State = PlayerWinState
 	}
-	room.broadcastPlayersState("", "Good peope win")
+	room.broadcastPlayersState("Good peope win", "", "success")
 	room.state = RoomGameFinishState
 }
 
@@ -166,7 +166,7 @@ func (room *Room) spyWins() {
 		}
 		p.State = PlayerLoseState
 	}
-	room.broadcastPlayersState("", "Spies win")
+	room.broadcastPlayersState("Spies win", "", "error")
 	room.state = RoomGameFinishState
 }
 
@@ -178,7 +178,7 @@ func (room *Room) tidyUp() {
 	}
 	room.spies = make([]*Player, 0)
 	room.setAllPlayersToState(PlayerIdleState)
-	room.broadcastPlayersState("", "")
+	room.broadcastPlayersState("", "", "")
 }
 
 func (room *Room) deliverWords() {
@@ -198,7 +198,7 @@ func (room *Room) deliverWords() {
 		players[i].State = PlayerWordReadingState
 	}
 
-	room.broadcastPlayersState("", "")
+	room.broadcastPlayersState("", "", "")
 	waitForState(func() bool { return room.allAlivePlayersInState(PlayerWordGotState) })
 }
 

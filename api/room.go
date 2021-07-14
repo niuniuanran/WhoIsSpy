@@ -204,7 +204,7 @@ func (room *Room) unregisterPlayerInRoom(player *Player) {
 	}
 }
 
-func (room *Room) broadcastPlayersState(alert string, instruction string) {
+func (room *Room) broadcastPlayersState(alert string, instruction string, alertType string) {
 	players := room.getPlayersInRoom()
 	bs, err := json.Marshal(players)
 	if err != nil {
@@ -216,6 +216,7 @@ func (room *Room) broadcastPlayersState(alert string, instruction string) {
 		Payload:     string(bs),
 		RoomCode:    room.Code,
 		Alert:       alert,
+		AlertType:   alertType,
 		Instruction: instruction,
 	}
 	room.broadcastToPlayersInRoom(message.encode())
@@ -224,7 +225,7 @@ func (room *Room) broadcastPlayersState(alert string, instruction string) {
 
 func (room *Room) playerReadyInRoom(player *Player) {
 	player.State = PlayerReadyState
-	room.broadcastPlayersState(fmt.Sprintf("%s is ready", player.Nickname), "")
+	room.broadcastPlayersState(fmt.Sprintf("%s is ready", player.Nickname), "", "success")
 	players := room.getPlayerPointersInRoom()
 	if len(players) < room.numPlayer {
 		return
@@ -239,7 +240,7 @@ func (room *Room) playerReadyInRoom(player *Player) {
 
 func (room *Room) playerUndoReadyInRoom(player *Player) {
 	player.State = PlayerIdleState
-	room.broadcastPlayersState(fmt.Sprintf("%s is not ready", player.Nickname), "")
+	room.broadcastPlayersState(fmt.Sprintf("%s is not ready", player.Nickname), "", "warning")
 }
 
 func (room *Room) broadcastToPlayersInRoom(message []byte) {
@@ -257,10 +258,11 @@ func (room *Room) notifyPlayerJoined(player *Player) {
 	}
 
 	message := &BroadcastMessage{
-		Action:   PlayerJoinedBroadcast,
-		Payload:  string(bs),
-		RoomCode: room.Code,
-		Alert:    fmt.Sprintf("%s just joined", player.Nickname),
+		Action:    PlayerJoinedBroadcast,
+		Payload:   string(bs),
+		RoomCode:  room.Code,
+		Alert:     fmt.Sprintf("%s just joined", player.Nickname),
+		AlertType: AlertTypeSuccess,
 	}
 
 	room.broadcastToPlayersInRoom(message.encode())
@@ -274,10 +276,11 @@ func (room *Room) notifyPlayerLeft(player *Player) {
 		return
 	}
 	message := &BroadcastMessage{
-		Action:   PlayerLeftBroadcast,
-		Payload:  string(bs),
-		RoomCode: player.RoomCode,
-		Alert:    fmt.Sprintf("%s left the room", player.Nickname),
+		Action:    PlayerLeftBroadcast,
+		Payload:   string(bs),
+		RoomCode:  player.RoomCode,
+		Alert:     fmt.Sprintf("%s left the room", player.Nickname),
+		AlertType: AlertTypeWarning,
 	}
 
 	room.broadcastToPlayersInRoom(message.encode())

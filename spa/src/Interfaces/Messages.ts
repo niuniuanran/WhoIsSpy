@@ -28,6 +28,7 @@ interface BroadcastMessage{
     roomcode?: string
     alert?: string
     instruction?: string
+    alertType?: string
 }
 
 interface ReportMessage{

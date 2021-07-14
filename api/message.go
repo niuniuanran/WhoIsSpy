@@ -19,12 +19,19 @@ const (
 	AskVoteBroadcast        = "please-vote"
 )
 
+const (
+	AlertTypeSuccess = "success"
+	AlertTypeWarning = "warning"
+	AlertTypeError   = "error"
+)
+
 type BroadcastMessage struct {
 	Action      string `json:"action"`
 	Payload     string `json:"payload"`
 	RoomCode    string `json:"roomcode"`
 	Alert       string `json:"alert"`
 	Instruction string `json:"instruction"`
+	AlertType   string `json:"alertType"`
 }
 
 func (message *BroadcastMessage) encode() []byte {

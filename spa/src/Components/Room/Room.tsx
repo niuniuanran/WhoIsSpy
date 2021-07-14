@@ -111,7 +111,7 @@ export default function Room(){
         </Modal>
         <ContentContainer allowExit onExit={reportExitRoom}> 
             <div>
-                {alertLine && <RoomTopAlert alertLine={alertLine}/>}
+                {alertLine && <RoomTopAlert alertLine={alertLine} type="success"/>}
                 <Typography variant="h4" className={classes.marginBottom}>
                     Room {code}
                 </Typography>

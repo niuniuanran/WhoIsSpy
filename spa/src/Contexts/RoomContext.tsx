@@ -36,6 +36,7 @@ export type RoomContextType = {
     roomState: string
     setRoomState: (s: string) => void
     reportResultReceived: () => void
+    alertType?: "success"|"warning"|"error"
 }
 
 function RoomProvider({ children }: RoomContextProp){
@@ -52,6 +53,7 @@ function RoomProvider({ children }: RoomContextProp){
     const [wordRead, setWordRead] = useState(false)
     const [voteTargets, setVoteTargets] = useState<[string]>()
     const [roomState, setRoomState] = useState(RoomStates.IdleState)
+    const [alertType, setAlertType] = useState("success")
 
     const ws = useRef<WebSocket|null>(null);
 
@@ -60,7 +62,11 @@ function RoomProvider({ children }: RoomContextProp){
 
         if (message.alert) {
             setAlertLine(message.alert)
-            setTimeout(()=>setAlertLine(""), 2000)
+            setTimeout(()=>setAlertLine(""), 2500)
+        }  
+
+        if (message.alertType) {
+            setAlertType(message.alertType)
         }  
 
         if (message.action === BroadcastActions.PlayerNewStateBroadcast) {
@@ -221,7 +227,8 @@ function RoomProvider({ children }: RoomContextProp){
             onWordRead,
             instruction,
             voteTargets,
-            reportResultReceived
+            reportResultReceived,
+            alertType
         }
     }>
         {children}

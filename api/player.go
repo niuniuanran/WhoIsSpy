@@ -233,7 +233,7 @@ func (player *Player) vote(target string) {
 	player.room.votes[target] = append(v, player.Nickname)
 
 	player.State = PlayerVotedState
-	player.room.broadcastPlayersState("", "")
+	player.room.broadcastPlayersState("", "", "")
 }
 
 // BySerialNumber implements sort.Interface for []*Player based on the SerialNumber field.
