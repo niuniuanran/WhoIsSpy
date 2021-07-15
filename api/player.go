@@ -225,7 +225,7 @@ func (player *Player) handleNewMessage(jsonMessage []byte) {
 		}
 	case ChangeWordAction:
 		{
-			if player.room.allPlayersInState(PlayerWordChangingState) {
+			if !player.room.allPlayersInState(PlayerWordChangingState) {
 				player.room.changeWord(player.Nickname)
 			}
 		}
