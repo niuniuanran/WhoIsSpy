@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface RoomTopAlertProps{
     alertLine: string
-    type?: "success"|"error"|"warning"
+    type?: "success"|"error"|"warning"|"info"
 }
 
 export default function RoomTopAlert({ alertLine, type }:RoomTopAlertProps) {

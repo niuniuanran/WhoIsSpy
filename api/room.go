@@ -3,10 +3,12 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"sort"
 	"strconv"
+	"strings"
 )
 
 var roomCodeIncr = 1001
@@ -40,6 +42,7 @@ type Room struct {
 	spyWord      string
 	votes        map[string][]string
 	state        string
+	wordPairs    map[string]bool
 }
 
 type RoomSettings struct {
@@ -59,6 +62,8 @@ type RoomInfo struct {
 }
 
 func NewRoom(roomSettings RoomSettings) *Room {
+	wordPairs := loadWords(roomSettings.Language)
+
 	return &Room{
 		Code:         generateCode(),
 		Language:     roomSettings.Language,
@@ -71,7 +76,21 @@ func NewRoom(roomSettings RoomSettings) *Room {
 		unregister:   make(chan *Player),
 		broadcast:    make(chan *BroadcastMessage),
 		state:        RoomIdleState,
+		wordPairs:    wordPairs,
 	}
+}
+
+func loadWords(language string) map[string]bool {
+	dat, err := ioutil.ReadFile(fmt.Sprintf("words-%s", language))
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	fields := strings.Fields(string(dat))
+	wordPairs := make(map[string]bool)
+	for _, p := range fields {
+		wordPairs[p] = false
+	}
+	return wordPairs
 }
 
 type AytMessage struct {

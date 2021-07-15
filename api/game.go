@@ -74,7 +74,7 @@ func (room *Room) runVoteRound(targets []*Player, firstRound bool) {
 	if firstRound {
 		room.broadcastPlayersState("", "Please vote", "")
 	} else {
-		room.broadcastPlayersState("Got ties. Please vote again", "Please vote", AlertTypeWarning)
+		room.broadcastPlayersState("Got ties. Please vote again", "Please vote", AlertTypeInfo)
 	}
 	waitForState(func() bool { return room.allAlivePlayersInState(PlayerVotedState) })
 	room.calculateVotes()

@@ -23,6 +23,7 @@ const (
 	AlertTypeSuccess = "success"
 	AlertTypeWarning = "warning"
 	AlertTypeError   = "error"
+	AlertTypeInfo    = "info"
 )
 
 type BroadcastMessage struct {

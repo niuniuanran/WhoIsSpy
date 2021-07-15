@@ -36,7 +36,7 @@ export type RoomContextType = {
     roomState: string
     setRoomState: (s: string) => void
     reportResultReceived: () => void
-    alertType?: "success"|"warning"|"error"
+    alertType?: "success"|"warning"|"error"|"info"
 }
 
 function RoomProvider({ children }: RoomContextProp){
