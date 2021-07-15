@@ -59,15 +59,11 @@ function RoomProvider({ children }: RoomContextProp){
 
     const handleMessage = useCallback((message:BroadcastMessage) => {
         message.instruction && setInstruction(message.instruction)
-
-        if (message.alert) {
+        if (message.alert){
+            message.alertType && setAlertType(message.alertType)
             setAlertLine(message.alert)
             setTimeout(()=>setAlertLine(""), 2500)
-        }  
-
-        if (message.alertType) {
-            setAlertType(message.alertType)
-        }  
+        } 
 
         if (message.action === BroadcastActions.PlayerNewStateBroadcast) {
             let players: [Player] = JSON.parse(message.payload) 

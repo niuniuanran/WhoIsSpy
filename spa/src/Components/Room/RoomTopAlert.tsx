@@ -20,7 +20,7 @@ interface RoomTopAlertProps{
 
 export default function RoomTopAlert({ alertLine, type }:RoomTopAlertProps) {
     const classes = useStyles()
-    return <Alert severity={ type } variant="filled" className={classes.root} iconMapping={{ success: <PersonPinIcon fontSize="inherit" />, error:  <PersonPinIcon fontSize="inherit" />}}>
+    return <Alert severity={ type } className={classes.root} iconMapping={{ success: <PersonPinIcon fontSize="inherit" />, error:  <PersonPinIcon fontSize="inherit" />}}>
         { alertLine }
     </Alert>
 }

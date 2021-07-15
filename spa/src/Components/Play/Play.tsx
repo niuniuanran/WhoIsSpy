@@ -72,7 +72,7 @@ export default function Play() {
         return <ContentContainer>
             <div>
             {alertLine && <RoomTopAlert alertLine={alertLine} type={alertType}/>}
-            <InstructionCard instruction="waiting for other players to vote">
+            <InstructionCard instruction="Waiting for other players to vote">
                 <CircularProgress/>
             </InstructionCard>
             </div>
@@ -82,8 +82,8 @@ export default function Play() {
     if (playerState === PlayerStates.WinState) {
         setInterval(() =>{
             fireworks({
-                x: window.innerWidth,
-                y: window.innerHeight,
+                x: window.innerWidth/2,
+                y: window.innerHeight/2,
                 colors: ['#cc3333', '#4CAF50', '#81C784']
               })
         }, 2000)
@@ -95,7 +95,7 @@ export default function Play() {
             {alertLine && <RoomTopAlert alertLine={alertLine} type={alertType}/>}
             <InstructionCard instruction={instruction}>
                 <div>
-                    {playerState === PlayerStates.LoseState && <Typography variant="h2">You lose</Typography>}
+                    {playerState === PlayerStates.LoseState && <Typography variant="h3">You lose</Typography>}
                     {playerState === PlayerStates.WinState && <Typography variant="h2">You win!!</Typography>}
                     <Button onClick={() => {onResultReceived();}} variant="contained" size="small" color="primary">
                         OK
