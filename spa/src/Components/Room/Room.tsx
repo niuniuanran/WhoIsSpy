@@ -2,7 +2,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { useContext } from "react"
 import { RoomContext, RoomContextType } from "../../Contexts/RoomContext";
 import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext"
-import { Typography, Modal, Paper, Button, CircularProgress } from "@material-ui/core";
+import { Typography, Modal, Paper, Button, CircularProgress} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles"
 import NamePlayerForRoom from "./NamePlayerForRoom";
 import ContentContainer from "../Shared/ContentContainer"
@@ -10,6 +10,7 @@ import PlayerList from "./PlayerList";
 import RoomTopAlert from "./RoomTopAlert"
 import Play from "../Play/Play"
 import {PlayerStates} from "../../Interfaces/Player"
+import InstructionCard from "../Play/InstructionCard";
 
 const useStyle = makeStyles(theme => ({
     modalBody: {
@@ -80,13 +81,13 @@ export default function Room(){
 
     if (playersInRoom?.find(p => p.nickname === nickname)?.state === PlayerStates.WinState) {
         return <ContentContainer>
-           <Paper> Some win effect </Paper>
+           <InstructionCard nickname={nickname} instruction="Well done :)"/>
         </ContentContainer>
     }
 
     if (playersInRoom?.find(p => p.nickname === nickname)?.state === PlayerStates.LoseState) {
         return <ContentContainer>
-           <Paper> Some lose effect </Paper>
+            <InstructionCard nickname={nickname} instruction="Better luck next time"/>
         </ContentContainer>
     }
 

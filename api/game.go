@@ -99,7 +99,7 @@ func (room *Room) calculateVotes() {
 	}
 
 	maxVoteTargets[0].State = PlayerKilledState
-	room.broadcastPlayersState(fmt.Sprintf("%s is killed", maxVoteTargets[0].Nickname), fmt.Sprintf("%s is killed", maxVoteTargets[0].Nickname), "")
+	room.broadcastPlayersState(fmt.Sprintf("%s is killed", maxVoteTargets[0].Nickname), fmt.Sprintf("%s is killed", maxVoteTargets[0].Nickname), AlertTypeError)
 	room.decideIfGameFinish()
 }
 
@@ -154,7 +154,7 @@ func (room *Room) goodWins() {
 		}
 		p.State = PlayerWinState
 	}
-	room.broadcastPlayersState("Good peope win", "", "success")
+	room.broadcastPlayersState("Good peope win", "Good peope win", "success")
 	room.state = RoomGameFinishState
 }
 
@@ -166,7 +166,7 @@ func (room *Room) spyWins() {
 		}
 		p.State = PlayerLoseState
 	}
-	room.broadcastPlayersState("Spies win", "", "error")
+	room.broadcastPlayersState("Spies win", "Spies win", "error")
 	room.state = RoomGameFinishState
 }
 
