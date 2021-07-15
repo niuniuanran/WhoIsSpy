@@ -93,6 +93,10 @@ function LanguageProvider({language, children}:LanguageContextProp){
         failJoinRoom: {
             en: "Failed to join room",
             cn: "加入房间失败"
+        },
+        changeWord: {
+            en: "Change words",
+            cn: "换一组词"
         }
     }
 

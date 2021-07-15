@@ -25,19 +25,20 @@ const (
 )
 
 const (
-	PlayerIdleState         = ""
-	PlayerReadyState        = "ready"
-	PlayerWordReadingState  = "reading"
-	PlayerWordGotState      = "got"
-	PlayerListeningState    = "listening"
-	PlayerTalkingState      = "talking"
-	PlayerVotingState       = "voting"
-	PlayerKilledState       = "killed"
-	PlayerWinState          = "win"
-	PlayerLoseState         = "lose"
-	PlayerTalkFinishedState = "talked"
-	PlayerVotedState        = "voted"
-	ResultReceivedState     = "result-received"
+	PlayerIdleState           = ""
+	PlayerReadyState          = "ready"
+	PlayerWordReadingState    = "reading"
+	PlayerWordGotState        = "got"
+	PlayerListeningState      = "listening"
+	PlayerTalkingState        = "talking"
+	PlayerVotingState         = "voting"
+	PlayerKilledState         = "killed"
+	PlayerWinState            = "win"
+	PlayerLoseState           = "lose"
+	PlayerTalkFinishedState   = "talked"
+	PlayerVotedState          = "voted"
+	PlayerResultReceivedState = "result-received"
+	PlayerWordChangingState   = "word-changing"
 )
 
 var (
@@ -220,7 +221,11 @@ func (player *Player) handleNewMessage(jsonMessage []byte) {
 		}
 	case ResultReceivedAction:
 		{
-			player.State = ResultReceivedState
+			player.State = PlayerResultReceivedState
+		}
+	case ChangeWordAction:
+		{
+			player.room.changeWord(player.Nickname)
 		}
 	}
 }

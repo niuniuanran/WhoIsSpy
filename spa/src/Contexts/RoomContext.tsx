@@ -37,6 +37,7 @@ export type RoomContextType = {
     setRoomState: (s: string) => void
     reportResultReceived: () => void
     alertType?: "success"|"warning"|"error"|"info"
+    changeWord: () => void
 }
 
 function RoomProvider({ children }: RoomContextProp){
@@ -89,6 +90,17 @@ function RoomProvider({ children }: RoomContextProp){
         }
 
     }, []);
+
+    const changeWord = useCallback(() => {
+        ws?.current?.send(
+            JSON.stringify({
+              action: ReportActions.ChangeWordAction,
+              senderNickname: nickname,
+              roomCode: code,
+              payload: ""
+            })
+          )
+    }, [ws, nickname, code])
 
     const reportExitRoom = useCallback(() => {
         console.log("Leaving room ", code)
@@ -224,7 +236,8 @@ function RoomProvider({ children }: RoomContextProp){
             instruction,
             voteTargets,
             reportResultReceived,
-            alertType
+            alertType,
+            changeWord
         }
     }>
         {children}

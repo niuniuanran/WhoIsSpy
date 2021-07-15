@@ -26,6 +26,7 @@ func (room *Room) runGame() {
 	room.assignSpies()
 	room.pickWords()
 	room.deliverWords()
+	waitForState(func() bool { return room.allAlivePlayersInState(PlayerWordGotState) })
 	for room.state != RoomGameFinishState {
 		time.Sleep(time.Second * 1)
 		room.runTalkRound()
@@ -178,7 +179,7 @@ func (room *Room) spyWins() {
 
 func (room *Room) tidyUp() {
 	room.state = RoomIdleState
-	waitForState(func() bool { return room.allPlayersInState(ResultReceivedState) })
+	waitForState(func() bool { return room.allPlayersInState(PlayerResultReceivedState) })
 	for _, s := range room.spies {
 		s.isSpy = false
 	}
@@ -217,7 +218,6 @@ func (room *Room) deliverWords() {
 	}
 
 	room.broadcastPlayersState("", "", "")
-	waitForState(func() bool { return room.allAlivePlayersInState(PlayerWordGotState) })
 }
 
 func (room *Room) allAlivePlayersInState(state string) bool {
@@ -257,4 +257,13 @@ func waitForState(check func() bool) {
 			return
 		}
 	}
+}
+
+func (room *Room) changeWord(nickname string) {
+	room.setAllAlivePlayersToState(PlayerWordChangingState)
+	instruction := fmt.Sprintf("%s requested to change the word", nickname)
+	room.broadcastPlayersState(instruction, "", AlertTypeInfo)
+	time.Sleep(time.Second)
+	room.pickWords()
+	room.deliverWords()
 }

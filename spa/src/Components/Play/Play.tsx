@@ -12,9 +12,9 @@ import InstructionCard from "./InstructionCard"
 import RoomTopAlert from "../Room/RoomTopAlert"
 
 export default function Play() {
-    const {word, onTalkFinish, onWordRead, instruction, playersInRoom, alertLine, alertType,
+    const {word, onTalkFinish, onWordRead, instruction, playersInRoom, alertLine, alertType, changeWord,
                     nickname, reportResultReceived} = useContext(RoomContext) as RoomContextType
-    const { getCurrentLanguage } = useContext(LanguageContext) as LanguageContextType
+    const { getCurrentLanguage, getText } = useContext(LanguageContext) as LanguageContextType
     const [playerState, setPlayerState] = useState(PlayerStates.IdleState)
     const history = useHistory()
     const { code } = useParams<{code?: string}>()
@@ -33,6 +33,21 @@ export default function Play() {
             <div>
                 {alertLine && <RoomTopAlert alertLine={alertLine} type={alertType}/>}
                 <WordCard word={word} onRead={onWordRead} central/>
+                <Button size="small" style={{position: "absolute", bottom: "1rem", left: "1rem"}} onClick={changeWord}>
+                    {getText("changeWord")}
+                </Button>
+            </div>
+        </ContentContainer>
+    }
+
+    if (playerState === PlayerStates.WordChangingState) {
+        let requesterName = (alertLine && alertLine.split(" requested")[0]) || "Someone"
+        return <ContentContainer>
+            <div>
+                {alertLine && <RoomTopAlert alertLine={alertLine} type={alertType}/>}
+                <InstructionCard nickname={requesterName} instruction={`Picking new words for you ...`}>
+                    <CircularProgress/>
+                </InstructionCard>
             </div>
         </ContentContainer>
     }

@@ -4,7 +4,7 @@ const BroadcastActions = {
      PlayerNewStateBroadcast: "player-state",
      YourWordBroadcast: "your-word",
      GameWillStartBroadcast: "game-will-start", 	
-     AskVoteBroadcast: "please-vote"
+     AskVoteBroadcast: "please-vote",
 }
 
 const ReportActions = {
@@ -14,7 +14,8 @@ const ReportActions = {
 	PlayerLeftAction:  "player-left",
     PlayerUndoReadyAction: "player-undo-ready",
     WordReadAction: "word-read",
-    ResultReceived: "result-received"
+    ResultReceived: "result-received",
+    ChangeWordAction: "change-word"
 }
 
 interface AytMessage {
