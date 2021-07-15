@@ -26,7 +26,7 @@ func (room *Room) runGame() {
 	for room.state != RoomGameFinishState {
 		time.Sleep(time.Second * 1)
 		room.runTalkRound()
-		room.runVoteRound(room.getAlivePlayerPointersInRoom())
+		room.runVoteRound(room.getAlivePlayerPointersInRoom(), true)
 	}
 
 	room.tidyUp()
@@ -52,7 +52,7 @@ func (room *Room) runTalkRound() {
 	}
 }
 
-func (room *Room) runVoteRound(targets []*Player) {
+func (room *Room) runVoteRound(targets []*Player, firstRound bool) {
 	room.votes = make(map[string][]string)
 	room.setAllAlivePlayersToState(PlayerVotingState)
 	targetNames := make([]string, 0)
@@ -71,7 +71,11 @@ func (room *Room) runVoteRound(targets []*Player) {
 	}
 
 	room.broadcastToPlayersInRoom(message.encode())
-	room.broadcastPlayersState("", "Please vote", "")
+	if firstRound {
+		room.broadcastPlayersState("", "Please vote", "")
+	} else {
+		room.broadcastPlayersState("Got ties. Please vote again", "Please vote", AlertTypeWarning)
+	}
 	waitForState(func() bool { return room.allAlivePlayersInState(PlayerVotedState) })
 	room.calculateVotes()
 }
@@ -94,7 +98,7 @@ func (room *Room) calculateVotes() {
 	}
 
 	if len(maxVoteTargets) > 1 {
-		room.runVoteRound(maxVoteTargets)
+		room.runVoteRound(maxVoteTargets, false)
 		return
 	}
 

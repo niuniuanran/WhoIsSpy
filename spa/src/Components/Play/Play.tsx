@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from "react"
 import { RoomContext, RoomContextType } from "../../Contexts/RoomContext"
 import { Button, CircularProgress, Typography } from "@material-ui/core"
+import MoodBadOutlinedIcon from '@material-ui/icons/MoodBadOutlined';
 import WordCard from "./WordCard"
 import ContentContainer from "../Shared/ContentContainer"
 import { PlayerStates } from "../../Interfaces/Player"
@@ -8,7 +9,6 @@ import { VoteCard } from "./VoteCard"
 import { useHistory, useParams } from "react-router-dom";
 import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext"
 import InstructionCard from "./InstructionCard"
-import fireworks from "fireworks"
 import RoomTopAlert from "../Room/RoomTopAlert"
 
 export default function Play() {
@@ -79,23 +79,16 @@ export default function Play() {
         </ContentContainer>
     }
 
-    if (playerState === PlayerStates.WinState) {
-        setInterval(() =>{
-            fireworks({
-                x: window.innerWidth/2,
-                y: window.innerHeight/2,
-                colors: ['#cc3333', '#4CAF50', '#81C784']
-              })
-        }, 2000)
-    }
-
     if (playerState === PlayerStates.LoseState || playerState === PlayerStates.WinState) {
         return <ContentContainer>
             <div>
             {alertLine && <RoomTopAlert alertLine={alertLine} type={alertType}/>}
             <InstructionCard instruction={instruction}>
                 <div>
-                    {playerState === PlayerStates.LoseState && <Typography variant="h3">You lose</Typography>}
+                    {playerState === PlayerStates.LoseState && <Typography variant="h4">
+                        You lose
+                        <MoodBadOutlinedIcon style={{paddingLeft: "0.5rem"}}/>
+                    </Typography>}
                     {playerState === PlayerStates.WinState && <Typography variant="h2">You win!!</Typography>}
                     <Button onClick={() => {onResultReceived();}} variant="contained" size="small" color="primary">
                         OK

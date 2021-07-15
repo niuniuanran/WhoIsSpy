@@ -43,7 +43,7 @@ export const RoomStates = {
 }
 
 export default function Room(){
-    const { nickname, setNickname, reportExitRoom, alertLine, joinFailedMessage, roomState,
+    const { nickname, setNickname, reportExitRoom, alertLine, alertType, joinFailedMessage, roomState,
         setJoinFailedMessage, roomCapacity, playersInRoom, getReady, undoReady } = useContext(RoomContext) as RoomContextType
     const { getText, getCurrentLanguage } = useContext(LanguageContext) as LanguageContextType
     const { code } = useParams<{code?: string}>()
@@ -80,6 +80,7 @@ export default function Room(){
     }
 
     if (playersInRoom?.find(p => p.nickname === nickname)?.state === PlayerStates.WinState) {
+
         return <ContentContainer>
            <InstructionCard nickname={nickname} instruction="Well done :)"/>
         </ContentContainer>
@@ -112,7 +113,7 @@ export default function Room(){
         </Modal>
         <ContentContainer allowExit onExit={reportExitRoom}> 
             <div>
-                {alertLine && <RoomTopAlert alertLine={alertLine} type="success"/>}
+                {alertLine && <RoomTopAlert alertLine={alertLine} type={alertType}/>}
                 <Typography variant="h4" className={classes.marginBottom}>
                     Room {code}
                 </Typography>
