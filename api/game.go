@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
+	"strings"
 	"time"
 )
 
@@ -20,8 +21,10 @@ func (room *Room) startGame() {
 }
 
 func (room *Room) runGame() {
+	rand.Seed(time.Now().UnixNano())
 	room.state = RoomPlayingState
 	room.assignSpies()
+	room.pickWords()
 	room.deliverWords()
 	for room.state != RoomGameFinishState {
 		time.Sleep(time.Second * 1)
@@ -110,7 +113,6 @@ func (room *Room) calculateVotes() {
 func (room *Room) assignSpies() {
 	players := room.getPlayerPointersInRoom()
 	room.spies = make([]*Player, 0, room.numPlayer)
-	rand.Seed(time.Now().UnixNano())
 	perm := rand.Perm(len(players))
 	for i := 0; i < room.numSpy; i++ {
 		room.spies = append(room.spies, players[perm[i]])
@@ -185,8 +187,22 @@ func (room *Room) tidyUp() {
 	room.broadcastPlayersState("", "", "")
 }
 
+func (room *Room) pickWords() {
+	pickedN := rand.Intn(len(room.wordPairs))
+	pickedWords := strings.Split(room.wordPairs[pickedN], "——")
+	room.wordPairs = append(room.wordPairs[:pickedN], room.wordPairs[pickedN+1:]...)
+	if room.RandomBlank {
+		r := rand.Intn(10)
+		if r > 7 {
+			room.normalWord = pickedWords[r%2]
+			room.spyWord = ""
+		}
+	}
+	room.normalWord = pickedWords[pickedN%2]
+	room.spyWord = pickedWords[1-pickedN%2]
+}
+
 func (room *Room) deliverWords() {
-	rand.Seed(time.Now().UnixNano())
 	players := room.getAlivePlayerPointersInRoom()
 	room.normalWord = "dog"
 	room.spyWord = "cat"

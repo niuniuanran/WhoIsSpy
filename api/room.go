@@ -42,7 +42,7 @@ type Room struct {
 	spyWord      string
 	votes        map[string][]string
 	state        string
-	wordPairs    map[string]bool
+	wordPairs    []string
 }
 
 type RoomSettings struct {
@@ -80,17 +80,13 @@ func NewRoom(roomSettings RoomSettings) *Room {
 	}
 }
 
-func loadWords(language string) map[string]bool {
+func loadWords(language string) []string {
 	dat, err := ioutil.ReadFile(fmt.Sprintf("words-%s", language))
 	if err != nil {
 		fmt.Println(err.Error())
 	}
 	fields := strings.Fields(string(dat))
-	wordPairs := make(map[string]bool)
-	for _, p := range fields {
-		wordPairs[p] = false
-	}
-	return wordPairs
+	return fields
 }
 
 type AytMessage struct {
