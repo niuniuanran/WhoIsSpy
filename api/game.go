@@ -204,8 +204,6 @@ func (room *Room) pickWords() {
 
 func (room *Room) deliverWords() {
 	players := room.getAlivePlayerPointersInRoom()
-	room.normalWord = "dog"
-	room.spyWord = "cat"
 	for i := 0; i < len(players); i++ {
 		word := room.normalWord
 		if players[i].isSpy {
