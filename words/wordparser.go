@@ -34,9 +34,13 @@ func addWordPairsFromFile(filePath string, existing map[string]bool) {
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	numberAndDot := regexp.MustCompile(`[0-9]+、`)
+	numberAndDot := regexp.MustCompile(`[0-9]+.`)
+	dot := regexp.MustCompile(`[0-9]*、`)
 	wordString := string(dat)
-	result := string(numberAndDot.ReplaceAll([]byte(wordString), []byte("")))
+	result := string(numberAndDot.ReplaceAll([]byte(wordString), []byte(" ")))
+	result = string(dot.ReplaceAll([]byte(result), []byte(" ")))
+
+	strings.ReplaceAll(result, ",", "——")
 	wordPairs := strings.Fields(result)
 
 	for _, p := range wordPairs {
