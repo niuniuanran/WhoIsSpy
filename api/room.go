@@ -3,15 +3,22 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"sort"
 	"strconv"
 	"strings"
+
+	_ "embed"
 )
 
 var roomCodeIncr = 1001
+
+//go:embed words-en
+var englishWords string
+
+//go:embed words-cn
+var chineseWords string
 
 const (
 	RoomFull        = "room-full"
@@ -81,12 +88,11 @@ func NewRoom(roomSettings RoomSettings) *Room {
 }
 
 func loadWords(language string) []string {
-	dat, err := ioutil.ReadFile(fmt.Sprintf("words-%s", language))
-	if err != nil {
-		fmt.Println(err.Error())
+	if language == "en" {
+		return strings.Fields(englishWords)
 	}
-	fields := strings.Fields(string(dat))
-	return fields
+
+	return strings.Fields(chineseWords)
 }
 
 type AytMessage struct {

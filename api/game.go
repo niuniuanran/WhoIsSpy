@@ -29,16 +29,27 @@ func (room *Room) runGame() {
 	waitForState(func() bool { return room.allAlivePlayersInState(PlayerWordGotState) })
 	for room.state != RoomGameFinishState {
 		time.Sleep(time.Second * 1)
-		room.runTalkRound()
-		room.runVoteRound(room.getAlivePlayerPointersInRoom(), true)
+		gameHealthy := room.runTalkRound()
+		if !gameHealthy {
+			return
+		}
+		gameHealthy = room.runVoteRound(room.getAlivePlayerPointersInRoom(), true)
+		if !gameHealthy {
+			return
+		}
 	}
 
 	room.tidyUp()
 }
 
-func (room *Room) runTalkRound() {
+func (room *Room) runTalkRound() bool {
 	room.setAllAlivePlayersToState(PlayerListeningState)
 	alivePlayers := room.getAlivePlayerPointersInRoom()
+	if len(alivePlayers) < 1 {
+		room.setAllPlayersToState(PlayerIdleState)
+		room.broadcastPlayersState("No alive players in room", "", AlertTypeWarning)
+		return false
+	}
 	startFrom := rand.Intn(len(alivePlayers))
 	i := startFrom
 	for {
@@ -51,12 +62,12 @@ func (room *Room) runTalkRound() {
 			i = 0
 		}
 		if i == startFrom {
-			break
+			return true
 		}
 	}
 }
 
-func (room *Room) runVoteRound(targets []*Player, firstRound bool) {
+func (room *Room) runVoteRound(targets []*Player, firstRound bool) bool {
 	room.votes = make(map[string][]string)
 	room.setAllAlivePlayersToState(PlayerVotingState)
 	targetNames := make([]string, 0)
@@ -81,11 +92,16 @@ func (room *Room) runVoteRound(targets []*Player, firstRound bool) {
 		room.broadcastPlayersState("Got ties. Please vote again", "Please vote", AlertTypeInfo)
 	}
 	waitForState(func() bool { return room.allAlivePlayersInState(PlayerVotedState) })
-	room.calculateVotes()
+	return room.calculateVotes()
 }
 
-func (room *Room) calculateVotes() {
+func (room *Room) calculateVotes() bool {
 	alivePlayers := room.getAlivePlayerPointersInRoom()
+	if len(alivePlayers) < 1 {
+		room.setAllPlayersToState(PlayerIdleState)
+		room.broadcastPlayersState("No alive players in room", "", AlertTypeWarning)
+		return false
+	}
 	maxVoteCount := 0
 	maxVoteTargets := make([]*Player, 0)
 	for _, p := range alivePlayers {
@@ -102,13 +118,12 @@ func (room *Room) calculateVotes() {
 	}
 
 	if len(maxVoteTargets) > 1 {
-		room.runVoteRound(maxVoteTargets, false)
-		return
+		return room.runVoteRound(maxVoteTargets, false)
 	}
 
 	maxVoteTargets[0].State = PlayerKilledState
 	room.broadcastPlayersState(fmt.Sprintf("%s is killed", maxVoteTargets[0].Nickname), fmt.Sprintf("%s is killed", maxVoteTargets[0].Nickname), AlertTypeError)
-	room.decideIfGameFinish()
+	return room.decideIfGameFinish()
 }
 
 func (room *Room) assignSpies() {
@@ -121,8 +136,13 @@ func (room *Room) assignSpies() {
 	}
 }
 
-func (room *Room) decideIfGameFinish() {
+func (room *Room) decideIfGameFinish() bool {
 	alivePlayers := room.getAlivePlayerPointersInRoom()
+	if len(alivePlayers) < 1 {
+		room.setAllPlayersToState(PlayerIdleState)
+		room.broadcastPlayersState("No alive players in room", "", AlertTypeWarning)
+		return false
+	}
 	aliveSpyCount := 0
 	aliveGoodCount := 0
 	for _, p := range alivePlayers {
@@ -135,22 +155,23 @@ func (room *Room) decideIfGameFinish() {
 
 	if aliveSpyCount == 0 {
 		room.goodWins()
-		return
+		return true
 	}
 
 	if room.numPlayer < 7 {
 		if aliveSpyCount >= 1 && aliveGoodCount <= 1 {
 			room.spyWins()
-			return
+			return true
 		}
 	}
 
 	if room.numPlayer >= 7 {
 		if aliveSpyCount >= 1 && aliveGoodCount <= 2 {
 			room.spyWins()
-			return
+			return true
 		}
 	}
+	return true
 }
 
 func (room *Room) goodWins() {

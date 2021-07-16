@@ -124,7 +124,7 @@ export default function Play() {
         return <ContentContainer>
             <div>
                 {alertLine && <RoomTopAlert alertLine={alertLine} type={alertType}/>}
-                <InstructionCard instruction={`Unexpected state ${playerState}`}>
+                <InstructionCard instruction={instruction || `Unexpected state ${playerState}`}>
                     <Button variant="contained" size="small" color="primary" onClick={() => {history.push(`/${getCurrentLanguage()}`)}}>
                         Back to homepage
                     </Button>
