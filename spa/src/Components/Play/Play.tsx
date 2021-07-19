@@ -10,6 +10,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext"
 import InstructionCard from "./InstructionCard"
 import RoomTopAlert from "../Room/RoomTopAlert"
+import PlayerList from "../Room/PlayerList";
 
 export default function Play() {
     const {word, onTalkFinish, onWordRead, instruction, playersInRoom, alertLine, alertType, changeWord,
@@ -118,7 +119,7 @@ export default function Play() {
         return <ContentContainer>
                  <div>
                 {alertLine && <RoomTopAlert alertLine={alertLine} type={alertType}/>}
-                <InstructionCard instruction="You are killed" nickname={nickname} killed/>
+                <PlayerList/>
                 </div>
         </ContentContainer>
     }
