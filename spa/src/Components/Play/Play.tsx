@@ -100,7 +100,7 @@ export default function Play() {
             {alertLine && <RoomTopAlert alertLine={alertLine} type={alertType}/>}
             <InstructionCard instruction={instruction}>
                 <div>
-                    {playerState === PlayerStates.LoseState && <Typography variant="h4">
+                    {playerState === PlayerStates.LoseState && <Typography variant="h2" color="secondary">
                         You lose
                         <MoodBadOutlinedIcon style={{paddingLeft: "0.5rem"}}/>
                     </Typography>}
@@ -116,7 +116,10 @@ export default function Play() {
 
     if (playerState === PlayerStates.KilledState) {
         return <ContentContainer>
+                 <div>
+                {alertLine && <RoomTopAlert alertLine={alertLine} type={alertType}/>}
                 <InstructionCard instruction="You are killed" nickname={nickname} killed/>
+                </div>
         </ContentContainer>
     }
 
