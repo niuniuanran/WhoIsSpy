@@ -5,6 +5,7 @@ import { CallApi } from "../Utils/Api"
 import {AytMessage} from "../Interfaces/Messages"
 import Player from "../Interfaces/Player"
 import { RoomStates } from "../Components/Room/Room";
+import ReconnectingWebSocket from 'reconnecting-websocket';
 
 const RoomContext = React.createContext<any>(undefined)
 
@@ -56,7 +57,7 @@ function RoomProvider({ children }: RoomContextProp){
     const [roomState, setRoomState] = useState(RoomStates.IdleState)
     const [alertType, setAlertType] = useState("success")
 
-    const ws = useRef<WebSocket|null>(null);
+    const ws = useRef<ReconnectingWebSocket|null>(null);
 
     const handleMessage = useCallback((message:BroadcastMessage) => {
         message.instruction && setInstruction(message.instruction)
@@ -197,7 +198,7 @@ function RoomProvider({ children }: RoomContextProp){
 
                 m.numPlayer && setRoomCapacity(m.numPlayer)
 
-                ws.current = new WebSocket(`ws://${process.env.REACT_APP_API_BASE_URL}/ws?nickname=${nickname}&roomcode=${code}`)
+                ws.current = new ReconnectingWebSocket(`ws://${process.env.REACT_APP_API_BASE_URL}/ws?nickname=${nickname}&roomcode=${code}`)
                 ws.current.onopen = () => {
                     console.log("connected");
                     setConnected(true);
