@@ -198,7 +198,7 @@ func (room *Room) RunRoom() {
 			room.registerPlayerInRoom(player)
 
 		case player := <-room.unregister:
-			room.unregisterPlayerInRoom(player)
+			room.playerLeft(player)
 
 		case message := <-room.broadcast:
 			room.broadcastToPlayersInRoom(message.encode())
@@ -208,6 +208,8 @@ func (room *Room) RunRoom() {
 
 func (room *Room) playerLeft(player *Player) {
 	log.Printf("Player %s leaves room %s", player.Nickname, room.Code)
+	log.Printf("Room state: %s", room.state)
+
 	if room.state == RoomIdleState {
 		room.unregisterPlayerInRoom(player)
 		return
@@ -275,7 +277,9 @@ func (room *Room) playerUndoReadyInRoom(player *Player) {
 
 func (room *Room) broadcastToPlayersInRoom(message []byte) {
 	for player := range room.players {
-		player.send <- message
+		if player.State != PlayerAppearAwayState {
+			player.send <- message
+		}
 	}
 }
 

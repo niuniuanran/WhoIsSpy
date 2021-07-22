@@ -39,7 +39,7 @@ const (
 	PlayerVotedState          = "voted"
 	PlayerResultReceivedState = "result-received"
 	PlayerWordChangingState   = "word-changing"
-	PlayerAppearAwayState     = "player-appear-away"
+	PlayerAppearAwayState     = "offline"
 )
 
 var (
