@@ -16,7 +16,8 @@ const PlayerStates = {
 	WinState: "win",
     LoseState: "lose",
     VotedState: "voted",
-    WordChangingState:"word-changing"
+    WordChangingState:"word-changing",
+    AppearAwayState: "player-appear-away"
 }
 
 export {PlayerStates}

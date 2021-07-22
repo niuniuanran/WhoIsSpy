@@ -206,6 +206,16 @@ func (room *Room) RunRoom() {
 	}
 }
 
+func (room *Room) playerLeft(player *Player) {
+	log.Printf("Player %s leaves room %s", player.Nickname, room.Code)
+	if room.state == RoomIdleState {
+		room.unregisterPlayerInRoom(player)
+		return
+	}
+	player.State = PlayerAppearAwayState
+	room.broadcastPlayersState(fmt.Sprintf("%s appears to be away", player.Nickname), "", AlertTypeWarning)
+}
+
 func (room *Room) registerPlayerInRoom(player *Player) {
 	player.SerialNumber = 100
 	log.Printf("Player %s joins room %s", player.Nickname, room.Code)
@@ -214,7 +224,6 @@ func (room *Room) registerPlayerInRoom(player *Player) {
 }
 
 func (room *Room) unregisterPlayerInRoom(player *Player) {
-	log.Printf("Player %s leaves room %s", player.Nickname, room.Code)
 	delete(room.players, player)
 	room.notifyPlayerLeft(player)
 	if len(room.players) == 0 {
@@ -330,7 +339,7 @@ func (room *Room) getPlayerPointersInRoom() []*Player {
 func (room *Room) getAlivePlayerPointersInRoom() []*Player {
 	ps := make([]*Player, 0)
 	for p, present := range room.players {
-		if present && p.State != PlayerKilledState {
+		if present && p.State != PlayerKilledState && p.State != PlayerAppearAwayState {
 			ps = append(ps, p)
 		}
 	}

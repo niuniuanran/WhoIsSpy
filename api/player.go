@@ -39,6 +39,7 @@ const (
 	PlayerVotedState          = "voted"
 	PlayerResultReceivedState = "result-received"
 	PlayerWordChangingState   = "word-changing"
+	PlayerAppearAwayState     = "player-appear-away"
 )
 
 var (
@@ -197,7 +198,7 @@ func (player *Player) handleNewMessage(jsonMessage []byte) {
 	switch message.Action {
 	case LeftAction:
 		{
-			player.room.unregisterPlayerInRoom(player)
+			player.room.playerLeft(player)
 		}
 	case ReadyAction:
 		{
