@@ -25,5 +25,3 @@ $ go run .
 ## Ongoing improvements
 
 I am working to make the game more resilient when a player leaves the room. Progress is kept in my journal [Hold my game together when people leaves room](https://niuniuanran.github.io/2021/07/20/Hold-my-game-together-when-people-leaves-room/)
-
-
