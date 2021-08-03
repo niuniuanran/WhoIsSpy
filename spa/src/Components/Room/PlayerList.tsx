@@ -30,6 +30,9 @@ const useStyles = makeStyles(theme => ({
     },
     killed: {  
         filter: "grayscale(100%)"
+    },
+    offline: {
+        filter: "blur(3px)"
     }
 }))
 
@@ -45,6 +48,11 @@ export default function PlayerList() {
         if (state === PlayerStates.KilledState) {
             return "default"
         }
+
+        if (state === PlayerStates.AppearAwayState) {
+            return "default"
+        }
+
         return "primary"
     }
 
@@ -53,7 +61,7 @@ export default function PlayerList() {
                 playersInRoom && playersInRoom.sort((a, b) => a.serialNumber - b.serialNumber).map((p, i) => (
                     <Grid xs={3} item key={i} className={`${classes.player} ${(i === playersInRoom.length - 1)? classes.new: ""}`}>
                         <Badge color={badgeColor(p.state)} badgeContent={p.state? p.state: 0}>
-                            <PlayerAvatar nickname={p.nickname} size="large" className={`${(p.nickname === nickname)? classes.me : classes.others} ${p.state === PlayerStates.KilledState && classes.killed}`}/>
+                            <PlayerAvatar nickname={p.nickname} size="large" className={`${(p.nickname === nickname)? classes.me : classes.others} ${p.state === PlayerStates.KilledState && classes.killed} ${p.state === PlayerStates.AppearAwayState && classes.offline}`}/>
                         </Badge>
                         <Typography className={classes.playerName}>
                             {
