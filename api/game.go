@@ -15,7 +15,7 @@ func (room *Room) startGame() {
 		RoomCode: room.Code,
 	}
 	time.Sleep(500 * time.Millisecond)
-	room.broadcastToPlayersInRoom((message.encode()))
+	room.broadcastToOnlinePlayers((message.encode()))
 	time.Sleep(3 * time.Second)
 	room.runGame()
 }
@@ -85,7 +85,7 @@ func (room *Room) runVoteRound(targets []*Player, firstRound bool) bool {
 		RoomCode: room.Code,
 	}
 
-	room.broadcastToPlayersInRoom(message.encode())
+	room.broadcastToOnlinePlayers(message.encode())
 	if firstRound {
 		room.broadcastPlayersState("", "Please vote", "")
 	} else {
@@ -247,6 +247,7 @@ func (room *Room) allAlivePlayersInState(state string) bool {
 			return false
 		}
 	}
+
 	return true
 }
 

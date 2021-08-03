@@ -201,26 +201,23 @@ func (room *Room) RunRoom() {
 			room.playerLeft(player)
 
 		case message := <-room.broadcast:
-			room.broadcastToPlayersInRoom(message.encode())
+			room.broadcastToOnlinePlayers(message.encode())
 		}
 	}
 }
 
 func (room *Room) playerLeft(player *Player) {
-	log.Printf("Player %s leaves room %s", player.Nickname, room.Code)
-	log.Printf("Room state: %s", room.state)
-
 	if room.state == RoomIdleState {
 		room.unregisterPlayerInRoom(player)
 		return
 	}
+
 	player.State = PlayerAppearAwayState
 	room.broadcastPlayersState(fmt.Sprintf("%s appears to be away", player.Nickname), "", AlertTypeWarning)
 }
 
 func (room *Room) registerPlayerInRoom(player *Player) {
 	player.SerialNumber = 100
-	log.Printf("Player %s joins room %s", player.Nickname, room.Code)
 	room.players[player] = true
 	room.notifyPlayerJoined(player)
 }
@@ -251,8 +248,7 @@ func (room *Room) broadcastPlayersState(alert string, instruction string, alertT
 		AlertType:   alertType,
 		Instruction: instruction,
 	}
-	room.broadcastToPlayersInRoom(message.encode())
-	log.Println("Broadcasting player state", message.toString())
+	room.broadcastToOnlinePlayers(message.encode())
 }
 
 func (room *Room) playerReadyInRoom(player *Player) {
@@ -275,8 +271,9 @@ func (room *Room) playerUndoReadyInRoom(player *Player) {
 	room.broadcastPlayersState(fmt.Sprintf("%s is not ready", player.Nickname), "", "warning")
 }
 
-func (room *Room) broadcastToPlayersInRoom(message []byte) {
-	for player := range room.players {
+func (room *Room) broadcastToOnlinePlayers(message []byte) {
+	for _, player := range room.getPlayerPointersInRoom() {
+		log.Println("going to broadcast to player", *player)
 		if player.State != PlayerAppearAwayState {
 			player.send <- message
 		}
@@ -299,7 +296,7 @@ func (room *Room) notifyPlayerJoined(player *Player) {
 		AlertType: AlertTypeSuccess,
 	}
 
-	room.broadcastToPlayersInRoom(message.encode())
+	room.broadcastToOnlinePlayers(message.encode())
 }
 
 func (room *Room) notifyPlayerLeft(player *Player) {
@@ -317,7 +314,7 @@ func (room *Room) notifyPlayerLeft(player *Player) {
 		AlertType: AlertTypeWarning,
 	}
 
-	room.broadcastToPlayersInRoom(message.encode())
+	room.broadcastToOnlinePlayers(message.encode())
 }
 
 func (room *Room) getPlayersInRoom() []Player {
