@@ -37,7 +37,10 @@ func (room *Room) runGame() {
 	room.assignSpies()
 	room.pickWords()
 	room.deliverWords()
-	room.waitForState(func() bool { return room.allAlivePlayersInState(PlayerWordGotState) })
+	room.waitForOneOfStates(
+		func() bool { return room.allAlivePlayersInState(PlayerWordGotState) },
+		func() bool { return room.state != RoomPlayingState },
+	)
 	for room.state != RoomGameFinishState {
 		time.Sleep(time.Second * 1)
 		room.runTalkRound()
@@ -48,6 +51,9 @@ func (room *Room) runGame() {
 }
 
 func (room *Room) runTalkRound() {
+	if room.state != RoomPlayingState {
+		return
+	}
 	room.setAllAlivePlayersToState(PlayerListeningState)
 	alivePlayers := room.getAlivePlayerPointersInRoom()
 	if len(alivePlayers) < 1 {
@@ -62,8 +68,16 @@ func (room *Room) runTalkRound() {
 		}
 		alivePlayers[i].State = PlayerTalkingState
 		room.broadcastPlayersState("", fmt.Sprintf("%s's turn to talk", alivePlayers[i].Nickname), "")
-		room.waitForState(func() bool { return alivePlayers[i].State == PlayerTalkFinishedState })
-		alivePlayers[i].State = PlayerListeningState
+		room.waitForOneOfStates(
+			func() bool { return alivePlayers[i].State == PlayerTalkFinishedState },
+			func() bool { return alivePlayers[i].offline },
+			func() bool { return room.state != RoomPlayingState })
+		if room.state != RoomPlayingState {
+			return
+		}
+		if !alivePlayers[i].offline {
+			alivePlayers[i].State = PlayerListeningState
+		}
 		i++
 		if i == len(alivePlayers) {
 			i = 0
@@ -75,6 +89,9 @@ func (room *Room) runTalkRound() {
 }
 
 func (room *Room) runVoteRound(targets []*Player, firstRound bool) {
+	if room.state != RoomPlayingState {
+		return
+	}
 	room.votes = make(map[string][]string)
 	room.setAllAlivePlayersToState(PlayerVotingState)
 	targetNames := make([]string, 0)
@@ -92,13 +109,25 @@ func (room *Room) runVoteRound(targets []*Player, firstRound bool) {
 		RoomCode: room.Code,
 	}
 
+	if room.state != RoomPlayingState {
+		return
+	}
+
 	room.broadcastToOnlinePlayers(message.encode())
 	if firstRound {
 		room.broadcastPlayersState("", "Please vote", "")
 	} else {
 		room.broadcastPlayersState("Got ties. Please vote again", "Please vote", AlertTypeInfo)
 	}
-	room.waitForState(func() bool { return room.allAlivePlayersInState(PlayerVotedState) })
+	room.waitForOneOfStates(
+		func() bool { return room.allAlivePlayersInState(PlayerVotedState) },
+		func() bool { return room.state != RoomPlayingState },
+	)
+
+	if room.state != RoomPlayingState {
+		return
+	}
+
 	room.calculateVotes()
 }
 
@@ -206,13 +235,15 @@ func (room *Room) spyWins(reason string) {
 
 func (room *Room) tidyUp() {
 	room.state = RoomIdleState
-	room.waitForState(func() bool { return room.allPlayersInState(PlayerResultReceivedState) })
+	room.waitForOneOfStates(
+		func() bool { return room.allPlayersInStates(PlayerResultReceivedState, PlayerAppearAwayState) },
+	)
 	for _, s := range room.spies {
 		s.isSpy = false
 	}
 	room.spies = make([]*Player, 0)
+
 	room.setAllPlayersToState(PlayerIdleState)
-	room.broadcastPlayersState("", "", "")
 }
 
 func (room *Room) pickWords() {
@@ -257,9 +288,18 @@ func (room *Room) allAlivePlayersInState(state string) bool {
 	return true
 }
 
-func (room *Room) allPlayersInState(state string) bool {
+func (room *Room) allPlayersInStates(states ...string) bool {
+	oneOfState := func(state string) bool {
+		for _, s := range states {
+			if state == s {
+				return true
+			}
+		}
+		return false
+	}
+
 	for _, p := range room.getPlayerPointersInRoom() {
-		if p.State != state {
+		if !oneOfState(p.State) {
 			return false
 		}
 	}
@@ -278,12 +318,13 @@ func (room *Room) setAllPlayersToState(state string) {
 	}
 }
 
-func (room *Room) waitForState(check func() bool) {
-	for room.state == RoomPlayingState {
+func (room *Room) waitForOneOfStates(checks ...func() bool) {
+	for {
 		time.Sleep(time.Second)
-
-		if check() {
-			return
+		for _, check := range checks {
+			if check() {
+				return
+			}
 		}
 	}
 }
