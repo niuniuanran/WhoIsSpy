@@ -23,8 +23,8 @@ func (room *Room) startGame() {
 func (room *Room) runHealthCheck() {
 	for room.state == RoomPlayingState {
 		for _, p := range room.getPlayerPointersInRoom() {
-			if p.State == PlayerAppearAwayState {
-				room.decideIfGameFinish()
+			if p.offline {
+				room.decideIfGameFinish(fmt.Sprintf("%s is offline. ", p.Nickname))
 			}
 		}
 	}
@@ -57,7 +57,7 @@ func (room *Room) runTalkRound() {
 	startFrom := rand.Intn(len(alivePlayers))
 	i := startFrom
 	for room.state == RoomPlayingState {
-		if alivePlayers[i].State == PlayerAppearAwayState {
+		if alivePlayers[i].offline {
 			continue
 		}
 		alivePlayers[i].State = PlayerTalkingState
@@ -106,9 +106,9 @@ func (room *Room) calculateVotes() {
 	alivePlayers := room.getAlivePlayerPointersInRoom()
 	if len(alivePlayers) < 1 {
 		room.setAllPlayersToState(PlayerIdleState)
-		room.broadcastPlayersState("No alive players in room", "", AlertTypeWarning)
-		return
+		room.broadcastPlayersState("No alive players in room, exiting game", "", AlertTypeWarning)
 	}
+
 	maxVoteCount := 0
 	maxVoteTargets := make([]*Player, 0)
 	for _, p := range alivePlayers {
@@ -130,7 +130,7 @@ func (room *Room) calculateVotes() {
 
 	maxVoteTargets[0].State = PlayerKilledState
 	room.broadcastPlayersState(fmt.Sprintf("%s is killed", maxVoteTargets[0].Nickname), fmt.Sprintf("%s is killed", maxVoteTargets[0].Nickname), AlertTypeError)
-	room.decideIfGameFinish()
+	room.decideIfGameFinish(fmt.Sprintf("%s is killed.", maxVoteTargets[0].Nickname))
 }
 
 func (room *Room) assignSpies() {
@@ -143,7 +143,7 @@ func (room *Room) assignSpies() {
 	}
 }
 
-func (room *Room) decideIfGameFinish() {
+func (room *Room) decideIfGameFinish(reason string) {
 	alivePlayers := room.getAlivePlayerPointersInRoom()
 	if len(alivePlayers) < 1 {
 		room.setAllPlayersToState(PlayerIdleState)
@@ -161,26 +161,26 @@ func (room *Room) decideIfGameFinish() {
 	}
 
 	if aliveSpyCount == 0 {
-		room.goodWins()
+		room.goodWins(fmt.Sprintf("%s No spies in the room.", reason))
 		return
 	}
 
 	if room.numPlayer < 7 {
 		if aliveSpyCount >= 1 && aliveGoodCount <= 1 {
-			room.spyWins()
+			room.spyWins(fmt.Sprintf("%s %d good people left in the room.", reason, aliveGoodCount))
 			return
 		}
 	}
 
 	if room.numPlayer >= 7 {
 		if aliveSpyCount >= 1 && aliveGoodCount <= 2 {
-			room.spyWins()
+			room.spyWins(fmt.Sprintf("%s %d good people left in the room.", reason, aliveGoodCount))
 			return
 		}
 	}
 }
 
-func (room *Room) goodWins() {
+func (room *Room) goodWins(reason string) {
 	room.state = RoomGameFinishState
 	for _, p := range room.getPlayerPointersInRoom() {
 		if p.isSpy {
@@ -189,10 +189,10 @@ func (room *Room) goodWins() {
 		}
 		p.State = PlayerWinState
 	}
-	room.broadcastPlayersState("Good peope win", "Good peope win", "success")
+	room.broadcastPlayersState(fmt.Sprintf("%s Good people win", reason), fmt.Sprintf("%s Good people win", reason), "success")
 }
 
-func (room *Room) spyWins() {
+func (room *Room) spyWins(reason string) {
 	room.state = RoomGameFinishState
 	for _, p := range room.getPlayerPointersInRoom() {
 		if p.isSpy {
@@ -201,7 +201,7 @@ func (room *Room) spyWins() {
 		}
 		p.State = PlayerLoseState
 	}
-	room.broadcastPlayersState("Spies win", "Spies win", "error")
+	room.broadcastPlayersState(fmt.Sprintf("%s Good people win", reason), fmt.Sprintf("%s Spies win", reason), "error")
 }
 
 func (room *Room) tidyUp() {

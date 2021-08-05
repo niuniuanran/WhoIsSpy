@@ -61,6 +61,7 @@ type Player struct {
 	send         chan []byte
 	room         *Room
 	isSpy        bool
+	offline      bool
 }
 
 func newPlayer(conn *websocket.Conn, room *Room, nickname string) *Player {

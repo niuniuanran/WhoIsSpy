@@ -213,6 +213,7 @@ func (room *Room) playerLeft(player *Player) {
 	}
 
 	player.State = PlayerAppearAwayState
+	player.offline = true
 	room.broadcastPlayersState(fmt.Sprintf("%s appears to be away", player.Nickname), "", AlertTypeWarning)
 }
 
@@ -273,8 +274,8 @@ func (room *Room) playerUndoReadyInRoom(player *Player) {
 
 func (room *Room) broadcastToOnlinePlayers(message []byte) {
 	for _, player := range room.getPlayerPointersInRoom() {
-		log.Println("going to broadcast to player", *player)
-		if player.State != PlayerAppearAwayState {
+		if !player.offline {
+			log.Println("going to broadcast to player", *player, "state: ", player.State)
 			player.send <- message
 		}
 	}
@@ -340,7 +341,7 @@ func (room *Room) getPlayerPointersInRoom() []*Player {
 func (room *Room) getAlivePlayerPointersInRoom() []*Player {
 	ps := make([]*Player, 0)
 	for p, present := range room.players {
-		if present && p.State != PlayerKilledState && p.State != PlayerAppearAwayState {
+		if present && p.State != PlayerKilledState && !p.offline {
 			ps = append(ps, p)
 		}
 	}
