@@ -216,6 +216,10 @@ func (room *Room) decideIfGameFinish(reason string) {
 func (room *Room) goodWins(reason string) {
 	room.state = RoomGameFinishState
 	for _, p := range room.getPlayerPointersInRoom() {
+		if p.offline {
+			p.State = PlayerAppearAwayState
+			continue
+		}
 		if p.isSpy {
 			p.State = PlayerLoseState
 			continue
@@ -228,6 +232,10 @@ func (room *Room) goodWins(reason string) {
 func (room *Room) spyWins(reason string) {
 	room.state = RoomGameFinishState
 	for _, p := range room.getPlayerPointersInRoom() {
+		if p.offline {
+			p.State = PlayerAppearAwayState
+			continue
+		}
 		if p.isSpy {
 			p.State = PlayerWinState
 			continue
@@ -239,16 +247,9 @@ func (room *Room) spyWins(reason string) {
 
 func (room *Room) tidyUp() {
 	room.state = RoomIdleState
-	room.waitForOneOfStates(
-		func() bool { return room.allPlayersInStates(PlayerResultReceivedState, PlayerAppearAwayState) },
-	)
-	for _, s := range room.spies {
-		s.isSpy = false
-	}
-	room.spies = make([]*Player, 0)
 
 	for _, p := range room.getPlayerPointersInRoom() {
-		if p.State == PlayerAppearAwayState {
+		if p.offline {
 			room.unregisterPlayerInRoom(p)
 		}
 		if room == nil {
@@ -256,7 +257,17 @@ func (room *Room) tidyUp() {
 		}
 	}
 
+	room.waitForOneOfStates(
+		func() bool { return room.allPlayersInStates(PlayerResultReceivedState, PlayerAppearAwayState) },
+	)
+
+	for _, s := range room.spies {
+		s.isSpy = false
+	}
+	room.spies = make([]*Player, 0)
+
 	room.setAllPlayersToState(PlayerIdleState)
+	log.Println("Broadcasting idle state")
 	room.broadcastPlayersState("", "", "")
 }
 
