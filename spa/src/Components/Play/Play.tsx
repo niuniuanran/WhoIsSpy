@@ -106,6 +106,9 @@ export default function Play() {
                         <MoodBadOutlinedIcon style={{paddingLeft: "0.5rem"}}/>
                     </Typography>}
                     {playerState === PlayerStates.WinState && <Typography variant="h2">You win!!</Typography>}
+                    <Typography variant="caption">
+                        { instruction }
+                    </Typography>
                     <Button onClick={() => {onResultReceived();}} variant="contained" size="small" color="primary">
                         OK
                     </Button>
