@@ -132,6 +132,10 @@ func (room *Room) runVoteRound(targets []*Player, firstRound bool) {
 }
 
 func (room *Room) calculateVotes() {
+	if room.state != RoomPlayingState {
+		return
+	}
+
 	alivePlayers := room.getAlivePlayerPointersInRoom()
 	if len(alivePlayers) < 1 {
 		room.setAllPlayersToState(PlayerIdleState)
@@ -243,7 +247,17 @@ func (room *Room) tidyUp() {
 	}
 	room.spies = make([]*Player, 0)
 
+	for _, p := range room.getPlayerPointersInRoom() {
+		if p.State == PlayerAppearAwayState {
+			room.unregisterPlayerInRoom(p)
+		}
+		if room == nil {
+			return
+		}
+	}
+
 	room.setAllPlayersToState(PlayerIdleState)
+	room.broadcastPlayersState("", "", "")
 }
 
 func (room *Room) pickWords() {

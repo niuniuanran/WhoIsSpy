@@ -130,7 +130,7 @@ func (player *Player) readPump() {
 		_, jsonMessage, err := player.conn.ReadMessage()
 		if err != nil {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
-				log.Printf("unexpected close error: %v", err)
+				log.Printf("Unexpected close error: %v", err)
 			}
 			break
 		}
