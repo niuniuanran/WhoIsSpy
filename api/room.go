@@ -207,7 +207,7 @@ func (room *Room) RunRoom() {
 }
 
 func (room *Room) playerLeft(player *Player) {
-	if room.state == RoomIdleState {
+	if room.state != RoomPlayingState {
 		room.unregisterPlayerInRoom(player)
 		return
 	}
@@ -278,6 +278,7 @@ func (room *Room) playerUndoReadyInRoom(player *Player) {
 func (room *Room) broadcastToOnlinePlayers(message []byte) {
 	for _, player := range room.getPlayerPointersInRoom() {
 		if !player.offline {
+			log.Println("Going to broadcast to player", player.Nickname, "State:", player.State)
 			player.send <- message
 		}
 	}

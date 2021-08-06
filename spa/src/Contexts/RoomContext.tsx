@@ -79,6 +79,7 @@ function RoomProvider({ children }: RoomContextProp){
 
         if (message.action === BroadcastActions.GameWillStartBroadcast) {
             setRoomState(RoomStates.GameOnState)
+            console.log("Game state set to", roomState)
         }
 
         if (message.action === BroadcastActions.YourWordBroadcast) {
@@ -90,7 +91,7 @@ function RoomProvider({ children }: RoomContextProp){
             setVoteTargets(JSON.parse(message.payload))
         }
 
-    }, []);
+    }, [roomState]);
 
     const changeWord = useCallback(() => {
         ws?.current?.send(
@@ -105,7 +106,7 @@ function RoomProvider({ children }: RoomContextProp){
 
     const onExitRoom = useCallback(() => {
         console.log("Websocket connection closed", code)
-        if(roomState == RoomStates.GameOnState) {
+        if(roomState === RoomStates.GameOnState) {
             nickname && localStorage.setItem("nickname", nickname)
             code && localStorage.setItem("roomCode", code)
         }
@@ -117,7 +118,7 @@ function RoomProvider({ children }: RoomContextProp){
               payload: ""
             })
           )
-    }, [ws, nickname, code])
+    }, [ws, nickname, code, roomState])
 
     const onVote = useCallback((target:string) => {
         ws?.current?.send(
@@ -179,6 +180,7 @@ function RoomProvider({ children }: RoomContextProp){
         }, [ws, nickname, code])
 
     const reportResultReceived= useCallback(async () => {
+        console.log("Game state set to", roomState)
         setRoomState(RoomStates.IdleState)
         setWord("")
         ws?.current?.send(
@@ -189,7 +191,7 @@ function RoomProvider({ children }: RoomContextProp){
                 payload: ""
             })
             )
-    }, [ws, nickname, code])
+    }, [ws, nickname, code, roomState])
 
     useEffect(() => {
         if (nickname && code && !connected){
