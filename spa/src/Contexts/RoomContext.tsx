@@ -19,7 +19,7 @@ export type RoomContextType = {
     setId: (id: number) => void
     setNickname: (name: string) => void
     getAvatarPath: () => string
-    reportExitRoom?: () => void
+    onExitRoom?: () => void
     playersInRoom?: [Player]
     alertLine?: string
     joinFailedMessage?: string
@@ -44,7 +44,7 @@ export type RoomContextType = {
 function RoomProvider({ children }: RoomContextProp){
     const { code } = useParams<{code?: string}>()
     const [id, setId] = useState(undefined)
-    const [nickname, setNickname] = useState(undefined)
+    const [nickname, setNickname] = useState("")
     const [connected, setConnected] = useState(false)
     const [alertLine, setAlertLine] = useState("")
     const [playersInRoom, setPlayersInRoom] = useState<Player[]>()
@@ -103,11 +103,15 @@ function RoomProvider({ children }: RoomContextProp){
           )
     }, [ws, nickname, code])
 
-    const reportExitRoom = useCallback(() => {
-        console.log("Leaving room ", code)
+    const onExitRoom = useCallback(() => {
+        console.log("Websocket connection closed", code)
+        if(roomState == RoomStates.GameOnState) {
+            nickname && localStorage.setItem("nickname", nickname)
+            code && localStorage.setItem("roomCode", code)
+        }
         ws?.current?.send(
             JSON.stringify({
-              action: ReportActions.PlayerLeftAction,
+              action: ReportActions.PlayerExitAction,
               senderNickname: nickname,
               roomCode: code,
               payload: ""
@@ -207,12 +211,12 @@ function RoomProvider({ children }: RoomContextProp){
                     handleMessage(JSON.parse(evt.data));
                 };
                 ws.current.onclose = () => {
-                    reportExitRoom()
+                    onExitRoom()
                     console.log("disconnected");
 
             }})
         }
-    }, [reportExitRoom, handleMessage, code, nickname, ws, connected])
+    }, [onExitRoom, handleMessage, code, nickname, ws, connected])
 
     return <RoomContext.Provider value={
         {
@@ -220,7 +224,7 @@ function RoomProvider({ children }: RoomContextProp){
             setId,
             nickname,
             setNickname,
-            reportExitRoom,
+            onExitRoom,
             playersInRoom,
             alertLine,
             joinFailedMessage,

@@ -43,7 +43,7 @@ export const RoomStates = {
 }
 
 export default function Room(){
-    const { nickname, setNickname, reportExitRoom, alertLine, alertType, joinFailedMessage, roomState,
+    const { nickname, setNickname, onExitRoom, alertLine, alertType, joinFailedMessage, roomState,
         setJoinFailedMessage, roomCapacity, playersInRoom, getReady, undoReady } = useContext(RoomContext) as RoomContextType
     const { getText, getCurrentLanguage } = useContext(LanguageContext) as LanguageContextType
     const { code } = useParams<{code?: string}>()
@@ -69,7 +69,7 @@ export default function Room(){
         setTimeout(() => {
             history.push(`/${getCurrentLanguage()}/room/${code}/play`)
         }, 3000)
-        return <ContentContainer allowExit onExit={reportExitRoom}> 
+        return <ContentContainer allowExit onExit={onExitRoom}> 
             <div>
                 <CircularProgress size="5rem" className={classes.marginBottom}/>
                 <Typography variant="h5" className={classes.marginTop}>
@@ -111,7 +111,7 @@ export default function Room(){
                     </Button>
                 </Paper>
         </Modal>
-        <ContentContainer allowExit onExit={reportExitRoom}> 
+        <ContentContainer allowExit onExit={onExitRoom}> 
             <div>
                 {alertLine && <RoomTopAlert alertLine={alertLine} type={alertType}/>}
                 <Typography variant="h4" className={classes.marginBottom}>

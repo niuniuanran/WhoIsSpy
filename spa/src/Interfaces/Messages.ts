@@ -11,7 +11,7 @@ const ReportActions = {
     TalkFinishAction: "talk-finish",
 	VoteAction:        "vote",
 	PlayerReadyAction: "player-ready",
-	PlayerLeftAction:  "player-left",
+	PlayerExitAction:  "player-left",
     PlayerUndoReadyAction: "player-undo-ready",
     WordReadAction: "word-read",
     ResultReceived: "result-received",
