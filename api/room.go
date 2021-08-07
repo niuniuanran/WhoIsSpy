@@ -207,13 +207,15 @@ func (room *Room) RunRoom() {
 }
 
 func (room *Room) playerLeft(player *Player) {
+	log.Println("Player left: ", player.Nickname)
+	log.Println("Room state: ", room.state)
+	player.offline = true
 	if room.state == RoomIdleState {
 		room.unregisterPlayerInRoom(player)
 		return
 	}
 
 	player.State = PlayerAppearAwayState
-	player.offline = true
 	room.broadcastPlayersState(fmt.Sprintf("%s appears to be away", player.Nickname), "", AlertTypeWarning)
 }
 
@@ -278,7 +280,6 @@ func (room *Room) playerUndoReadyInRoom(player *Player) {
 func (room *Room) broadcastToOnlinePlayers(message []byte) {
 	for _, player := range room.getPlayerPointersInRoom() {
 		if !player.offline {
-			log.Println("Going to broadcast to player", player.Nickname, "State:", player.State)
 			player.send <- message
 		}
 	}

@@ -271,7 +271,6 @@ func (room *Room) tidyUp() {
 	room.spies = make([]*Player, 0)
 
 	room.setAllPlayersToState(PlayerIdleState)
-	log.Println("Broadcasting idle state")
 	room.broadcastPlayersState("", "", "")
 }
 
