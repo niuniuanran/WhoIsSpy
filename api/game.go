@@ -177,6 +177,10 @@ func (room *Room) assignSpies() {
 }
 
 func (room *Room) decideIfGameFinish() {
+	if room.state != RoomPlayingState {
+		return
+	}
+
 	alivePlayers := room.getAlivePlayerPointersInRoom()
 	if len(alivePlayers) < 1 {
 		room.setAllPlayersToState(PlayerIdleState)

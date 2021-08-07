@@ -207,7 +207,7 @@ func (room *Room) RunRoom() {
 }
 
 func (room *Room) playerLeft(player *Player) {
-	if room.state != RoomPlayingState {
+	if room.state == RoomIdleState {
 		room.unregisterPlayerInRoom(player)
 		return
 	}
