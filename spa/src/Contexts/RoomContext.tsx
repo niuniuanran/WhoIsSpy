@@ -79,7 +79,6 @@ function RoomProvider({ children }: RoomContextProp){
 
         if (message.action === BroadcastActions.GameWillStartBroadcast) {
             setRoomState(RoomStates.GameOnState)
-            console.log("Game state set to", roomState)
         }
 
         if (message.action === BroadcastActions.YourWordBroadcast) {
@@ -105,7 +104,6 @@ function RoomProvider({ children }: RoomContextProp){
     }, [ws, nickname, code])
 
     const onExitRoom = useCallback(() => {
-        console.log("Websocket connection closed", code)
         if(roomState === RoomStates.GameOnState) {
             nickname && localStorage.setItem("nickname", nickname)
             code && localStorage.setItem("roomCode", code)
@@ -180,7 +178,6 @@ function RoomProvider({ children }: RoomContextProp){
         }, [ws, nickname, code])
 
     const reportResultReceived= useCallback(async () => {
-        console.log("Game state set to", roomState)
         setRoomState(RoomStates.IdleState)
         setWord("")
         ws?.current?.send(
@@ -191,7 +188,7 @@ function RoomProvider({ children }: RoomContextProp){
                 payload: ""
             })
             )
-    }, [ws, nickname, code, roomState])
+    }, [ws, nickname, code])
 
     useEffect(() => {
         if (nickname && code && !connected){
