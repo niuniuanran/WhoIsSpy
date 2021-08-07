@@ -212,6 +212,7 @@ func (room *Room) playerLeft(player *Player) {
 	player.offline = true
 	if room.state == RoomIdleState {
 		room.unregisterPlayerInRoom(player)
+		room.notifyPlayerLeft(player)
 		return
 	}
 
@@ -226,10 +227,6 @@ func (room *Room) registerPlayerInRoom(player *Player) {
 }
 
 func (room *Room) unregisterPlayerInRoom(player *Player) {
-	if !player.offline {
-		room.notifyPlayerLeft(player)
-	}
-
 	delete(room.players, player)
 	if len(room.players) == 0 {
 		log.Printf("Room %s is empty. Cleaning room...", room.Code)
