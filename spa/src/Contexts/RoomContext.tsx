@@ -19,7 +19,7 @@ export type RoomContextType = {
     setId: (id: number) => void
     setNickname: (name: string) => void
     getAvatarPath: () => string
-    onExitRoom?: () => void
+    onDisconnectFromRoom?: () => void
     playersInRoom?: [Player]
     alertLine?: string
     joinFailedMessage?: string
@@ -90,7 +90,7 @@ function RoomProvider({ children }: RoomContextProp){
             setVoteTargets(JSON.parse(message.payload))
         }
 
-    }, [roomState]);
+    }, []);
 
     const changeWord = useCallback(() => {
         ws?.current?.send(
@@ -103,7 +103,7 @@ function RoomProvider({ children }: RoomContextProp){
           )
     }, [ws, nickname, code])
 
-    const onExitRoom = useCallback(() => {
+    const onDisconnectFromRoom = useCallback(() => {
         if(roomState === RoomStates.GameOnState) {
             nickname && localStorage.setItem("nickname", nickname)
             code && localStorage.setItem("roomCode", code)
@@ -210,12 +210,12 @@ function RoomProvider({ children }: RoomContextProp){
                     handleMessage(JSON.parse(evt.data));
                 };
                 ws.current.onclose = () => {
-                    onExitRoom()
+                    onDisconnectFromRoom()
                     console.log("disconnected");
 
             }})
         }
-    }, [onExitRoom, handleMessage, code, nickname, ws, connected])
+    }, [onDisconnectFromRoom, handleMessage, code, nickname, ws, connected])
 
     return <RoomContext.Provider value={
         {
@@ -223,7 +223,7 @@ function RoomProvider({ children }: RoomContextProp){
             setId,
             nickname,
             setNickname,
-            onExitRoom,
+            onDisconnectFromRoom,
             playersInRoom,
             alertLine,
             joinFailedMessage,

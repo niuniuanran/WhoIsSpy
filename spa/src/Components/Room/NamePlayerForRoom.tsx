@@ -1,9 +1,10 @@
-import {useState, useContext} from "react";
+import {useState, useContext, useEffect} from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import { FormGroup, TextField, Button, } from "@material-ui/core";
 import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext";
 import { RoomContext, RoomContextType } from "../../Contexts/RoomContext";
 import PlayerAvatar from "../Shared/PlayerAvatar";
+import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     formGroup: {
@@ -20,6 +21,18 @@ export default function NamePlayerForRoom() {
     const { getText } = useContext(LanguageContext) as LanguageContextType
     const { setNickname } = useContext(RoomContext) as RoomContextType
     const [ tryNickname, setTryNickname ] = useState("")
+    const { code } = useParams<{code?: string}>()
+
+    useEffect(() => {
+        const storedCode = localStorage.getItem("roomCode")
+        if(storedCode === code) {
+            const nickname = localStorage.getItem("nickname") 
+            if (nickname) {
+                setTryNickname(nickname);
+            }
+            localStorage.clear();
+        }
+    }, [code])
 
     return  <form autoComplete="off">
             <PlayerAvatar nickname={tryNickname} size="xlarge"/>

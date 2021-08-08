@@ -43,7 +43,7 @@ export const RoomStates = {
 }
 
 export default function Room(){
-    const { nickname, setNickname, onExitRoom, alertLine, alertType, joinFailedMessage, roomState,
+    const { nickname, setNickname, onDisconnectFromRoom: onExitRoom, alertLine, alertType, joinFailedMessage, roomState,
         setJoinFailedMessage, roomCapacity, playersInRoom, getReady, undoReady } = useContext(RoomContext) as RoomContextType
     const { getText, getCurrentLanguage } = useContext(LanguageContext) as LanguageContextType
     const { code } = useParams<{code?: string}>()

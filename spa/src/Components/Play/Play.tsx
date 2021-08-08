@@ -148,7 +148,7 @@ export default function Play() {
 }
 
 function DisconnectButton() {
-    const {onExitRoom} = useContext(RoomContext) as RoomContextType
+    const {onDisconnectFromRoom: onExitRoom} = useContext(RoomContext) as RoomContextType
     return <Button onClick = {onExitRoom}>
         Disconnect
     </Button>
