@@ -39,6 +39,7 @@ export type RoomContextType = {
     reportResultReceived: () => void
     alertType?: "success"|"warning"|"error"|"info"
     changeWord: () => void
+    connected: boolean
 }
 
 function RoomProvider({ children }: RoomContextProp){
@@ -212,7 +213,7 @@ function RoomProvider({ children }: RoomContextProp){
                 ws.current.onclose = () => {
                     onDisconnectFromRoom()
                     console.log("disconnected");
-
+                    setConnected(false);
             }})
         }
     }, [onDisconnectFromRoom, handleMessage, code, nickname, ws, connected])
@@ -241,7 +242,8 @@ function RoomProvider({ children }: RoomContextProp){
             voteTargets,
             reportResultReceived,
             alertType,
-            changeWord
+            changeWord,
+            connected
         }
     }>
         {children}

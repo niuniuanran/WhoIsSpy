@@ -14,7 +14,7 @@ import PlayerList from "../Room/PlayerList";
 
 export default function Play() {
     const {word, onTalkFinish, onWordRead, instruction, playersInRoom, alertLine, alertType, changeWord,
-        nickname, reportResultReceived} = useContext(RoomContext) as RoomContextType
+        nickname, reportResultReceived, connected} = useContext(RoomContext) as RoomContextType
     const { getCurrentLanguage, getText } = useContext(LanguageContext) as LanguageContextType
     const [playerState, setPlayerState] = useState(PlayerStates.IdleState)
     const history = useHistory()
@@ -27,6 +27,20 @@ export default function Play() {
     const onResultReceived = () => {
         reportResultReceived()
         history.push(`/${getCurrentLanguage()}/room/${code}`)
+    }
+
+    if (!connected) {
+        return <ContentContainer>
+            <div>
+                <InstructionCard instruction={"You look disconnected..."}>
+                    <div>
+                    <Button variant="contained" size="small" color="primary" onClick={() => {history.push(`/${getCurrentLanguage()}`)}}>
+                        Back to homepage
+                    </Button>
+                    </div>
+                </InstructionCard>
+            </div>
+        </ContentContainer>
     }
 
     if (playerState === PlayerStates.WordReadingState) {
