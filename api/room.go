@@ -89,7 +89,7 @@ func NewRoom(roomSettings RoomSettings) *Room {
 
 func loadWords(language string) []string {
 	if language == "en" {
-		return strings.Fields(englishWords)
+		return strings.Split(englishWords, "\n")
 	}
 
 	return strings.Fields(chineseWords)
