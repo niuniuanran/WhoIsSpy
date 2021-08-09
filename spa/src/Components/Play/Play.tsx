@@ -37,7 +37,6 @@ export default function Play() {
                 <Button size="small" style={{position: "absolute", bottom: "1rem", left: "1rem"}} onClick={changeWord}>
                     {getText("changeWord")}
                 </Button>
-                <DisconnectButton/>
             </div>
         </ContentContainer>
     }
@@ -50,7 +49,6 @@ export default function Play() {
                 <InstructionCard nickname={requesterName} instruction={`Picking new words for you ...`}>
                     <CircularProgress/>
                 </InstructionCard>
-                <DisconnectButton/>
             </div>
         </ContentContainer>
     }
@@ -63,7 +61,6 @@ export default function Play() {
                     <Button variant="contained" size="small" color="primary" onClick={() => {onTalkFinish();}}>I finish</Button>
                 </InstructionCard>
                 <WordCard word={word} onRead={onWordRead} defaultHide/>
-                <DisconnectButton/>
             </div>
         </ContentContainer>
     }
@@ -74,7 +71,6 @@ export default function Play() {
                 {alertLine && <RoomTopAlert alertLine={alertLine} type={alertType}/>}
                 <InstructionCard nickname={playersInRoom?.find(p => p.state === PlayerStates.TalkingState)?.nickname} instruction={instruction}/>
                 <WordCard word={word} onRead={onWordRead} defaultHide/>
-                <DisconnectButton/>
             </div>
         </ContentContainer>
     }
@@ -84,7 +80,6 @@ export default function Play() {
             <div>
                 {alertLine && <RoomTopAlert alertLine={alertLine} type={alertType}/>}
                 <VoteCard/>
-                <DisconnectButton/>
             </div>
         </ContentContainer>
     }
@@ -96,7 +91,6 @@ export default function Play() {
             <InstructionCard instruction="Waiting for other players to vote">
                 <CircularProgress/>
             </InstructionCard>
-            <DisconnectButton/>
             </div>
         </ContentContainer>
     }
@@ -117,7 +111,6 @@ export default function Play() {
                     </Button>
                 </div>
             </InstructionCard>
-            <DisconnectButton/>
             </div>
         </ContentContainer>
     }
@@ -127,7 +120,6 @@ export default function Play() {
                  <div>
                 {alertLine && <RoomTopAlert alertLine={alertLine} type={alertType}/>}
                 <PlayerList/>
-                <DisconnectButton/>
                 </div>
         </ContentContainer>
     }
@@ -141,15 +133,7 @@ export default function Play() {
                         Back to homepage
                     </Button>
                 </InstructionCard>
-                <DisconnectButton/>
             </div>
         </ContentContainer>
     }
-}
-
-function DisconnectButton() {
-    const {onDisconnectFromRoom: onExitRoom} = useContext(RoomContext) as RoomContextType
-    return <Button onClick = {onExitRoom}>
-        Disconnect
-    </Button>
 }
