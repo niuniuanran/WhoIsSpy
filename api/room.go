@@ -217,7 +217,7 @@ func (room *Room) playerLeft(player *Player) {
 	}
 
 	player.State = PlayerAppearAwayState
-	room.broadcastPlayersState(fmt.Sprintf("%s appears to be away", player.Nickname), "", AlertTypeWarning)
+	room.broadcastPlayersState("appearAway", player.Nickname, "", AlertTypeWarning)
 }
 
 func (room *Room) registerPlayerInRoom(player *Player) {
@@ -236,7 +236,7 @@ func (room *Room) unregisterPlayerInRoom(player *Player) {
 	}
 }
 
-func (room *Room) broadcastPlayersState(alert string, instruction string, alertType string) {
+func (room *Room) broadcastPlayersState(alert string, instruction string, arg string, alertType string) {
 	players := room.getPlayersInRoom()
 	bs, err := json.Marshal(players)
 	if err != nil {
@@ -256,7 +256,7 @@ func (room *Room) broadcastPlayersState(alert string, instruction string, alertT
 
 func (room *Room) playerReadyInRoom(player *Player) {
 	player.State = PlayerReadyState
-	room.broadcastPlayersState(fmt.Sprintf("%s is ready", player.Nickname), "", "success")
+	room.broadcastPlayersState("isReady", player.Nickname, "", "success")
 	players := room.getPlayerPointersInRoom()
 	if len(players) < room.numPlayer {
 		return
@@ -271,7 +271,7 @@ func (room *Room) playerReadyInRoom(player *Player) {
 
 func (room *Room) playerUndoReadyInRoom(player *Player) {
 	player.State = PlayerIdleState
-	room.broadcastPlayersState(fmt.Sprintf("%s is not ready", player.Nickname), "", "warning")
+	room.broadcastPlayersState("isNotReady", player.Nickname, "", "warning")
 }
 
 func (room *Room) broadcastToOnlinePlayers(message []byte) {

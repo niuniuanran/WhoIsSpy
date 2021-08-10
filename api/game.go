@@ -2,9 +2,9 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"math/rand"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -58,7 +58,7 @@ func (room *Room) runTalkRound() {
 	alivePlayers := room.getAlivePlayerPointersInRoom()
 	if len(alivePlayers) < 1 {
 		room.setAllPlayersToState(PlayerIdleState)
-		room.broadcastPlayersState("No alive players in room", "", AlertTypeWarning)
+		room.broadcastPlayersState("noAlivePlayers", "", "", AlertTypeWarning)
 	}
 	startFrom := rand.Intn(len(alivePlayers))
 	i := startFrom
@@ -67,7 +67,7 @@ func (room *Room) runTalkRound() {
 			continue
 		}
 		alivePlayers[i].State = PlayerTalkingState
-		room.broadcastPlayersState("", fmt.Sprintf("%s's turn to talk", alivePlayers[i].Nickname), "")
+		room.broadcastPlayersState("", "turnToTalk", alivePlayers[i].Nickname, "")
 		room.waitForOneOfStates(
 			func() bool { return alivePlayers[i].State == PlayerTalkFinishedState },
 			func() bool { return alivePlayers[i].offline },
@@ -115,9 +115,9 @@ func (room *Room) runVoteRound(targets []*Player, firstRound bool) {
 
 	room.broadcastToOnlinePlayers(message.encode())
 	if firstRound {
-		room.broadcastPlayersState("", "Please vote", "")
+		room.broadcastPlayersState("", "pleaseVote", "", "")
 	} else {
-		room.broadcastPlayersState("Got ties. Please vote again", "Please vote", AlertTypeInfo)
+		room.broadcastPlayersState("gotTies", "pleaseVote", "", AlertTypeInfo)
 	}
 	room.waitForOneOfStates(
 		func() bool { return room.allAlivePlayersInState(PlayerVotedState) },
@@ -139,7 +139,7 @@ func (room *Room) calculateVotes() {
 	alivePlayers := room.getAlivePlayerPointersInRoom()
 	if len(alivePlayers) < 1 {
 		room.setAllPlayersToState(PlayerIdleState)
-		room.broadcastPlayersState("No alive players in room, exiting game", "", AlertTypeWarning)
+		room.broadcastPlayersState("noAlivePlayers", "", "", AlertTypeWarning)
 	}
 
 	maxVoteCount := 0
@@ -162,7 +162,7 @@ func (room *Room) calculateVotes() {
 	}
 
 	maxVoteTargets[0].State = PlayerKilledState
-	room.broadcastPlayersState(fmt.Sprintf("%s is killed", maxVoteTargets[0].Nickname), fmt.Sprintf("%s is killed", maxVoteTargets[0].Nickname), AlertTypeError)
+	room.broadcastPlayersState("isKilled", "isKilled", maxVoteTargets[0].Nickname, AlertTypeError)
 	room.decideIfGameFinish()
 }
 
@@ -184,7 +184,7 @@ func (room *Room) decideIfGameFinish() {
 	alivePlayers := room.getAlivePlayerPointersInRoom()
 	if len(alivePlayers) < 1 {
 		room.setAllPlayersToState(PlayerIdleState)
-		room.broadcastPlayersState("No alive players in room", "", AlertTypeWarning)
+		room.broadcastPlayersState("noAlivePlayers", "", "", AlertTypeWarning)
 		return
 	}
 	aliveSpyCount := 0
@@ -198,26 +198,26 @@ func (room *Room) decideIfGameFinish() {
 	}
 
 	if aliveSpyCount == 0 {
-		room.goodWins("No spies in the room.")
+		room.goodWins()
 		return
 	}
 
 	if room.numPlayer < 7 {
 		if aliveSpyCount >= 1 && aliveGoodCount <= 1 {
-			room.spyWins(fmt.Sprintf("%d good people left in the room.", aliveGoodCount))
+			room.spyWins(aliveGoodCount)
 			return
 		}
 	}
 
 	if room.numPlayer >= 7 {
 		if aliveSpyCount >= 1 && aliveGoodCount <= 2 {
-			room.spyWins(fmt.Sprintf("%d good people left in the room.", aliveGoodCount))
+			room.spyWins(aliveGoodCount)
 			return
 		}
 	}
 }
 
-func (room *Room) goodWins(reason string) {
+func (room *Room) goodWins() {
 	room.state = RoomGameFinishState
 	for _, p := range room.getPlayerPointersInRoom() {
 		if p.offline {
@@ -230,10 +230,10 @@ func (room *Room) goodWins(reason string) {
 		}
 		p.State = PlayerWinState
 	}
-	room.broadcastPlayersState(fmt.Sprintf("%s Good people win", reason), fmt.Sprintf("%s Good people win", reason), "success")
+	room.broadcastPlayersState("goodWin", "goodWin", "", "success")
 }
 
-func (room *Room) spyWins(reason string) {
+func (room *Room) spyWins(aliveCount int) {
 	room.state = RoomGameFinishState
 	for _, p := range room.getPlayerPointersInRoom() {
 		if p.offline {
@@ -246,7 +246,7 @@ func (room *Room) spyWins(reason string) {
 		}
 		p.State = PlayerLoseState
 	}
-	room.broadcastPlayersState(fmt.Sprintf("%s Good people win", reason), fmt.Sprintf("%s Spies win", reason), "error")
+	room.broadcastPlayersState("spiesWin", "spiesWin", strconv.Itoa(aliveCount), "error")
 }
 
 func (room *Room) tidyUp() {
@@ -271,7 +271,7 @@ func (room *Room) tidyUp() {
 	room.spies = make([]*Player, 0)
 
 	room.setAllPlayersToState(PlayerIdleState)
-	room.broadcastPlayersState("", "", "")
+	room.broadcastPlayersState("", "", "", "")
 }
 
 func (room *Room) pickWords() {
@@ -303,7 +303,7 @@ func (room *Room) deliverWords() {
 		players[i].State = PlayerWordReadingState
 	}
 
-	room.broadcastPlayersState("", "", "")
+	room.broadcastPlayersState("", "", "", "")
 }
 
 func (room *Room) allAlivePlayersInState(state string) bool {
@@ -359,8 +359,7 @@ func (room *Room) waitForOneOfStates(checks ...func() bool) {
 
 func (room *Room) changeWord(nickname string) {
 	room.setAllAlivePlayersToState(PlayerWordChangingState)
-	instruction := fmt.Sprintf("%s requested to change the word", nickname)
-	room.broadcastPlayersState(instruction, "", AlertTypeInfo)
+	room.broadcastPlayersState("requestChangeWord", "", nickname, AlertTypeInfo)
 	time.Sleep(time.Second)
 	room.pickWords()
 	room.deliverWords()
