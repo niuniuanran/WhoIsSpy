@@ -214,7 +214,7 @@ function RoomProvider({ children }: RoomContextProp){
                 ws.current.onclose = () => {
                     onDisconnectFromRoom()
                     console.log("disconnected");
-                    setConnected(false);
+                    // setConnected(false);
             }})
         }
     }, [onDisconnectFromRoom, handleMessage, code, nickname, ws, connected])
