@@ -33,6 +33,7 @@ type BroadcastMessage struct {
 	Alert       string `json:"alert"`
 	Instruction string `json:"instruction"`
 	AlertType   string `json:"alertType"`
+	Arg         string `json:"arg"`
 }
 
 func (message *BroadcastMessage) encode() []byte {

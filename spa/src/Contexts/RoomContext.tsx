@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect, useCallback} from "react";
+import React, {useState, useRef, useEffect, useCallback, useContext} from "react";
 import { useParams } from "react-router-dom";
 import { BroadcastActions, BroadcastMessage, ReportActions } from "../Interfaces/Messages";
 import { CallApi } from "../Utils/Api"
@@ -6,6 +6,7 @@ import {AytMessage} from "../Interfaces/Messages"
 import Player from "../Interfaces/Player"
 import { RoomStates } from "../Components/Room/Room";
 import ReconnectingWebSocket from 'reconnecting-websocket';
+import { LanguageContext, LanguageContextType } from "./LanguageContext"
 
 const RoomContext = React.createContext<any>(undefined)
 
@@ -43,6 +44,7 @@ export type RoomContextType = {
 }
 
 function RoomProvider({ children }: RoomContextProp){
+    const { getText } = useContext(LanguageContext) as LanguageContextType
     const { code } = useParams<{code?: string}>()
     const [id, setId] = useState(undefined)
     const [nickname, setNickname] = useState("")
@@ -57,14 +59,13 @@ function RoomProvider({ children }: RoomContextProp){
     const [voteTargets, setVoteTargets] = useState<[string]>()
     const [roomState, setRoomState] = useState(RoomStates.IdleState)
     const [alertType, setAlertType] = useState("success")
-
     const ws = useRef<ReconnectingWebSocket|null>(null);
 
     const handleMessage = useCallback((message:BroadcastMessage) => {
-        message.instruction && setInstruction(message.instruction)
+        message.instruction && setInstruction(getText(message.instruction, message.arg))
         if (message.alert){
             message.alertType && setAlertType(message.alertType)
-            setAlertLine(message.alert)
+            setAlertLine(getText(message.alert, message.arg))
             setTimeout(()=>setAlertLine(""), 2500)
         } 
 

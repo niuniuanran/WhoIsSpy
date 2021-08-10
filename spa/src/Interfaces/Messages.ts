@@ -30,6 +30,7 @@ interface BroadcastMessage{
     alert?: string
     instruction?: string
     alertType?: string
+    arg?: string
 }
 
 interface ReportMessage{

@@ -250,6 +250,7 @@ func (room *Room) broadcastPlayersState(alert string, instruction string, arg st
 		Alert:       alert,
 		AlertType:   alertType,
 		Instruction: instruction,
+		Arg:         arg,
 	}
 	room.broadcastToOnlinePlayers(message.encode())
 }

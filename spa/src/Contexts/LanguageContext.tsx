@@ -189,14 +189,55 @@ function LanguageProvider({language, children}:LanguageContextProp){
         submitVote: {
             en: "Vote",
             cn: "提交"
+        },
+        noAlivePlayers: {
+            en: `No alive players in room`,
+            cn: `已没有存活玩家`
+        },
+        gotTies: {
+            en: "Got ties. Please continue to vote",
+            cn: "平票，请继续投票"
+        },
+        goodWin: {
+            en: "No spies left. Good people win!",
+            cn: "卧底全部死亡，好人胜利！"
         }
     }
 
     const textDisplayFuncs: { [name: string]: {[language:string]:(arg:string)=>string}}={
-        "room":{
+        room:{
             en: (arg:string) => `Room ${arg}`,
             cn: (arg: string) => `${arg} 房间`
+        },
+        isReady:{
+            en: (arg:string) => `${arg} is ready`,
+            cn: (arg: string) => `玩家 ${arg} 准备`
+        },
+        isNotReady:{
+            en: (arg:string) => `${arg} is not ready`,
+            cn: (arg: string) => `玩家 ${arg} 撤销准备`
+        },
+        appearAway:{
+            en: (arg:string) => `${arg} appears away`,
+            cn: (arg: string) => `玩家 ${arg} 掉线`
+        },
+        turnToTalk: {
+            en: (arg:string) => `${arg}'s turn to talk`,
+            cn: (arg:string) => `玩家 ${arg} 请发言`,
+        },
+        isKilled: {
+            en: (arg:string) => `${arg} is killed`,
+            cn: (arg:string) => `玩家 ${arg} 被杀`,
+        },
+        spiesWin: {
+            en: (arg:string) => `Only ${arg} good people left. Spies win!`,
+            cn: (arg:string) => `仅剩${arg}名好人，卧底胜利！`,
+        },
+        requestChangeWord: {
+            en: (arg:string) => `${arg} requested to change word`,
+            cn: (arg:string) => `玩家 ${arg} 要求换词`,
         }
+
     }
 
     const getText = (key:string, arg:string) => (arg && textDisplayFuncs[key][language](arg)) || textDisplay[key][language]
