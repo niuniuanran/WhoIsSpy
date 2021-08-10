@@ -248,7 +248,6 @@ function LanguageProvider({language, children}:LanguageContextProp){
     }
 
     const getText = (key:string, arg:string) => {
-        console.log(`key: ${key}, arg: ${arg}`)
         return (arg && textDisplayFuncs[key][language](arg)) || textDisplay[key][language]}
     const getCurrentLanguage = () => language
 
