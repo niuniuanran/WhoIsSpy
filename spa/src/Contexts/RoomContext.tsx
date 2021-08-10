@@ -92,7 +92,7 @@ function RoomProvider({ children }: RoomContextProp){
             setVoteTargets(JSON.parse(message.payload))
         }
 
-    }, []);
+    }, [getText]);
 
     const changeWord = useCallback(() => {
         ws?.current?.send(

@@ -236,11 +236,20 @@ function LanguageProvider({language, children}:LanguageContextProp){
         requestChangeWord: {
             en: (arg:string) => `${arg} requested to change word`,
             cn: (arg:string) => `玩家 ${arg} 要求换词`,
+        },
+        joined: {
+            en: (arg: string) => `${arg} joined the room`,
+            cn: (arg: string) => `${arg} 加入了房间`,
+        },
+        left: {
+            en: (arg: string) => `${arg} left the room`,
+            cn: (arg: string) => `${arg} 离开了房间`,
         }
-
     }
 
-    const getText = (key:string, arg:string) => (arg && textDisplayFuncs[key][language](arg)) || textDisplay[key][language]
+    const getText = (key:string, arg:string) => {
+        console.log(`key: ${key}, arg: ${arg}`)
+        return (arg && textDisplayFuncs[key][language](arg)) || textDisplay[key][language]}
     const getCurrentLanguage = () => language
 
     return <LanguageContext.Provider value={

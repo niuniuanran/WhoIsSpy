@@ -295,8 +295,9 @@ func (room *Room) notifyPlayerJoined(player *Player) {
 		Action:    PlayerJoinedBroadcast,
 		Payload:   string(bs),
 		RoomCode:  room.Code,
-		Alert:     fmt.Sprintf("%s just joined", player.Nickname),
+		Alert:     "joined",
 		AlertType: AlertTypeSuccess,
+		Arg:       player.Nickname,
 	}
 
 	room.broadcastToOnlinePlayers(message.encode())
@@ -313,8 +314,9 @@ func (room *Room) notifyPlayerLeft(player *Player) {
 		Action:    PlayerLeftBroadcast,
 		Payload:   string(bs),
 		RoomCode:  player.RoomCode,
-		Alert:     fmt.Sprintf("%s left the room", player.Nickname),
+		Alert:     "left",
 		AlertType: AlertTypeWarning,
+		Arg:       player.Nickname,
 	}
 
 	room.broadcastToOnlinePlayers(message.encode())
