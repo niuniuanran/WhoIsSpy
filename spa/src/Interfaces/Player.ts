@@ -16,7 +16,7 @@ const PlayerStates = {
 	WinState: "win",
     LoseState: "lose",
     VotedState: "voted",
-    WordChangingState:"word-changing",
+    WordChangingState:"wordChanging",
     AppearAwayState: "offline"
 }
 

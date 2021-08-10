@@ -32,10 +32,10 @@ export default function Play() {
     if (!connected) {
         return <ContentContainer>
             <div>
-                <InstructionCard instruction={"You look disconnected..."}>
+                <InstructionCard instruction={getText("youLookDisconnected")}>
                     <div>
                     <Button variant="contained" size="small" color="primary" onClick={() => {history.push(`/${getCurrentLanguage()}`)}}>
-                        Back to homepage
+                        {getText("backToHomepage")}
                     </Button>
                     </div>
                 </InstructionCard>
@@ -102,7 +102,7 @@ export default function Play() {
         return <ContentContainer>
             <div>
             {alertLine && <RoomTopAlert alertLine={alertLine} type={alertType}/>}
-            <InstructionCard instruction="Waiting for other players to vote">
+            <InstructionCard instruction={getText("waitingVote")}>
                 <CircularProgress/>
             </InstructionCard>
             </div>
@@ -144,7 +144,7 @@ export default function Play() {
                 {alertLine && <RoomTopAlert alertLine={alertLine} type={alertType}/>}
                 <InstructionCard instruction={instruction || `Unexpected state ${playerState}`}>
                     <Button variant="contained" size="small" color="primary" onClick={() => {history.push(`/${getCurrentLanguage()}`)}}>
-                        Back to homepage
+                        {getText("backToHomepage")}
                     </Button>
                 </InstructionCard>
             </div>

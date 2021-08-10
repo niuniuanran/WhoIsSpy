@@ -7,7 +7,7 @@ interface LanguageContextProp {
 const LanguageContext = React.createContext<any>(undefined)
 export type LanguageContextType = {
     language: string,
-    getText: (arg:string) => string,
+    getText: (key:string, arg?:string) => string,
     getCurrentLanguage: () => string
 }
 
@@ -96,11 +96,110 @@ function LanguageProvider({language, children}:LanguageContextProp){
         },
         changeWord: {
             en: "Change words",
-            cn: "换一组词"
+            cn: "换词"
+        },
+        backToHomepage: {
+            en: "Back to homepage",
+            cn: "返回主页"
+        },
+        youLookDisconnected:{
+            en: "You look disconnected...",
+            cn: "你好像掉线了🤔"
+        },
+        waitingVote:{
+            en: "Waiting for other players to vote",
+            cn: "正在等待其他玩家投票"
+        },
+        you: {
+            en: "you",
+            cn: "你"
+        },
+        imReady: {
+            en:"I'm ready",
+            cn:"准备"
+        },
+        notReady: {
+            en:"I'm not ready",
+            cn:"没准备好"
+        },
+        gameStarting:{
+            en: "Game starting...",
+            cn: "游戏即将开始..."
+        },
+        ready: {
+            en: "ready",
+            cn: "准备"
+        },
+        reading: {
+            en: "reading",
+            cn: "读词中"
+        },
+        listening: {
+            en: "",
+            cn: ""
+        },
+        talking: {
+            en: "talking",
+            cn: "发言中"
+        },
+        voting: {
+            en: "voting",
+            cn: "投票中"
+        },
+        killed: {
+            en: "killed",
+            cn: "被杀"
+        },
+        win: {
+            en: "win",
+            cn: "胜利"
+        },
+        lose: {
+            en: "lose",
+            cn: "失败"
+        },
+        voted: {
+            en: "voted",
+            cn: "已投票"
+        },
+        wordChanging:{
+            en: "",
+            cn: ""
+        },
+        offline: {
+            en: "offline",
+            cn: "掉线"
+        },
+        yourWord: {
+            en: "Your word:",
+            cn: "你的词是："
+        },
+        gotIt: {
+            en: "Got it",
+            cn: "好的"
+        },
+        seeWord:{
+            en: "See word",
+            cn: "显示词语"
+        },
+        pleaseVote: {
+            en: "Please vote",
+            cn: "请投票"
+        },
+        submitVote: {
+            en: "Vote",
+            cn: "提交"
         }
     }
 
-    const getText = (key:string) => textDisplay[key][language]
+    const textDisplayFuncs: { [name: string]: {[language:string]:(arg:string)=>string}}={
+        "room":{
+            en: (arg:string) => `Room ${arg}`,
+            cn: (arg: string) => `${arg} 房间`
+        }
+    }
+
+    const getText = (key:string, arg:string) => (arg && textDisplayFuncs[key][language](arg)) || textDisplay[key][language]
     const getCurrentLanguage = () => language
 
     return <LanguageContext.Provider value={

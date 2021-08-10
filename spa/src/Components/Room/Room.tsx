@@ -73,7 +73,7 @@ export default function Room(){
             <div>
                 <CircularProgress size="5rem" className={classes.marginBottom}/>
                 <Typography variant="h5" className={classes.marginTop}>
-                    Game starting....
+                    {getText("gameStarting")}
                 </Typography>         
             </div>
         </ContentContainer>
@@ -115,17 +115,17 @@ export default function Room(){
             <div>
                 {alertLine && <RoomTopAlert alertLine={alertLine} type={alertType}/>}
                 <Typography variant="h4" className={classes.marginBottom}>
-                    Room {code}
+                    {getText("room", code)}
                 </Typography>
                 <PlayerList/>
                 {
                     playersInRoom && roomCapacity && (roomCapacity === playersInRoom?.length) && (
                         playersInRoom.find(p => p.nickname === nickname)?.state === PlayerStates.ReadyState ?
                     <Button size="large" variant="contained" color="secondary"  className={classes.marginTop} onClick={undoReady}>
-                        I'm not ready
+                        {getText("notReady")}
                     </Button>:
                      <Button size="large" variant="contained" color="secondary" className={classes.marginTop} onClick={getReady}>
-                        I'm ready
+                        {getText("imReady")}
                     </Button>)
                 }
             </div>

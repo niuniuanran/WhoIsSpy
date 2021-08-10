@@ -2,10 +2,12 @@ import { FormControl, FormControlLabel, Radio, RadioGroup, Button, Typography, C
 import { useState, useContext } from "react"
 import { RoomContext, RoomContextType } from "../../Contexts/RoomContext";
 import PlayerAvatar from "../Shared/PlayerAvatar";
+import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext"
 
 export function VoteCard() {
     const [target, setTarget] = useState("")    
     const {onVote, voteTargets} = useContext(RoomContext) as RoomContextType
+    const {getText} = useContext(LanguageContext) as LanguageContextType
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTarget((event.target as HTMLInputElement).value);
@@ -14,7 +16,7 @@ export function VoteCard() {
     return <Card style={{position: "relative", left: "-10%", width: "120%"}}>
         <CardContent>
             <Typography variant="h5">
-                Please vote
+                {getText("pleaseVote")}
             </Typography>
         <form style={{marginTop: "1rem"}}>
             <FormControl component="fieldset">
@@ -38,7 +40,7 @@ export function VoteCard() {
             </RadioGroup>
             </FormControl>
             <Button onClick={() => onVote(target)} color="primary" variant="contained" style={{marginTop: "1rem"}}>
-                Vote
+                {getText("submitVote")}
             </Button>
         </form>    
         </CardContent>

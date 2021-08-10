@@ -38,7 +38,7 @@ const (
 	PlayerTalkFinishedState   = "talked"
 	PlayerVotedState          = "voted"
 	PlayerResultReceivedState = "result-received"
-	PlayerWordChangingState   = "word-changing"
+	PlayerWordChangingState   = "wordChanging"
 	PlayerAppearAwayState     = "offline"
 )
 

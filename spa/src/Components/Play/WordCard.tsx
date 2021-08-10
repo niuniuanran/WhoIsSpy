@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Card, CardActionArea, CardActions, CardContent, Typography, Button } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core";
 import VisibilityIcon from '@material-ui/icons/Visibility';
+import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageContext"
 
 interface WordCardProps{
     word: string
@@ -44,6 +45,8 @@ const useStyles = makeStyles((theme) => ({
 export default function WordCard({word, central, onRead, defaultHide}: WordCardProps) {
     const [visible, setVisible] = useState(true && !defaultHide)
     const classes = useStyles()
+    const { getText } = useContext(LanguageContext) as LanguageContextType
+
     const onClickGotIt = () => {
         setVisible(false)
         onRead()
@@ -54,7 +57,7 @@ export default function WordCard({word, central, onRead, defaultHide}: WordCardP
             <CardActionArea onClick={onClickGotIt} className={classes.wordArea}>
                 <CardContent>
                 <Typography variant="caption" component="h1" style={{textAlign: "left", paddingLeft:"1em"}}>
-                        Your word:
+                        {getText("yourWord")}
                     </Typography>
                     <Typography variant="h4" component="h1">
                         {word}
@@ -63,7 +66,7 @@ export default function WordCard({word, central, onRead, defaultHide}: WordCardP
             </CardActionArea>
             <CardActions>
                 <Button color="secondary" onClick={onClickGotIt}>
-                    Got it 
+                    {getText("gotIt")}
                 </Button>
             </CardActions>
         </Card>
@@ -73,7 +76,7 @@ export default function WordCard({word, central, onRead, defaultHide}: WordCardP
             <CardActionArea onClick={() => setVisible(true)} className={classes.cardArea}>
                 <VisibilityIcon style={{fontSize: (central? "4rem":"2rem")}}/> 
                 <Typography>
-                    See word
+                    {getText("seeWord")}
                 </Typography>
             </CardActionArea>
         </Card>

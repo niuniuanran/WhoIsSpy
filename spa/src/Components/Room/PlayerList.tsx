@@ -5,6 +5,7 @@ import { Typography, Grid, Badge } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/core";
 import {PlayerStates} from "../../Interfaces/Player"
+import { LanguageContextType, LanguageContext } from "../../Contexts/LanguageContext";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -39,6 +40,7 @@ const useStyles = makeStyles(theme => ({
 export default function PlayerList() {
     const classes = useStyles()
     const {nickname, playersInRoom, roomCapacity} = useContext(RoomContext) as RoomContextType
+    const { getText } = useContext(LanguageContext) as LanguageContextType
     const spotNum = (roomCapacity || 0) - (playersInRoom?.length || 0)
     const badgeColor = (state:string) => {
         if (state === PlayerStates.TalkingState) {
@@ -60,12 +62,12 @@ export default function PlayerList() {
             {
                 playersInRoom && playersInRoom.sort((a, b) => a.serialNumber - b.serialNumber).map((p, i) => (
                     <Grid xs={3} item key={i} className={`${classes.player} ${(i === playersInRoom.length - 1)? classes.new: ""}`}>
-                        <Badge color={badgeColor(p.state)} badgeContent={p.state? p.state: 0}>
+                        <Badge color={badgeColor(p.state)} badgeContent={p.state? getText(p.state): 0}>
                             <PlayerAvatar nickname={p.nickname} size="large" className={`${(p.nickname === nickname)? classes.me : classes.others} ${p.state === PlayerStates.KilledState && classes.killed} ${p.state === PlayerStates.AppearAwayState && classes.offline}`}/>
                         </Badge>
                         <Typography className={classes.playerName}>
                             {
-                                nickname === p.nickname ?`${p.nickname} (you)`: p.nickname
+                                nickname === p.nickname ?`${p.nickname} (${getText("you")})`: p.nickname
                             }
                         </Typography>
                     </Grid>))}
