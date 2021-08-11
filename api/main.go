@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"net/http"
 )
@@ -34,6 +35,14 @@ func main() {
 	http.HandleFunc("/ayt", func(w http.ResponseWriter, r *http.Request) {
 		setupResponse(&w, r)
 		handleAyt(w, r)
+	})
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		setupResponse(&w, r)
+		if (r).Method == "OPTIONS" {
+			return
+		}
+		fmt.Fprint(w, "Health check ok")
 	})
 
 	log.Println("Running on :8080")

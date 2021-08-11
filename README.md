@@ -9,17 +9,28 @@ To run the dev game (which is tested among our gang of six and we had great fun)
 $ git clone https://github.com/niuniuanran/WhoIsSpy.git
 ```
 
-Start the front end:
+### Start the back end
+
+#### Option 1 - prerequisite: [go 1.16](https://golang.org/dl/)
+
+```
+$ cd WhoIsSpy/api
+$ go run .
+```
+
+#### Option 2 - prerequisite: [docker](https://docs.docker.com/get-docker/)
+```
+docker build --tag spy-api .
+docker run -p 8080:8080 spy-api
+```
+
+### Start the front end
+
+Start the front end spa:
 ```
 $ cd WhoIsSpy/spa
 $ npm install
 $ npm start
-```
-
-Start the server:
-```
-$ cd WhoIsSpy/api
-$ go run .
 ```
 
 ## Ongoing improvements
