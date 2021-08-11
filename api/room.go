@@ -217,7 +217,7 @@ func (room *Room) playerLeft(player *Player) {
 	}
 
 	player.State = PlayerAppearAwayState
-	room.broadcastPlayersState("appearAway", player.Nickname, "", AlertTypeWarning)
+	room.broadcastPlayersState("appearAway", "", player.Nickname, AlertTypeWarning)
 }
 
 func (room *Room) registerPlayerInRoom(player *Player) {
@@ -257,7 +257,7 @@ func (room *Room) broadcastPlayersState(alert string, instruction string, arg st
 
 func (room *Room) playerReadyInRoom(player *Player) {
 	player.State = PlayerReadyState
-	room.broadcastPlayersState("isReady", player.Nickname, "", "success")
+	room.broadcastPlayersState("isReady", "", player.Nickname, "success")
 	players := room.getPlayerPointersInRoom()
 	if len(players) < room.numPlayer {
 		return
