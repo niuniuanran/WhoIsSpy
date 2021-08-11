@@ -20,8 +20,9 @@ $ go run .
 
 #### Option 2 - prerequisite: [docker](https://docs.docker.com/get-docker/)
 ```
-docker build --tag spy-api .
-docker run -p 8080:8080 spy-api
+$ cd WhoIsSpy/api
+$ docker build --tag spy-api .
+$ docker run -p 8080:8080 spy-api
 ```
 
 ### Start the front end
