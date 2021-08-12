@@ -40,6 +40,7 @@ export type RoomContextType = {
     alertType?: "success"|"warning"|"error"|"info"
     changeWord: () => void
     connected: boolean
+    arg?: string
 }
 
 function RoomProvider({ children }: RoomContextProp){
@@ -58,6 +59,7 @@ function RoomProvider({ children }: RoomContextProp){
     const [voteTargets, setVoteTargets] = useState<[string]>()
     const [roomState, setRoomState] = useState(RoomStates.IdleState)
     const [alertType, setAlertType] = useState("success")
+    const [arg, setArg] = useState("")
     const ws = useRef<WebSocket|null>(null);
 
     const handleMessage = useCallback((message:BroadcastMessage) => {
@@ -69,6 +71,7 @@ function RoomProvider({ children }: RoomContextProp){
         } 
 
         if (message.action === BroadcastActions.PlayerNewStateBroadcast) {
+            message.arg && setArg(arg)
             let players: [Player] = JSON.parse(message.payload) 
             setPlayersInRoom(players)
         }
@@ -243,7 +246,8 @@ function RoomProvider({ children }: RoomContextProp){
             reportResultReceived,
             alertType,
             changeWord,
-            connected
+            connected,
+            arg
         }
     }>
         {children}

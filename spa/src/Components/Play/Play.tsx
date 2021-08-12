@@ -11,10 +11,11 @@ import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageCon
 import InstructionCard from "./InstructionCard"
 import RoomTopAlert from "../Room/RoomTopAlert"
 import PlayerList from "../Room/PlayerList";
+import SpyList from "./SpyList";
 
 export default function Play() {
     const {word, onTalkFinish, onWordRead, instruction, playersInRoom, alertLine, alertType, changeWord,
-        nickname, reportResultReceived, connected} = useContext(RoomContext) as RoomContextType
+        nickname, reportResultReceived, connected, arg} = useContext(RoomContext) as RoomContextType
     const { getCurrentLanguage, getText } = useContext(LanguageContext) as LanguageContextType
     const [playerState, setPlayerState] = useState(PlayerStates.IdleState)
     const history = useHistory()
@@ -122,6 +123,7 @@ export default function Play() {
                     {playerState === PlayerStates.WinState && <Typography variant="h3">
                         {getText("youWin")}
                     </Typography>}
+                    <SpyList/>
                     <Button onClick={() => {onResultReceived();}} variant="contained" size="small" color="primary">
                         {getText("ok")}
                     </Button>

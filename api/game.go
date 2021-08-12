@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"log"
 	"math/rand"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -230,7 +229,8 @@ func (room *Room) goodWins() {
 		}
 		p.State = PlayerWinState
 	}
-	room.broadcastPlayersState("goodWin", "goodWin", "", "success")
+
+	room.broadcastPlayersState("goodWin", "goodWin", room.listSpies(), "success")
 }
 
 func (room *Room) spyWins(aliveCount int) {
@@ -246,7 +246,22 @@ func (room *Room) spyWins(aliveCount int) {
 		}
 		p.State = PlayerLoseState
 	}
-	room.broadcastPlayersState("spiesWin", "spiesWin", strconv.Itoa(aliveCount), "error")
+	room.broadcastPlayersState("spiesWin", "spiesWin", room.listSpies(), "error")
+}
+
+func (room *Room) listSpies() string {
+	spies := make([]string, 0, room.numSpy)
+	for _, p := range room.getPlayerPointersInRoom() {
+		if p.isSpy {
+			spies = append(spies, p.Nickname)
+		}
+	}
+	bs, err := json.Marshal(spies)
+	if err != nil {
+		log.Println("Error marshaling spy list: ", err.Error())
+	}
+	log.Println("Spy list:", string(bs))
+	return string(bs)
 }
 
 func (room *Room) tidyUp() {

@@ -202,10 +202,6 @@ function LanguageProvider({language, children}:LanguageContextProp){
             en: "Got ties. Please continue to vote",
             cn: "平票，请继续投票"
         },
-        goodWin: {
-            en: "No spies left. Good people win!",
-            cn: "卧底全部死亡，好人胜利！"
-        },
         youWin: {
             en: "You win",
             cn: "你赢啦"
@@ -241,9 +237,13 @@ function LanguageProvider({language, children}:LanguageContextProp){
             en: (arg:string) => `${arg} is killed`,
             cn: (arg:string) => `玩家 ${arg} 被杀`,
         },
+        goodWin: {
+            en: (arg:string) => "Good people win!",
+            cn: (arg:string) => "好人胜利！"
+        },
         spiesWin: {
-            en: (arg:string) => `Only ${arg} good people left. Spies win!`,
-            cn: (arg:string) => `仅剩${arg}名好人，卧底胜利！`,
+            en: (arg:string) => `Spies win!`,
+            cn: (arg:string) => `卧底胜利！`,
         },
         requestChangeWord: {
             en: (arg:string) => `${arg} requested to change word`,
