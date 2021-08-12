@@ -107,7 +107,7 @@ export default function Room(){
                         {joinFailedMessage}
                     </p>
                     <Button onClick={onModalClose} className={classes.modalButton}>
-                        {getText("ok")}
+                        {getText("confirm")}
                     </Button>
                 </Paper>
         </Modal>

@@ -115,13 +115,15 @@ export default function Play() {
             {alertLine && <RoomTopAlert alertLine={alertLine} type={alertType}/>}
             <InstructionCard instruction={instruction}>
                 <div>
-                    {playerState === PlayerStates.LoseState && <Typography variant="h2" color="secondary">
-                        You lose
+                    {playerState === PlayerStates.LoseState && <Typography variant="h3" color="secondary">
+                        {getText("youLose")}
                         <MoodBadOutlinedIcon style={{paddingLeft: "0.5rem"}}/>
                     </Typography>}
-                    {playerState === PlayerStates.WinState && <Typography variant="h2">You win!!</Typography>}
+                    {playerState === PlayerStates.WinState && <Typography variant="h3">
+                        {getText("youWin")}
+                    </Typography>}
                     <Button onClick={() => {onResultReceived();}} variant="contained" size="small" color="primary">
-                        OK
+                        {getText("ok")}
                     </Button>
                 </div>
             </InstructionCard>

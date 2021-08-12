@@ -58,7 +58,7 @@ export default function NamePlayerForRoom() {
                         setNickname(tryNickname)
                     }}
                     size="large" variant="contained" color="primary">
-                { getText("ok") }
+                { getText("confirm") }
         </Button>      
         </form>
 }

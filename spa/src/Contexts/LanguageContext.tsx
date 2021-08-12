@@ -74,9 +74,13 @@ function LanguageProvider({language, children}:LanguageContextProp){
             en: "Create room",
             cn: "创建房间"
         },
-        ok: {
+        confirm: {
             en: "OK",
             cn: "确认"
+        },
+        ok: {
+            en: "OK",
+            cn: "好的"
         },
         youNickname: {
             en: "Your nickname",
@@ -201,6 +205,14 @@ function LanguageProvider({language, children}:LanguageContextProp){
         goodWin: {
             en: "No spies left. Good people win!",
             cn: "卧底全部死亡，好人胜利！"
+        },
+        youWin: {
+            en: "You win",
+            cn: "你赢啦"
+        },
+        youLose: {
+            en: "You lose",
+            cn: "你输了"
         }
     }
 
