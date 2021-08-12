@@ -5,13 +5,22 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 )
 
-var addr = flag.String("addr", ":8080", "http server address")
+var addr *string
 var rooms map[*Room]bool
 var availableRoomCodes = make(map[string]bool)
 
 func main() {
+	var port string
+	if os.Getenv("PORT") != "" {
+		port = os.Getenv("PORT")
+	} else {
+		port = "8080"
+	}
+	addr = flag.String("addr", fmt.Sprintf(":%s", port), "http server address")
+
 	flag.Parse()
 	rooms = make(map[*Room]bool)
 
@@ -45,7 +54,7 @@ func main() {
 		fmt.Fprint(w, "Health check ok")
 	})
 
-	log.Println("Running on :8080")
+	log.Println("Running on", port)
 
 	log.Fatal(http.ListenAndServe(*addr, nil))
 }
