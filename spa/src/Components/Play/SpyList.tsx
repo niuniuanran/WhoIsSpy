@@ -31,13 +31,10 @@ export default function SpyList() {
     const {arg, nickname} = useContext(RoomContext) as RoomContextType
     const { getText } = useContext(LanguageContext) as LanguageContextType
     const [spyList, setSpyList] = useState([])
-    if (!arg) {
-        return <div/>
-    }
 
     useEffect(() => {
         console.log(arg)
-        setSpyList(JSON.parse(arg))
+        arg && setSpyList(JSON.parse(arg))
     }, [arg])
 
     if (spyList.length < 1) {

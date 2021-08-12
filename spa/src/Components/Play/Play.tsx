@@ -15,7 +15,7 @@ import SpyList from "./SpyList";
 
 export default function Play() {
     const {word, onTalkFinish, onWordRead, instruction, playersInRoom, alertLine, alertType, changeWord,
-        nickname, reportResultReceived, connected, arg} = useContext(RoomContext) as RoomContextType
+        nickname, reportResultReceived, connected} = useContext(RoomContext) as RoomContextType
     const { getCurrentLanguage, getText } = useContext(LanguageContext) as LanguageContextType
     const [playerState, setPlayerState] = useState(PlayerStates.IdleState)
     const history = useHistory()

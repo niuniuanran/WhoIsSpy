@@ -71,7 +71,7 @@ function RoomProvider({ children }: RoomContextProp){
         } 
 
         if (message.action === BroadcastActions.PlayerNewStateBroadcast) {
-            message.arg && setArg(arg)
+            message.arg && setArg(message.arg)
             let players: [Player] = JSON.parse(message.payload) 
             setPlayersInRoom(players)
         }
