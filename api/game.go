@@ -283,8 +283,8 @@ func (room *Room) pickWords() {
 		if r > 7 {
 			room.normalWord = pickedWords[r%2]
 			room.spyWord = ""
+			return
 		}
-		return
 	}
 	room.normalWord = pickedWords[pickedN%2]
 	room.spyWord = pickedWords[1-pickedN%2]
