@@ -207,8 +207,6 @@ func (room *Room) RunRoom() {
 }
 
 func (room *Room) playerLeft(player *Player) {
-	log.Println("Player left: ", player.Nickname)
-	log.Println("Room state: ", room.state)
 	player.offline = true
 	if room.state == RoomIdleState {
 		room.unregisterPlayerInRoom(player)

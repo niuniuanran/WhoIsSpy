@@ -5,7 +5,6 @@ import { CallApi } from "../Utils/Api"
 import {AytMessage} from "../Interfaces/Messages"
 import Player from "../Interfaces/Player"
 import { RoomStates } from "../Components/Room/Room";
-import ReconnectingWebSocket from 'reconnecting-websocket';
 import { LanguageContext, LanguageContextType } from "./LanguageContext"
 
 const RoomContext = React.createContext<any>(undefined)
@@ -59,7 +58,7 @@ function RoomProvider({ children }: RoomContextProp){
     const [voteTargets, setVoteTargets] = useState<[string]>()
     const [roomState, setRoomState] = useState(RoomStates.IdleState)
     const [alertType, setAlertType] = useState("success")
-    const ws = useRef<ReconnectingWebSocket|null>(null);
+    const ws = useRef<WebSocket|null>(null);
 
     const handleMessage = useCallback((message:BroadcastMessage) => {
         message.instruction && setInstruction(getText(message.instruction, message.arg))
@@ -106,10 +105,11 @@ function RoomProvider({ children }: RoomContextProp){
     }, [ws, nickname, code])
 
     const onDisconnectFromRoom = useCallback(() => {
-        if(roomState === RoomStates.GameOnState) {
-            nickname && localStorage.setItem("nickname", nickname)
-            code && localStorage.setItem("roomCode", code)
+        if (ws?.current?.readyState === ws?.current?.CLOSED) {
+            console.log("Already in closed state")
+            return
         }
+
         ws?.current?.send(
             JSON.stringify({
               action: ReportActions.PlayerExitAction,
@@ -118,7 +118,7 @@ function RoomProvider({ children }: RoomContextProp){
               payload: ""
             })
           )
-    }, [ws, nickname, code, roomState])
+    }, [ws, nickname, code])
 
     const onVote = useCallback((target:string) => {
         ws?.current?.send(
@@ -203,7 +203,7 @@ function RoomProvider({ children }: RoomContextProp){
 
                 m.numPlayer && setRoomCapacity(m.numPlayer)
 
-                ws.current = new ReconnectingWebSocket(`ws://${process.env.REACT_APP_API_BASE_URL}/ws?nickname=${nickname}&roomcode=${code}`)
+                ws.current = new WebSocket(`ws://${process.env.REACT_APP_API_BASE_URL}/ws?nickname=${nickname}&roomcode=${code}`)
                 ws.current.onopen = () => {
                     console.log("connected");
                     setConnected(true);
@@ -214,7 +214,6 @@ function RoomProvider({ children }: RoomContextProp){
                 ws.current.onclose = () => {
                     onDisconnectFromRoom()
                     console.log("disconnected");
-                    // setConnected(false);
             }})
         }
     }, [onDisconnectFromRoom, handleMessage, code, nickname, ws, connected])
