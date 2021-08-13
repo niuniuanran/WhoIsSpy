@@ -233,6 +233,14 @@ function LanguageProvider({language, children}:LanguageContextProp){
         goodWord: {
             en: "Good word",
             cn: "好人词"
+        },
+        issueOrPr: {
+            en: "Submit an issue/PR",
+            cn: "提交issue或PR"
+        },
+        connectWithMe: {
+            en: "Connect with me",
+            cn: "与我联系"
         }
     }
 
