@@ -11,7 +11,7 @@ import { LanguageContext, LanguageContextType } from "../../Contexts/LanguageCon
 import InstructionCard from "./InstructionCard"
 import RoomTopAlert from "../Room/RoomTopAlert"
 import PlayerList from "../Room/PlayerList";
-import SpyList from "./SpyList";
+import GameAnswer from "./GameAnswer";
 
 export default function Play() {
     const {word, onTalkFinish, onWordRead, instruction, playersInRoom, alertLine, alertType, changeWord,
@@ -123,7 +123,7 @@ export default function Play() {
                     {playerState === PlayerStates.WinState && <Typography variant="h3">
                         {getText("youWin")}
                     </Typography>}
-                    <SpyList/>
+                    <GameAnswer/>
                     <Button onClick={() => {onResultReceived();}} variant="contained" size="small" color="primary">
                         {getText("ok")}
                     </Button>

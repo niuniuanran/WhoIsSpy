@@ -225,6 +225,14 @@ function LanguageProvider({language, children}:LanguageContextProp){
         spiesAre: {
             en: "The spies are: ",
             cn: "卧底其实是："
+        },
+        spyWord: {
+            en: "Spy word is",
+            cn: "卧底词是"
+        },
+        goodWord: {
+            en: "Good word is",
+            cn: "好人词是"
         }
     }
 

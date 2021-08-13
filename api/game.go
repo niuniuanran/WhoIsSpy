@@ -230,7 +230,7 @@ func (room *Room) goodWins() {
 		p.State = PlayerWinState
 	}
 
-	room.broadcastPlayersState("goodWin", "goodWin", room.listSpies(), "success")
+	room.broadcastPlayersState("goodWin", "goodWin", room.listAnswer(), "success")
 }
 
 func (room *Room) spyWins(aliveCount int) {
@@ -246,21 +246,32 @@ func (room *Room) spyWins(aliveCount int) {
 		}
 		p.State = PlayerLoseState
 	}
-	room.broadcastPlayersState("spiesWin", "spiesWin", room.listSpies(), "error")
+	room.broadcastPlayersState("spiesWin", "spiesWin", room.listAnswer(), "error")
 }
 
-func (room *Room) listSpies() string {
+type gameAnswer struct {
+	Spies    []string `json:"spies"`
+	GoodWord string   `json:"goodWord"`
+	SpyWord  string   `json:"spyWord"`
+}
+
+func (room *Room) listAnswer() string {
 	spies := make([]string, 0, room.numSpy)
 	for _, p := range room.getPlayerPointersInRoom() {
 		if p.isSpy {
 			spies = append(spies, p.Nickname)
 		}
 	}
-	bs, err := json.Marshal(spies)
+	answer := gameAnswer{
+		Spies:    spies,
+		GoodWord: room.normalWord,
+		SpyWord:  room.spyWord,
+	}
+	bs, err := json.Marshal(answer)
 	if err != nil {
 		log.Println("Error marshaling spy list: ", err.Error())
 	}
-	log.Println("Spy list:", string(bs))
+	log.Println("answer:", string(bs))
 	return string(bs)
 }
 

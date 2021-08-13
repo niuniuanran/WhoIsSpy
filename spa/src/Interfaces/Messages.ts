@@ -40,5 +40,11 @@ interface ReportMessage{
     payload?: string
 }
 
-export type {BroadcastMessage, ReportMessage, AytMessage}
+interface GameAnswerMessage {
+    spyNames?: [string]
+    spyWord: string
+    goodWord: string
+}
+
+export type {BroadcastMessage, ReportMessage, AytMessage, GameAnswerMessage}
 export {BroadcastActions, ReportActions}
