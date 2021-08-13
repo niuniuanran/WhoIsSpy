@@ -1,7 +1,7 @@
 import PlayerAvatar from "../Shared/PlayerAvatar";
 import { RoomContext, RoomContextType } from "../../Contexts/RoomContext";
 import { useContext, useState } from "react";
-import { Typography, Grid, Box } from "@material-ui/core";
+import { Typography, Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import { useEffect } from "react";
 import { LanguageContextType, LanguageContext } from "../../Contexts/LanguageContext";
@@ -42,17 +42,17 @@ export default function SpyList() {
     }
 
     return <div>
-            <Box display="flex" className={classes.root}>
+            <Box display="flex" justifyContent="center" className={classes.root}>
                 {
                     spyList && spyList.map((p, i) => (
-                        <Grid xs={12} item key={i} className={classes.player}>
+                        <div key={i} className={classes.player}>
                             <PlayerAvatar nickname={p} size="medium" className={`${(p === nickname)? classes.me : classes.others}`}/>
                             <Typography className={classes.playerName}>
                                 {
                                     nickname === p ?`${p} (${getText("you")})`: p
                                 }
                             </Typography>
-                        </Grid>))
+                        </div>))
                 }
             </Box>
         </div>
