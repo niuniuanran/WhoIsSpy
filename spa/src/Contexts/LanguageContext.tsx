@@ -209,7 +209,15 @@ function LanguageProvider({language, children}:LanguageContextProp){
         youLose: {
             en: "You lose",
             cn: "你输了"
-        }
+        },
+        goodWin: {
+            en: "Good people win!",
+            cn: "好人胜利！"
+        },
+        spiesWin: {
+            en: `Spies win!`,
+            cn: `卧底胜利！`,
+        },
     }
 
     const textDisplayFuncs: { [name: string]: {[language:string]:(arg:string)=>string}}={
@@ -237,14 +245,6 @@ function LanguageProvider({language, children}:LanguageContextProp){
             en: (arg:string) => `${arg} is killed`,
             cn: (arg:string) => `玩家 ${arg} 被杀`,
         },
-        goodWin: {
-            en: (arg:string) => "Good people win!",
-            cn: (arg:string) => "好人胜利！"
-        },
-        spiesWin: {
-            en: (arg:string) => `Spies win!`,
-            cn: (arg:string) => `卧底胜利！`,
-        },
         requestChangeWord: {
             en: (arg:string) => `${arg} requested to change word`,
             cn: (arg:string) => `玩家 ${arg} 要求换词`,
@@ -260,7 +260,11 @@ function LanguageProvider({language, children}:LanguageContextProp){
     }
 
     const getText = (key:string, arg:string) => {
-        return (arg && textDisplayFuncs[key][language](arg)) || textDisplay[key][language]}
+        return (arg && textDisplayFuncs[key] && textDisplayFuncs[key][language] && textDisplayFuncs[key][language](arg)) 
+            || textDisplay[key] && textDisplay[key][language]
+            || `Did not find ${key}`
+    }
+
     const getCurrentLanguage = () => language
 
     return <LanguageContext.Provider value={
