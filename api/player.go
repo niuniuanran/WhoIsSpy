@@ -132,6 +132,7 @@ func (player *Player) readPump() {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
 				log.Printf("Unexpected close error: %v", err)
 			}
+			log.Printf("Unexpected error: %v", err)
 			break
 		}
 		player.handleNewMessage(jsonMessage)
@@ -181,6 +182,7 @@ func (player *Player) writePump() {
 }
 
 func (player *Player) disconnect() {
+	log.Println("Disconnecting player: ", player.Nickname)
 	player.room.unregister <- player
 	close(player.send)
 	player.conn.Close()
@@ -193,6 +195,8 @@ func (player *Player) handleNewMessage(jsonMessage []byte) {
 		log.Printf("Error on unmarshal JSON message %s", err)
 		return
 	}
+
+	log.Println("Received message: ", message)
 
 	switch message.Action {
 	case LeftAction:
