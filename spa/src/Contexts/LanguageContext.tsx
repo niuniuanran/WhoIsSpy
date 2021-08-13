@@ -218,6 +218,14 @@ function LanguageProvider({language, children}:LanguageContextProp){
             en: `Spies win!`,
             cn: `卧底胜利！`,
         },
+        spyIs: {
+            en: "The spy is: ",
+            cn: "卧底其实是："
+        },
+        spiesAre: {
+            en: "The spies are: ",
+            cn: "卧底其实是："
+        }
     }
 
     const textDisplayFuncs: { [name: string]: {[language:string]:(arg:string)=>string}}={

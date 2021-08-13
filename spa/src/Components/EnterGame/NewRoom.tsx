@@ -71,13 +71,13 @@ export default function NewRoom(){
                                         color="primary" />}
                         label={getText("randomBlank")}
                     />
-                    <FormControlLabel
+                    {/* <FormControlLabel
                         control={<Checkbox checked={roomSettings.eighteenPlus} 
                                         onChange={ e => setRoomSettings(roomSettings => ({...roomSettings, eighteenPlus: e.target.checked}))} 
                                         name="eighteen-plus"
                                         color="secondary" />}
                         label={getText("eighteenPlus")}
-                    />
+                    /> */}
                 </FormGroup>
                 <Button className={classes.submitButton} onClick={ onClickCreate }
                         size="large" variant="contained" color="primary">

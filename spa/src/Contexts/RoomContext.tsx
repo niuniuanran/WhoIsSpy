@@ -71,6 +71,8 @@ function RoomProvider({ children }: RoomContextProp){
         } 
 
         if (message.action === BroadcastActions.PlayerNewStateBroadcast) {
+            console.log("message.arg: ", message.arg)
+            console.log("message.payload: ", message.payload)
             message.arg && setArg(message.arg)
             let players: [Player] = JSON.parse(message.payload) 
             setPlayersInRoom(players)
@@ -173,7 +175,7 @@ function RoomProvider({ children }: RoomContextProp){
             roomCode: code,
             payload: ""
         }))
-        
+
         ws?.current?.send(
             JSON.stringify({
                 action: ReportActions.PlayerReadyAction,

@@ -33,8 +33,9 @@ export default function SpyList() {
     const [spyList, setSpyList] = useState([])
 
     useEffect(() => {
-        console.log(arg)
-        arg && setSpyList(JSON.parse(arg))
+        if (arg && arg.startsWith("[")) {
+            setSpyList(JSON.parse(arg))
+        }
     }, [arg])
 
     if (spyList.length < 1) {
@@ -42,9 +43,12 @@ export default function SpyList() {
     }
 
     return <div>
+        <Typography>
+            {spyList.length == 1? getText("spyIs") : getText("spiesAre")}
+        </Typography>
             <Box display="flex" justifyContent="center" className={classes.root}>
                 {
-                    spyList && spyList.map((p, i) => (
+                    spyList.map((p, i) => (
                         <div key={i} className={classes.player}>
                             <PlayerAvatar nickname={p} size="medium" className={`${(p === nickname)? classes.me : classes.others}`}/>
                             <Typography className={classes.playerName}>
