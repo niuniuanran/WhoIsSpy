@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
     root: {
         width: "100%",
         position: "absolute",
-        top: "3rem",
+        top: "0rem",
         margin: "0 auto",
         zIndex: 2
     },

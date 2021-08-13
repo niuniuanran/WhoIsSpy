@@ -227,12 +227,12 @@ function LanguageProvider({language, children}:LanguageContextProp){
             cn: "卧底其实是："
         },
         spyWord: {
-            en: "Spy word is",
-            cn: "卧底词是"
+            en: "Spy word",
+            cn: "卧底词"
         },
         goodWord: {
-            en: "Good word is",
-            cn: "好人词是"
+            en: "Good word",
+            cn: "好人词"
         }
     }
 

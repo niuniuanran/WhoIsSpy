@@ -48,12 +48,12 @@ export default function GameAnswer() {
     return <div>
         {answer.goodWord && <WordAnswer good word={answer.goodWord}/>}
         {answer.spyWord && <WordAnswer word={answer.spyWord}/>}
-        {answer.spyNames && <SpyList spyList={answer.spyNames}/>}
+        {answer.spyNames && <SpyList spyNames={answer.spyNames}/>}
     </div>
 }
 
 interface SpyListProps{
-    spyList: [string]
+    spyNames: [string]
 }
 
 interface WordAnswerProps{
@@ -63,7 +63,7 @@ interface WordAnswerProps{
 
 function WordAnswer({good, word}: WordAnswerProps) {
     const { getText } = useContext(LanguageContext) as LanguageContextType
-    return <Box display="flex" justifyContent="center" >
+    return <Box display="flex" justifyContent="center" m={3}>
             {good? <Typography>{getText("goodWord")}</Typography> : <Typography>{getText("spyWord")}</Typography>}
             <Paper>
                 <Typography>
@@ -73,7 +73,7 @@ function WordAnswer({good, word}: WordAnswerProps) {
     </Box>
 }
 
-function SpyList({spyList}: SpyListProps) {
+function SpyList({spyNames: spyList}: SpyListProps) {
     const classes = useStyles()
     const { nickname } = useContext(RoomContext) as RoomContextType
     const { getText } = useContext(LanguageContext) as LanguageContextType

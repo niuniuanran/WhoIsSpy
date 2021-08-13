@@ -251,7 +251,7 @@ func (room *Room) spyWins(aliveCount int) {
 }
 
 type gameAnswer struct {
-	Spies    []string `json:"spies"`
+	Spies    []string `json:"spyNames"`
 	GoodWord string   `json:"goodWord"`
 	SpyWord  string   `json:"spyWord"`
 }
