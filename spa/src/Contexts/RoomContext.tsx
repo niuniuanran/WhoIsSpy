@@ -215,8 +215,8 @@ function RoomProvider({ children }: RoomContextProp){
                     handleMessage(JSON.parse(evt.data));
                 };
                 ws.current.onclose = () => {
-                    onDisconnectFromRoom()
                     console.log("disconnected");
+                    onDisconnectFromRoom()
             }})
         }
     }, [onDisconnectFromRoom, handleMessage, code, nickname, ws, connected])
