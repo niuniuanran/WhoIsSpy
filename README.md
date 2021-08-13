@@ -2,7 +2,7 @@
 
 This is one of the favourite board games among my friends, but no one wants to be the driver. So I made this web application to be the driver.
 
-## How to run
+## Run a smoke test
 
 To run the dev game (which is tested among our gang of six and we had great fun)
 ```
@@ -33,6 +33,12 @@ $ cd WhoIsSpy/spa
 $ npm install
 $ npm start
 ```
+
+### To host the game for a bunch
+- Get your PC and all the group's phones connected to the same WiFi network
+- In the `WhoIsSpy/spa/.env` file, update the `REACT_APP_API_BASE_URL` value to be your PC's private IP address 
+- Restart the front end
+- Enjoy!
 
 ## Ongoing improvements
 
