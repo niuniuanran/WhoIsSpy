@@ -158,6 +158,7 @@ func (room *Room) calculateVotes() {
 
 	if len(maxVoteTargets) > 1 {
 		room.runVoteRound(maxVoteTargets, false)
+		return
 	}
 
 	maxVoteTargets[0].State = PlayerKilledState
