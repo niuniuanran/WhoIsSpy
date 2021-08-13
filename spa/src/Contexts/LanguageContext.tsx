@@ -262,7 +262,7 @@ function LanguageProvider({language, children}:LanguageContextProp){
     const getText = (key:string, arg:string) => {
         return (arg && textDisplayFuncs[key] && textDisplayFuncs[key][language] && textDisplayFuncs[key][language](arg)) 
             || textDisplay[key] && textDisplay[key][language]
-            || `Did not find ${key}`
+            || key
     }
 
     const getCurrentLanguage = () => language
