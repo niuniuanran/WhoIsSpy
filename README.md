@@ -2,6 +2,8 @@
 
 This is one of the favourite board games among my friends, but no one wants to be the driver. So I made this web application to be the driver.
 
+https://user-images.githubusercontent.com/41246016/129313422-43118c84-639b-4281-a625-25db8743b2f5.mp4
+
 ## Run a smoke test
 
 To run the dev game (which is tested among our gang of six and we had great fun)
