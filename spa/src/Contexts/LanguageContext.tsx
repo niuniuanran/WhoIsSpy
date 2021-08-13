@@ -219,12 +219,12 @@ function LanguageProvider({language, children}:LanguageContextProp){
             cn: `卧底胜利！`,
         },
         spyIs: {
-            en: "The spy is: ",
-            cn: "卧底其实是："
+            en: "The spy is ",
+            cn: "卧底是"
         },
         spiesAre: {
-            en: "The spies are: ",
-            cn: "卧底其实是："
+            en: "The spies are ",
+            cn: "卧底是"
         },
         spyWord: {
             en: "Spy word",

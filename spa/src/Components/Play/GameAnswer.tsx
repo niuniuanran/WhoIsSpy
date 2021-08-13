@@ -24,6 +24,13 @@ const useStyles = makeStyles(theme => ({
     },
     playerName: {
         textAlign: "center"
+    },
+    wordPaper: {
+        marginLeft: "3px",
+        padding: "0px 6px"
+    },
+    spyIs: {
+        marginRight: "1rem"
     }
 }))
 
@@ -62,15 +69,16 @@ interface WordAnswerProps{
 }
 
 function WordAnswer({good, word}: WordAnswerProps) {
+    const classes = useStyles()
     const { getText } = useContext(LanguageContext) as LanguageContextType
-    return <Box display="flex" justifyContent="center" m={3}>
-            {good? <Typography>{getText("goodWord")}</Typography> : <Typography>{getText("spyWord")}</Typography>}
-            <Paper>
-                <Typography>
-                    {word? word: "    "}
-                </Typography>
-            </Paper>
-    </Box>
+    return <Box display="flex" justifyContent="center" m={2}>
+                {good? <Typography>{getText("goodWord")}</Typography> : <Typography>{getText("spyWord")}</Typography>}
+                <Paper className={classes.wordPaper} elevation={3} variant="outlined">
+                    <Typography>
+                        {word? word: "    "}
+                    </Typography>
+                </Paper>
+            </Box>
 }
 
 function SpyList({spyNames: spyList}: SpyListProps) {
@@ -83,14 +91,14 @@ function SpyList({spyNames: spyList}: SpyListProps) {
     }
 
     return <div>
-        <Typography>
-            {spyList.length === 1? getText("spyIs") : getText("spiesAre")}
-        </Typography>
-            <Box display="flex" justifyContent="center" className={classes.list}>
+            <Box display="flex" justifyContent="center" alignItems="center" className={classes.list}>
+            <Typography className={classes.spyIs}>
+                {spyList.length === 1? getText("spyIs") : getText("spiesAre")}
+            </Typography>
                 {
                     spyList.map((p, i) => (
                         <div key={i} className={classes.player}>
-                            <PlayerAvatar nickname={p} size="medium" className={`${(p === nickname)? classes.me : classes.others}`}/>
+                            <PlayerAvatar nickname={p} size="xsmall" className={`${(p === nickname)? classes.me : classes.others}`}/>
                             <Typography className={classes.playerName}>
                                 {
                                     nickname === p ?`${p} (${getText("you")})`: p
