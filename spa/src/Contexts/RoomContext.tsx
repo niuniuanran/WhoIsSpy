@@ -220,7 +220,7 @@ function RoomProvider({ children }: RoomContextProp){
 
                 m.numPlayer && setRoomCapacity(m.numPlayer)
 
-                ws.current = new WebSocket(`ws://${process.env.REACT_APP_API_BASE_URL}/ws?nickname=${nickname}&roomcode=${code}`)
+                ws.current = new WebSocket(`wss://${process.env.REACT_APP_API_BASE_URL}/ws?nickname=${nickname}&roomcode=${code}`)
                 ws.current.onopen = () => {
                     console.log("connected");
                     setConnected(true);

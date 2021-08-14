@@ -25,10 +25,12 @@ func main() {
 	rooms = make(map[*Room]bool)
 
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+		log.Println("Received websocket connection request")
 		ServePlayerWs(w, r)
 	})
 
 	http.HandleFunc("/create-room", func(w http.ResponseWriter, r *http.Request) {
+		log.Println("Received /create-room request")
 		setupResponse(&w, r)
 		if (r).Method == "OPTIONS" {
 			return
@@ -37,16 +39,19 @@ func main() {
 	})
 
 	http.HandleFunc("/find-room", func(w http.ResponseWriter, r *http.Request) {
+		log.Println("Received /find-room request")
 		setupResponse(&w, r)
 		handleFindRoom(w, r)
 	})
 
 	http.HandleFunc("/ayt", func(w http.ResponseWriter, r *http.Request) {
+		log.Println("Received /ayt request")
 		setupResponse(&w, r)
 		handleAyt(w, r)
 	})
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		log.Println("Received health check request")
 		setupResponse(&w, r)
 		if (r).Method == "OPTIONS" {
 			return

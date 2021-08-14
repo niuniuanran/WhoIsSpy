@@ -11,7 +11,7 @@ const CallApi = async ({ payload, path, method="POST", headers = {} }:ApiConfig)
   try {
     const { data } = await axios({
       method,
-      url:`http://${process.env.REACT_APP_API_BASE_URL}/${path}`,
+      url:`https://${process.env.REACT_APP_API_BASE_URL}/${path}`,
       headers,
       data: payload
     });
