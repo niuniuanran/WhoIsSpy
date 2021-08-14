@@ -67,7 +67,7 @@ export default function Room(){
 
     if (roomState === RoomStates.GameOnState) {
         setTimeout(() => {
-            history.push(`/${getCurrentLanguage()}/room/${code}/play`)
+            history.push(`/WhoIsSpy/${getCurrentLanguage()}/room/${code}/play`)
         }, 3000)
         return <ContentContainer allowExit onExit={onExitRoom}> 
             <div>

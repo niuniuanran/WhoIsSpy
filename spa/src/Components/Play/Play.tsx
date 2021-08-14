@@ -27,7 +27,7 @@ export default function Play() {
 
     const onResultReceived = () => {
         reportResultReceived()
-        history.push(`/${getCurrentLanguage()}/room/${code}`)
+        history.push(`/WhoIsSpy/${getCurrentLanguage()}/room/${code}`)
     }
 
     if (!connected) {
@@ -35,7 +35,7 @@ export default function Play() {
             <div>
                 <InstructionCard instruction={getText("youLookDisconnected")}>
                     <div>
-                    <Button variant="contained" size="small" color="primary" onClick={() => {history.push(`/${getCurrentLanguage()}`)}}>
+                    <Button variant="contained" size="small" color="primary" onClick={() => {history.push(`/WhoIsSpy/${getCurrentLanguage()}`)}}>
                         {getText("backToHomepage")}
                     </Button>
                     </div>
@@ -147,7 +147,7 @@ export default function Play() {
             <div>
                 {alertLine && <RoomTopAlert alertLine={alertLine} type={alertType}/>}
                 <InstructionCard instruction={instruction || `Unexpected state ${playerState}`}>
-                    <Button variant="contained" size="small" color="primary" onClick={() => {history.push(`/${getCurrentLanguage()}`)}}>
+                    <Button variant="contained" size="small" color="primary" onClick={() => {history.push(`/WhoIsSpy/${getCurrentLanguage()}`)}}>
                         {getText("backToHomepage")}
                     </Button>
                 </InstructionCard>

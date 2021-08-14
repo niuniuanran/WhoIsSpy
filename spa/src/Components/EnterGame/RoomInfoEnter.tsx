@@ -89,7 +89,7 @@ export default function RoomInfoEnter({loading, code, capacity, currentPlayerNum
                         )
                     }
                     </Skeleton>):(
-                <Button size="large" variant="contained" color="primary" style={{marginTop: "2rem"}} onClick={() => {history.push(`/${roomLanguage}/room/${code}/enter`)}}>
+                <Button size="large" variant="contained" color="primary" style={{marginTop: "2rem"}} onClick={() => {history.push(`/WhoIsSpy/${roomLanguage}/room/${code}/enter`)}}>
                     {getText("enterRoom")}
                 </Button>)} 
             </div>

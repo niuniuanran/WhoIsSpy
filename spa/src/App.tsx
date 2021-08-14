@@ -18,17 +18,17 @@ function App() {
     <ThemeProvider theme={theme}>
         <Router>
             <Switch>
-              <Route path="/en">
+              <Route path="/WhoIsSpy/en">
                 <LanguageProvider language={"en"}>
                   <GameRoute/>
                 </LanguageProvider>
               </Route>
-              <Route path="/cn">
+              <Route path="/WhoIsSpy/cn">
                 <LanguageProvider language={"cn"}>
                   <GameRoute/>
                 </LanguageProvider>
               </Route>
-              <Route path="/">
+              <Route path="/WhoIsSpy/">
                 <ChooseLanguage />
               </Route>
             </Switch>

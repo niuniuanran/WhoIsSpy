@@ -69,7 +69,7 @@ export default function ContentContainer({children, allowBack, allowExit, onExit
                         <Button size="large" aria-label="back" color="primary" variant="text" style={{fontWeight: "bolder"}} 
                             onClick={() => {
                                 onExit && onExit()
-                                history.push(`/${languageContext?.getCurrentLanguage()}`
+                                history.push(`/WhoIsSpy/${languageContext?.getCurrentLanguage()}`
                             )}}>
                             <ArrowBackIosIcon /> {languageContext?.getText("exit")}
                         </Button>

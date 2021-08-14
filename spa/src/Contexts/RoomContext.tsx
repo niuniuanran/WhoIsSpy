@@ -71,8 +71,6 @@ function RoomProvider({ children }: RoomContextProp){
         } 
 
         if (message.action === BroadcastActions.PlayerNewStateBroadcast) {
-            console.log("message.arg: ", message.arg)
-            console.log("message.payload: ", message.payload)
             message.arg && setArg(message.arg)
             let players: [Player] = JSON.parse(message.payload) 
             setPlayersInRoom(players)
@@ -163,19 +161,6 @@ function RoomProvider({ children }: RoomContextProp){
     }, [ws, nickname, code, wordRead])
 
     const getReady = useCallback(() => {
-        if (ws?.current?.readyState === ws?.current?.CLOSED) {
-            console.log("Trying to send get ready message. Already in closed state")
-            return
-        }
-        console.log("ws readystate is", ws?.current?.readyState)
-        console.log("ws OPEN is", ws?.current?.OPEN)
-        console.log("Message sending: ", JSON.stringify({
-            action: ReportActions.PlayerReadyAction,
-            senderNickname: nickname,
-            roomCode: code,
-            payload: ""
-        }))
-
         ws?.current?.send(
             JSON.stringify({
                 action: ReportActions.PlayerReadyAction,

@@ -5,8 +5,8 @@ import ContentContainer from '../Shared/ContentContainer';
 export default function ChooseLanguage(){
     return <ContentContainer>
                 <Grid container spacing={5}>
-                    <OptionButtonBig path="/en" text="English"/>
-                    <OptionButtonBig path="/cn" text="中文"/>
+                    <OptionButtonBig path="/WhoIsSpy/en" text="English"/>
+                    <OptionButtonBig path="/WhoIsSpy/cn" text="中文"/>
             </Grid>
         </ContentContainer>
 }
