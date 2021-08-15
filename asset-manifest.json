@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/WhoIsSpy/static/css/main.52728fd5.chunk.css",
-    "main.js": "/WhoIsSpy/static/js/main.5bf6b876.chunk.js",
-    "main.js.map": "/WhoIsSpy/static/js/main.5bf6b876.chunk.js.map",
+    "main.js": "/WhoIsSpy/static/js/main.24ef642f.chunk.js",
+    "main.js.map": "/WhoIsSpy/static/js/main.24ef642f.chunk.js.map",
     "runtime-main.js": "/WhoIsSpy/static/js/runtime-main.6e8b9dcf.js",
     "runtime-main.js.map": "/WhoIsSpy/static/js/runtime-main.6e8b9dcf.js.map",
     "static/js/2.76f52fdb.chunk.js": "/WhoIsSpy/static/js/2.76f52fdb.chunk.js",
@@ -15,6 +15,6 @@
     "static/js/runtime-main.6e8b9dcf.js",
     "static/js/2.76f52fdb.chunk.js",
     "static/css/main.52728fd5.chunk.css",
-    "static/js/main.5bf6b876.chunk.js"
+    "static/js/main.24ef642f.chunk.js"
   ]
 }
