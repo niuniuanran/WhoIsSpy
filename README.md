@@ -36,7 +36,7 @@ $ npm install
 $ npm start
 ```
 
-### To host the game for a bunch
+### To host the game for a bunch of friends at your place
 - Get your PC and all the group's phones connected to the same WiFi network
 - In the `WhoIsSpy/spa/.env` file, update the `REACT_APP_API_BASE_URL` value to be your PC's private IP address 
 - Restart the front end
